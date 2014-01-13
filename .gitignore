@@ -1,7 +1,8 @@
 .Rproj.user
 .Rhistory
 .RData
-.gz
-.log
-.html
+*.gz
+*.log
+*.html
+ggmapTemp*
 
