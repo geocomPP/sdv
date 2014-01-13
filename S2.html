@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+
+<title>R and Spatial Data</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: rgb(88, 72, 246)
+   }
+
+   pre .number {
+     color: rgb(0, 0, 205);
+   }
+
+   pre .comment {
+     color: rgb(76, 136, 107);
+   }
+
+   pre .keyword {
+     color: rgb(0, 0, 255);
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: rgb(3, 106, 7);
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+</head>
+
+<body>
+<h1>R and Spatial Data</h1>
+
+<h2>Preliminaries</h2>
+
+<p>R has a unique syntax that is worth learning in basic terms before 
+loading spatial data: to R spatial and non-spatial data are 
+treated in the same way, although they have different underlying data structures. </p>
+
+<p>The first step is to ensure that you are in the correct working directory. 
+Use <code>setwd</code> to select the correct folder. Assuming the folder has been downloaded
+from GitHub and unpacked into the desktop on a Windows computer, you would type the
+following:</p>
+
+<pre><code class="r">setwd(&quot;C:/Users/Uname/Desktop/sdvwR-master&quot;)
+</code></pre>
+
+<p>In RStudio, it is recommended to work from <em>script files</em>. To open a new
+R script, click <code>File &gt; New File</code> (see the 
+<a href="http://www.rstudio.com/ide/docs/using/keyboard_shortcuts">RStudio website</a> for shortcuts.)
+Try typing and running (by pressing <code>ctl-Enter</code> in an RStudio script)
+the following calculations to see how R works and plot the result.</p>
+
+<pre><code class="r">t &lt;- seq(from = 0, to = 20, by = 0.1)
+x &lt;- sin(t) * exp(-0.2 * t)
+plot(t, x)
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk A preliminary plot"/> </p>
+
+<p>R code consists of <em>functions</em>, usually proceeded by brackets (e.g. <code>seq</code>)
+and <em>objects</em> (<code>d</code>, <code>t</code> and <code>x</code>). Each function contains <em>arguments</em>,
+the names of which often do not need to be stated: the function <code>seq(0, 20, 0.1)</code>, for example,
+would also work because <code>from</code>, <code>to</code> and <code>by</code> are the <em>default</em> arguments.
+Knowing this is important as it can save typing. In this chapter, however, 
+we generally spell out each of the argument names, for clarity. </p>
+
+<p>Note the use of the assignment arrow <code>&lt;-</code> to create new objects. 
+Objects are entities that can be called to by name in R 
+and can be renamed through additional assignements (e.g <code>y &lt;- x</code> if y seems 
+a more appropriate name). This is an efficient way of referring to large data objects or sets of commands.</p>
+
+<h2>Spatial Data in R</h2>
+
+<p>In any data analysis project, spatial or otherwise, it is important to
+have a strong understanding of the dataset before progressing. This
+section will therefore begin with a description of the input data. 
+We will see how data can be loaded into R and exported
+to other formats, before going into more detail about the underlying
+structure of spatial data in R.</p>
+
+<h3>Loading spatial data in R</h3>
+
+<p>In most situations, the starting point of a spatial analysis project is to
+load in the datasets. These may originate from government
+agencies, remote sensing devices or &#39;volunteered geographical
+information&#39; (Goodchild 2007). R is able to import a very wide range of spatial data formats thanks to
+its interface with the Geospatial Data Abstraction Library (GDAL), which
+is enabled by the package <code>rgdal</code>. Below we will install the rgdal package
+using the function <code>install.packages</code> (this can be used to install any packages) and then load
+data from two spatial data formats: GPS eXchange (<code>.gpx</code>) and ESRI&#39;s
+Shapefile.</p>
+
+<p><code>readOGR</code> is in fact capable of loading dozens more file formats, so the
+focus is on the <em>method</em> rather than the specific formats. 
+Let&#39;s start with a <code>.gpx</code> file, a tracklog recording a bicycle
+ride from Sheffield to Wakefield uploaded OpenStreetMap [3].</p>
+
+<pre><code class="r">install.packages(&quot;rgdal&quot;)
+</code></pre>
+
+<pre><code>## Error: trying to use CRAN without setting a mirror
+</code></pre>
+
+<pre><code class="r">library(rgdal)  # load the gdal package
+ogrListLayers(dsn = &quot;data/gps-trace.gpx&quot;)
+shf2lds &lt;- readOGR(dsn = &quot;data/gps-trace.gpx&quot;, layer = &quot;tracks&quot;)  # load track
+plot(shf2lds)
+shf2lds.p &lt;- readOGR(dsn = &quot;data/gps-trace.gpx&quot;, layer = &quot;track_points&quot;)  # load points
+points(shf2lds.p[seq(1, 3000, 100), ])
+</code></pre>
+
+<pre><code>## Error: plot.new has not been called yet
+</code></pre>
+
+<pre><code>## Error: plot.new has not been called yet
+</code></pre>
+
+<p>In the code above we first used R to <em>download</em> a file from the internet, using the
+function <code>download.file</code> (note this has been <em>commented out</em> using the <code>#</code> symbol). 
+The two essential arguments of this function
+are <code>url</code> (we could have typed <code>url =</code> before the link) and <code>destfile</code>,
+the destination file. As with any function, more optional
+arguments can be viewed by by typing <code>?download.file</code>.</p>
+
+<p>When <code>rgdal</code> has successfully loaded, the next task is not to import the
+file directly, but to find out which <em>layers</em> are available to import, 
+with <code>ogrListLayers</code>. The output from this command tells us
+that various layers are available, including <code>tracks</code> and
+<code>track_points</code>. These are imported into R&#39;s <em>workspace</em> using <code>readOGR</code>. </p>
+
+<p>Finally, the basic
+<code>plot</code> function is used to visualize the newly imported objects, ensuring
+they make sense. In the second plot function (<code>points</code>), we 
+add points for a subset of the object. There will be no axes in the plot;
+to see how to add them, enter <code>?axis</code></p>
+
+<p>Try discovering more about the function by typing <code>?readOGR</code>.
+The documentation explains that the <code>dsn =</code> argument is 
+interpreted differently depending on the type of
+file used. In the above example, the <code>dsn</code> was set to as the name of the file.
+To load Shapefiles, by contrast, the <em>folder</em> containing the data is
+used:</p>
+
+<pre><code class="r">lnd &lt;- readOGR(dsn = &quot;data/&quot;, &quot;london_sport&quot;)
+</code></pre>
+
+<p>Here, the files reside in a folder entitled <code>data</code>, which is in
+R&#39;s current working directory (you can check this using <code>getwd()</code>).
+If the files were stored in the working directory, one would use
+<code>dsn = &quot;.&quot;</code> instead. Again, it may be wise to plot the data that
+results, to ensure that it has worked correctly. Now that the data has
+been loaded into R&#39;s own <code>sp</code> format, try interrogating and plotting it,
+using functions such as <code>summary</code> and <code>plot</code>.</p>
+
+<p>The london_sport file contains data pertaining to the percentage of 
+people within each London Borough who regularly undertake 
+physical activity and also the 2001 population of each borough. </p>
+
+<p>Both of the datasets we have loaded so far are relatively small. 
+But spatial data can get very large indeed. It is thus useful to 
+understand how &#39;large&#39; the object you are dealing with is, and
+know how to reduce unnecessary complexity in its <em>geometry</em> to 
+make it more manageable to analyse, plot and store. Fortunately, 
+R makes this easy, with the commands <code>object.size</code> and <code>gSimplify</code>.
+For more information on these useful commands, readers are 
+referred to an <a href="http://rpubs.com/RobinLovelace/11962">on-line vignette</a> 
+based on the <code>lnd</code> and <code>shf2lds</code> objects
+we have just loaded. For now, let us continue with an
+even more important topic: how R &#39;sees&#39; spatial data.</p>
+
+<h3>The structure of spatial data in R</h3>
+
+<p>Spatial datasets in R are saved in their own format, defined as 
+<code>Spatial...</code> classes within the <code>sp</code> package. For this reason, 
+<code>sp</code> is the basic spatial package in R, upon which the others depend. 
+Spatial classes range from the basic <code>Spatial</code> class to the complex
+<code>SpatialPolygonsDataFrame</code>: the <code>Spatial</code> class contains only two required <em>slots</em> [5]:</p>
+
+<pre><code class="r">getSlots(&quot;Spatial&quot;)
+</code></pre>
+
+<pre><code>##        bbox proj4string 
+##    &quot;matrix&quot;       &quot;CRS&quot;
+</code></pre>
+
+<p>This tells us that <code>Spatial</code> objects must contain a bounding box (<code>bbox</code>) and 
+a coordinate reference system (CRS) accessed via the function <code>proj4string</code>. 
+Further details on these can be found by typing <code>?bbox</code> and <code>?proj4string</code>. 
+All other spatial classes in R build on 
+this foundation of a bounding box and a projection system (which 
+is set automatically to <code>NA</code> if it is not known). However, more complex 
+classes contain more slots, some of which are lists which contain additional 
+lists. To find out the slots of <code>shf2lds.simple</code>, for example, we would first 
+ascertain its class and then use the <code>getSlots</code> command:</p>
+
+<pre><code class="r">class(shf2lds.simple)  # identify the object&#39;s class
+</code></pre>
+
+<pre><code>## Error: object &#39;shf2lds.simple&#39; not found
+</code></pre>
+
+<pre><code class="r">getSlots(&quot;SpatialLinesDataFrame&quot;)  # find the associated slots
+</code></pre>
+
+<pre><code>##         data        lines         bbox  proj4string 
+## &quot;data.frame&quot;       &quot;list&quot;     &quot;matrix&quot;        &quot;CRS&quot;
+</code></pre>
+
+<p>The same principles apply to all spatial classes including 
+<code>Spatial* Points</code>, <code>Polygons</code> <code>Grids</code> and <code>Pixels</code>
+as well as associated <code>*DataFrame</code> classes. For more information on 
+this, see the <code>sp</code> documentation: <code>?Spatial</code>.</p>
+
+<p>To flatten a <code>Spatial*</code> object in R, so it becomes a simple
+data frame, the <code>fortify</code> function can be used (more on this later).
+For most spatial data handling tasks the <code>Spatial*</code> object classes are idea, 
+as illustrated below.</p>
+
+<h3>Saving and exporting spatial objects</h3>
+
+<p>A typical R workflow involves loading the data, processing/analysing the data
+and finally exporting the data in a new form. 
+<code>writeOGR</code>, the 
+logical counterpart of <code>readOGR</code> is ideal for this task. This is performed using
+the following command (in this case we are exporting to an ESRI Shapefile):</p>
+
+<pre><code class="r">shf2lds.simple &lt;- SpatialLinesDataFrame(shf2lds.simple, data.frame(row.names = &quot;0&quot;, 
+    a = 1))
+</code></pre>
+
+<pre><code>## Error: object &#39;shf2lds.simple&#39; not found
+</code></pre>
+
+<pre><code class="r">writeOGR(shf2lds.simple, layer = &quot;shf2lds&quot;, dsn = &quot;data/&quot;, driver = &quot;ESRI Shapefile&quot;)
+</code></pre>
+
+<pre><code>## Error: object &#39;shf2lds.simple&#39; not found
+</code></pre>
+
+<p>In the above code, the object was first converted into a spatial dataframe class required
+by the <code>writeOGR</code> command, before 
+being exported as a shapefile entitled shf2lds. Unlike with <code>readOGR</code>, the driver must 
+be specified, in this case with &ldquo;ESRI Shapefile&rdquo; [4]. The simplified GPS data are now available
+to other GIS programs for further analysis. Alternatively, 
+<code>save(shf2lds.simple, file = &quot;data/shf2lds.RData&quot;)</code>
+will save the object in R&#39;s own spatial data format.</p>
+
+<h3>Attribute joins</h3>
+
+<p>London Boroughs are official administrative
+zones so we can easily join a range of other datasets 
+to the polygons in the <code>lnd</code> object. We will use the example 
+of crime data to illustrate this data availability, which is 
+stored in the <code>data</code> folder available from this project&#39;s github page.</p>
+
+<pre><code class="r">load(&quot;data/crimeAg.Rdata&quot;)  # load the crime dataset from an R dataset
+</code></pre>
+
+<p>After the dataset has been explored (e.g. using the <code>summary</code> and <code>head</code> functions)
+to ensure compatibility, it can be joined to <code>lnd</code>. We will use the
+the <code>join</code> function in the <code>plyr</code> package but the <code>merge</code> function 
+could equally be used (remember to type <code>library(plyr)</code> if needed).</p>
+
+<p><code>join</code> requires all joining variables to have the 
+same name, which has already been done [7].</p>
+
+<pre><code class="r">lnd@data &lt;- join(lnd@data, crimeAg)
+</code></pre>
+
+<p>Take a look at the <code>lnd@data</code> object. You should 
+see new variables added, meaning the attribute join 
+was successful. </p>
+
+<h2>Summary</h2>
+
+<p>To summarise this section, we have learned how to 
+perform the crucial tasks of loading and saving spatial datasets 
+in R. This should have been surprisingly painless 
+considering the dread surrounding some command-line programs 
+(watch out for typos!). We have also taken a look inside R&#39;s representation 
+of spatial data, learned how to manipulate these datasets 
+with a simple attribute join. Much more complex procedures are 
+possible, but for now we will move on to visualisation. </p>
+
+</body>
+
+</html>
+
