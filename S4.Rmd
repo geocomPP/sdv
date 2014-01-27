@@ -81,59 +81,14 @@ earth <- readPNG("figure/earth_raster.png")
 base + annotation_raster(earth, xmin = -180, xmax = 180, ymin = -90, ymax = 90) + route + theme(panel.background = element_rect(fill='#BAC4B9',colour='black')) + annotation_raster(btitle, xmin = 30, xmax = 140, ymin = 51, ymax = 87) + annotation_raster(compass, xmin = 65, xmax = 105, ymin = 25, ymax = 65) + coord_equal() + quiet
 ```
 
-## Animating your plots
-
-
-R is not designed to produce animated graphics and as such it has very few functions 
-that enable straightforward animation. To produce animated graphics users can 
-use a loop to plot and then export a series of images that can then be 
-stitched together into a video. There are two approaches to this; the 
-first is to create a loop that fills a folder with the desired images 
-and then utilise third party software to stitch the images together, 
-whilst the second uses R's own animation package. The latter option
-still requires the installation of an additional software package
-called ImageMagick but it has the benefit of creating the animation 
-for you within R and faciliting the export to a range of formats,
-not least HTML and GIF. Here we demonstrate the use of the package
-to produce an HTML animation of the shipping tracks completed in
-each year of the bdata object. The code snippet below appears 
-extremely dense, but it only contains a few addtions to the 
-plot code utilised above.
-
-First load the package:
-
-```{r}
-library(animation)
-```
-
-Then clear any previous animation. Obviously the first time you run this it is unnecessary, but it is a good habit to get into.
-
-```{r}
-ani.record(reset = TRUE)
-```
-
-We then initiate the "for loop". In this case we are using the `unique()` function to list the unique years within the `bdata` object. The loop will take the first year, in this case 1791, and assign it to the object `i`. The code inside the `{}` brackets will then run with `i=1791`. You will spot that `i` is used in a number of places- first to subset the data when creating the route plot and then as the title in the `ggtitle()` function. We need to force ggplot to create the graphic within the loop so the entire plot call is wrapped in the `print()` function. Once the plot is called `ani.record()` is used to save the plot still and `dev.off()` used to clear the plot window ready for the next iteration. `i` is then assigned the next year in the list and the code runs again until all years are plotted.
-
-```{r, eval=FALSE}
-  for (i in unique(bdata$year))
-    {
-    route <- c(geom_path(aes(long,lat,group=paste(trp, group.regroup, sep = ".")), colour="#0F3B5F", size = 0.2, data = bdata[which(bdata$year == i),], alpha = 0.5, lineend="round"))
-    print(base + route + wrld + theme(panel.background = element_rect(fill = '#BAC4B9',colour = 'black')) + annotation_raster(btitle, xmin = 30, xmax = 140, ymin = 51, ymax = 87) + annotation_raster(compass, xmin = 65, xmax = 105, ymin = 25, ymax = 65) + coord_equal() + quiet + ggtitle(i))
-ani.record()
-    dev.off()
-    }  
-```
-       
-The final step in the process is to save the animation to HTML and view it in your web browser. `ani.replay()` retrieves the animation stored by the `ani.record()` function and `outdir = getwd()` ensures the final file is stored in your working directory.
-
-
-```{r, eval=FALSE}
-saveHTML(ani.replay(), img.name = "record_plot",outdir = getwd())
-```
-
-You will note that there is something a little odd about the order in which the years appear. This can be solved by an additional step before the loop code above. Have a think then add this in and then regenerate the animation.  
-
 Recap and Conclusions
 =====================
+
+Summary
+-----------------
+
+There are an almost infinite number of different combinations colours, adornments and line widths that could be applied to a map, so take inspiration from maps and graphics you have seen and liked. The process is an iterative one, it will take multiple attempts to get right. Show your map to friends and colleagues - all will have an opinion but don’t be afraid to stand by the decisions you have taken. To give your maps a final polish you may wish to export them as a pdf using the `ggsave()` function and importing them into a vector graphics package such as Adobe Illustrator or Inkscape. 
+
+The beauty of producing maps in a programming environment as opposed to the GUI offered by the majority of GIS software packages lies in the fact that each line of code can be easily adapted to a different dataset. Users can therefore create a series of scripts that act as templates and simply call them when required. This saves a huge amount of time and has the added advantage that all outputs will have a consistent style and thus offer more professional looking publications. 
 
 This chapter has covered a large number of techniques and approaches for the preparation, analysis and visualisation of spatial data in R. Whilst it  only covers the tip of the iceberg in terms of R's capabilities, it does lay the foundations to the use of the multitude of other spatial data packages available. These can be discovered online and through the help documentation and other chapters provided by the R community. By utilising the data visualisation techniques and examples of best practice we have covered it is hoped that you will be able to communicate your results in a compelling and effective way without the need for the repetitive "pointing and clicking" required of many GIS packages; you can now tweak colours and other aspects of the plots without the need to start from scratch each time an iterative improvement is required. As the R community grows so will its range of applications and available packages so there will be many exciting opportunities ahead to improve on what is presented here.
