@@ -7,7 +7,8 @@ What is R?
 R is a free and open source computer program that runs on all major
 operating systems. It relies primarily on the *command line* for data
 input. This means that instead of interacting with the program by clicking on different 
-parts of the screen, users type commands. This will seem a little daunting at first but the approach has a number of benefits, as highlighted by Gary Sherman (2008,
+parts of the screen, users type commands. This will seem a little daunting at first but 
+the approach has a number of benefits, as highlighted by Gary Sherman (2008,
 p. 283), developer of the popular Geographical Information System (GIS) QGIS:
 
 > With the advent of “modern” GIS software, most people want to point
@@ -22,7 +23,8 @@ can be stored and repeated in scripts, saving time in the
 long-term and ensuring reproducible results (see "R and reproducible research").
 
 Another important attribute of R, related to its command line interface,
-is that it is a fully fledged open source *programming language*. In R what the user inputs is the same
+is that it is a fully fledged open source *programming language*. 
+In R what the user inputs is the same
 as what R sees when it processes the request. Access to
 R's source code and openness about how it works has enabled a veritable
 army of programmers to improve R over time and add an incredible number
@@ -95,17 +97,6 @@ R installation reproduce results described in a previous paper.
 This process is facilitated by the RStudio software
 that allows 'live' R code and results to be embedded in documents. 
 
-## Getting started with the chapter
 
-If you would like to work through the example code and data presented in this 
-chapter, the first stage, as with most GIS projects, 
-is to obtain and store the data. In this case, all the 
-data has been uploaded to GitHub, an on-line code sharing website:
-[github.com/geocomPP/sdvwR](https://github.com/geocomPP/sdvwR). 
-Upon visiting this page, click on the "Download ZIP" 
-button on the right, and unpack the folder to a sensible place
-on your computer (e.g. the Desktop). Explore the folder and try opening some of the files, 
-especially those from the sub-folder entitled "data": these are the input datasets we'll be using. For those new to R, we provide a quick introduction to handling spatial data with R in Appendix XXXX and in more detail online at XXXX.
-!!!THIS SECTION NOW NEEDS A FEW LINES OF CODE TO LOAD IN THE REQUIRED DATA FOR THE STEPS IN THE FUNDAMENTALS SECTION!!!
 
 

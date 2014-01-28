@@ -40,24 +40,15 @@ Geographical Information Systems (GIS).
 
 First ensure that the necessary packages are installed and 
 that R is in the correct working directory (see above).
-Then load the packages used in this section.
+Then load the ggplot2 package used in this section.
 
 ```{r, message=FALSE}
-library(rgdal)
 library(ggplot2)
 ```
 
-We are going to use a map of the world to demonstrate 
+We are going to use the previously loaded map of the world to demonstrate 
 some of the cartographic principles as they are introduced. 
-The world map used is available from the Natural Earth website. 
-Because these are already saved in the data folder, we can proceed to load the data. 
 
-```{r A Basic Map of the World, fig.width = 8, fig.height= 5, warning=FALSE}
-wrld <- readOGR("data/", "ne_110m_admin_0_countries")
-plot(wrld)
-```
-
-Let's see a sample of the attribute data 
 and remove the Falklands and French Southern and Antarctic Lands
 (to demonstrate the method - type `?regex` if interested how this works
 - and because these countries cause continent mis-assignment later on):
