@@ -1,4 +1,4 @@
-A practical primer on R and Spatial Data
+A practical primer on spatial data in R
 ==================
 
 This section briefly introduces the input data
@@ -10,25 +10,20 @@ The first stage, as with most GIS projects,
 is to obtain and load the data. In this case, all the 
 data has been uploaded to an on-line repository that provides 
 a detailed tutorial to accompany this Chapter:
-[github.com/geocomPP/sdvwR](https://github.com/geocomPP/sdvwR). 
+[github.com/geocomPP/sdvwR](https://github.com/geocomPP/sdvwR/blob/master/sdv-tutorial.pdf?raw=true). 
 Upon visiting this page you will see many files: the pdf file
 is the additional tutorial. To download the data, click on the "Download ZIP" 
 button on the right, and unpack the folder to a sensible place
 on your computer (e.g. the Desktop). Explore the folder and try opening some of the files, 
 especially those from the sub-folder entitled "data": these are the input 
-files. For those new to R, we provide a more introductory tutorial on the topic
-on line (see https://github.com/Robinlovelace/Creating-maps-in-R/: click on the .pdf 
-file and then "View Raw"). (Editor: this could also be a stand-alone appendix).
-
-Spatial Data in R
------------------
+files. For those new to R, we recom
 
 In any data analysis project, spatial or otherwise, it is important to
 have a strong understanding of the dataset before progressing. 
 We will see how data can be loaded into R (ready for the next section) and exported
 to other formats.
 
-### Loading spatial data in R
+## Loading spatial data in R
 
 R is able to import a very wide range of spatial data formats thanks to
 its interface with the Geospatial Data Abstraction Library (GDAL). 
@@ -40,118 +35,62 @@ The latter must be typed for each new R session that requires the package.
 The world map we use is available from the Natural Earth website and a
 slightly modified version of it (entitled "world") is loaded using the following code.
 A common problem preventing the data being loaded correctly is that 
-R is not in the correct *working directory*. Please refer to xxx if this 
-is an issue.
+R is not in the correct *working directory*. Please refer to the online 
+[tutorial](https://github.com/geocomPP/sdvwR/blob/master/sdv-tutorial.pdf?raw=true) if this is an issue.
 
-```{r A Basic Map of the World, fig.width = 8, fig.height= 5, warning=FALSE}
+```{r A Basic Map of the World, results='hide', fig.width = 8, fig.height= 5, warning=FALSE, message=FALSE}
+library(rgdal) # load the package (needs to be installed)
 wrld <- readOGR("data/", "world")
+plot(wrld)
 ```
 
-Let's see a sample of the attribute data 
+The above block of code loaded the rgdal library, created a new *object* called `wrld` and 
+plotted this object to ensure it is as we expect.
+This operation should be fast on most computers because `wrld` is quite small.
+Spatial data can get very large indeed, however. 
+It is thus useful to 
+understand how 'large' the object you are dealing with is, and
+know how to reduce unnecessary complexity in its *geometry* to 
+make it more manageable to analyse, plot and store. Fortunately, 
+R makes this easy, as described in Section 2 of the 
+[tutorial](https://github.com/geocomPP/sdvwR/blob/master/sdv-tutorial.pdf?raw=true) that accompanies this Chapter. 
+For now, let us continue with an even more important topic: how R 'sees' spatial data.
 
-### The structure of spatial data in R
+## How R 'sees' spatial data
 
 Spatial datasets in R are saved in their own format, defined as 
-`Spatial...` classes within the `sp` package. For this reason, 
-`sp` is the basic spatial package in R, upon which the others depend. 
-Spatial classes range from the basic `Spatial` class to the complex
-`SpatialPolygonsDataFrame`: the `Spatial` class contains only two required *slots* [5]:
+`Spatial` classes within the `sp` package.  This data class divides the 
+spatial information into different *slots* so the attribute and geometry data
+are stored separately. This makes handling spatial data in R memory efficient.
+For more detail on this topic, see "The structure of spatial data in R" in 
+the on line tutorial. We will see in the next section that this complex data
+structure can be simplified in R using the `fortify` function. 
+
+For now, let us ask some basic questions about the `wrld` object, using 
+functions that would apply to any spatial dataset in R, to gain an understanding
+of what we have loaded.
+
+How many rows of attribute data are there? This query can be answered using `nrow`:
 
 ```{r}
-getSlots("Spatial")
+nrow(wrld)
 ```
 
-This tells us that `Spatial` objects must contain a bounding box (`bbox`) and 
-a coordinate reference system (CRS) accessed via the function `proj4string`. 
-Further details on these can be found by typing `?bbox` and `?proj4string`. 
-All other spatial classes in R build on 
-this foundation of a bounding box and a projection system (which 
-is set automatically to `NA` if it is not known). However, more complex 
-classes contain more slots, some of which are lists which contain additional 
-lists. To find out the slots of `shf2lds.simple`, for example, we would first 
-ascertain its class and then use the `getSlots` command: !!!!I THINK THIS REQUIRES MORE EXPLANATION- MAYBE MOVE THE APPENDIX UP!!!
+What do the first 2 rows and 5 columns of attribute data contain?
+To answer this question, we need to refer to the `data` slot of the 
+object using the `@` symbol and square brackets to define the subset
+of the data to be displayed. In R, the rows are always referred to before
+the comma within the square brackets and the column numbers after. Try
+playing with the following line of code, for example by removing the square
+brackets entirely:
 
 ```{r}
-class(shf2lds.simple) # identify the object's class
-getSlots("SpatialLinesDataFrame") # find the associated slots
+wrld@data[1:2, 1:5] 
 ```
 
-The same principles apply to all spatial classes including 
-`Spatial* Points`, `Polygons` `Grids` and `Pixels`
-as well as associated `*DataFrame` classes. For more information on 
-this, see the `sp` documentation: `?Spatial`.
-
-To flatten a `Spatial*` object in R, so it becomes a simple
-data frame, the `fortify` function can be used (more on this later).
-For most spatial data handling tasks the `Spatial*` object classes are idea, 
-as illustrated below.
-
-### Saving and exporting spatial objects
-
-A typical R workflow involves loading the data, processing/analysing the data
-and finally exporting the data in a new form. 
-`writeOGR`, the 
-logical counterpart of `readOGR` is ideal for this task. This is performed using
-the following command (in this case we are exporting to an ESRI Shapefile): !!!THE NEED FOR ROW NAMES NEEDS EXPLANATION HERE!!!
-
-```{r}
-shf2lds.simple <- SpatialLinesDataFrame(shf2lds.simple, data.frame(row.names = "0", a = 1))
-writeOGR(shf2lds.simple, layer = "shf2lds", dsn = "data/", driver = "ESRI Shapefile")
-```
-
-```{r, echo=FALSE}
-# delete shf2lds file to prevent it causing errors later on
-system("rm data/shf2lds*")
-```
-
-In the above code, the object was first converted into a spatial dataframe class required
-by the `writeOGR` command, before 
-being exported as a shapefile entitled shf2lds. Unlike with `readOGR`, the driver must 
-be specified, in this case with "ESRI Shapefile" [4]. The simplified GPS data are now available
-to other GIS programs for further analysis. Alternatively, 
-`save(shf2lds.simple, file = "data/shf2lds.RData")`
-will save the object in R's own spatial data format.
-
-### Attribute joins !!!I THINK THE EXAMPLE NEED TO USE MERGE HERE FOR CONSISTENCY AND SIMPLICITY!!!
-
-London Boroughs are official administrative
-zones so we can easily join a range of other datasets 
-to the polygons in the `lnd` object. We will use the example 
-of crime data to illustrate this data availability, which is 
-stored in the `data` folder available from this project's github page.
-
-```{r}
-load("data/crimeAg.Rdata") # load the crime dataset from an R dataset
-```
-
-After the dataset has been explored (e.g. using the `summary` and `head` functions)
-to ensure compatibility, it can be joined to `lnd`. We will use the
-the `join` function in the `plyr` package but the `merge` function 
-could equally be used (remember to type `library(plyr)` if needed).
-
-```{r, echo=FALSE}
-library(plyr)
-```
-
-`join` requires all joining variables to have the 
-same name, which has already been done [7].
-
-```{r, results='hide', message=FALSE}
-lnd@data <- join(lnd@data, crimeAg)
-```
-
-Take a look at the `lnd@data` object. You should 
-see new variables added, meaning the attribute join 
-was successful. 
+The output shows that the first country in the `wrld` object is Afganistan.
+Now that we have a basic understanding of the attributes of the spatial dataset, 
+and know where to look for more detailed information about spatial data in R via
+the online tutorial, it is time to move on to the topic of visualisation.
 
 
-## Summary
-
-To summarise this section, we have learned how to 
-perform the crucial tasks of loading and saving spatial datasets 
-in R. This should have been surprisingly painless 
-considering the dread surrounding some command-line programs 
-(watch out for typos!). We have also taken a look inside R's representation 
-of spatial data, learned how to manipulate these datasets 
-with a simple attribute join. Much more complex procedures are 
-possible, but for now we will move on to visualisation by returning to the chapter. 
