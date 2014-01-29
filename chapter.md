@@ -6,12 +6,11 @@ What is R?
 
 R is a free and open source computer program that runs on all major
 operating systems. It relies primarily on the *command line* for data
-input: instead of interacting with the program by clicking on different
-parts of the screen, so users enter commands via the keyboard. This will
-seem to strange to people accustomed to relying on a graphical user
-interface (GUI) for most of their computing, yet the approach has a
-number of benefits, as highlighted by Gary Sherman (2008, p. 283),
-developer of the popular Geographical Information System (GIS) QGIS:
+input. This means that instead of interacting with the program by
+clicking on different parts of the screen, users type commands. This
+will seem a little daunting at first but the approach has a number of
+benefits, as highlighted by Gary Sherman (2008, p. 283), developer of
+the popular Geographical Information System (GIS) QGIS:
 
 > With the advent of “modern” GIS software, most people want to point
 > and click their way through life. That’s good, but there is a
@@ -25,15 +24,13 @@ can be stored and repeated in scripts, saving time in the long-term and
 ensuring reproducible results (see "R and reproducible research").
 
 Another important attribute of R, related to its command line interface,
-is that it is a fully fledged *programming language*. Other GIS programs
-are written in lower level languages such as C++ which are kept at a
-safe distance from the users by the GUI. In R, by contrast, the user
-inputs is the same as what R sees when it processes the request. Access
-to R's source code and openness about how it works has enabled a
-veritable army of programmers to improve R over time and add an
-incredible number of extensions to its capabilities. There are now more
-than 4000 official packages for R, allowing it to tackle almost any
-computational or numerical problem one could imagine.
+is that it is a fully fledged open source *programming language*. In R
+what the user inputs is the same as what R sees when it processes the
+request. Access to R's source code and openness about how it works has
+enabled a veritable army of programmers to improve R over time and add
+an incredible number of extensions to its capabilities. There are now
+more than 4000 official packages for R, allowing it to tackle almost any
+computational or numerical problem.
 
 Although writing R source code and creating new packages will not appeal
 to most R users, it inspires confidence to know that there is a strong
@@ -42,7 +39,8 @@ function that R cannot currently perform, there is a reasonable chance
 that someone is working on a solution that will become available at a
 later date. One area where extension of R's basic capabilities has been
 particularly successful is the addition of a wide variety of spatial
-tools.
+analysis and visualisation tools. The latter will be the focus of this
+chapter.
 
 Why R for spatial data visualisation?
 -------------------------------------
@@ -60,26 +58,26 @@ broadening of functionality to reflect a growing user base across
 disciplines. R has become "an integrated suite of software facilities
 for data manipulation, calculation and graphical display" (Venables et
 al. 2013). Spatial data analysis and visualisation is an important
-growth area within this increased functionality. In recent years R has
-really made its mark as a data visualisation tool. The map of Facebook
-friendships produced by Paul Butler is iconic in this regard, and
-reached a global audience. He mapped the linkages between friends by
-calculating the great circle arcs between them (using the `geosphere`
-package) and plotted the result, displayed in figure 1. The secret to
-the success of this map was the time taken to select the appropriate
-colour palette, line widths and transparency for the plot. As we discuss
-in Section 3 the importance of these cannot be understated and are the
-difference between a stunning graphic and an impenetrable mess.
+growth area within this increased functionality. The map of Facebook
+friendships produced by Paul Butler, for example, is iconic in this
+regard, and reached a global audience. He mapped the linkages between
+friends by calculating the great circle arcs between them (using the
+`geosphere` package) and plotted the result, displayed in Figure 1. The
+secret to the success of this map was the time taken to select the
+appropriate colour palette, line widths and transparency for the plot.
+As we discuss in Section 3 the importance of these cannot be understated
+and are the difference between a stunning graphic and an impenetrable
+mess.
 
 ![Iconic plot of Facebook friendship networks worldwide, by Paul
 Butler](figure/butler_facebook_2.jpg)
 
-The impact of the graphic was to inspire the R community to produce more
+The impact of the map was to inspire the R community to produce more
 ambitious graphics; a process fuelled by the increased demand for data
 visualisation and the development of sophisticated packages, such as
 ggplot2, that augment the basic plot functions of R. It is now the case
 that R has become a key analysis and visualisation tool used by the
-likes of Twitter, the New York Times and Facebook and thousands of
+likes of Twitter, the New York Times and Google and thousands of
 consultants, design houses and journalists. It is not longer the
 preserve of academic research, with many graduate jobs listing R as a
 desirable skill.
@@ -94,286 +92,121 @@ that we will be using to great effect in this chapter.
 
 ### R and reproducible research
 
-There is a drive towards transparency in data and methods datasets in
-academic publishing. R encourages truly transparent and reproducible
-research by enabling anyone with an R installation reproduce results
-described in a previous paper. This process is eased by the RStudio
-integrated development environment (IDE) that allows 'live' R code and
-results to be embedded in documents. In fact, this chapter was written
-in RStudio and can be recompiled on any computer by downloading the
-project's GitHub repository.
+There is a drive towards transparent data and methods in academic
+publishing. R encourages truly transparent and reproducible research by
+enabling anyone with an R installation reproduce results described in a
+previous paper. This process is facilitated by the RStudio software that
+allows 'live' R code and results to be embedded in documents.
 
-Getting started with the chapter
---------------------------------
+A practical primer on spatial data in R
+=======================================
 
-If you would like to work through the example code and data presented in
-this chapter, the first stage, as with most GIS projects, is to obtain
-and store the data. In this case, all the data has been uploaded to
-GitHub, an on-line code sharing website:
-[github.com/geocomPP/sdvwR](https://github.com/geocomPP/sdvwR). Upon
-visiting this page, click on the "Download ZIP" button on the right, and
-unpack the folder to a sensible place on your computer (e.g. the
-Desktop). Explore the folder and try opening some of the files,
-especially those from the sub-folder entitled "data": these are the
-input datasets we'll be using.
+This section briefly introduces the input data and how they can be
+loaded in R. It is a *practical* chapter, so R code will be provided
+that will allow the steps described to be reproduced on your own
+computer.
 
-R and Spatial Data
-==================
-
-Preliminaries
--------------
-
-R has a unique syntax that is worth learning in basic terms before
-loading spatial data: to R spatial and non-spatial data are treated in
-the same way, although they have different underlying data structures.
-
-The first step is to ensure that you are in the correct working
-directory. Use `setwd` to select the correct folder. Assuming the folder
-has been downloaded from GitHub and unpacked into the desktop on a
-Windows computer, you would type the following:
-
-~~~~ {.r}
-setwd("C:/Users/Uname/Desktop/sdvwR-master")
-~~~~
-
-In RStudio, it is recommended to work from *script files*. To open a new
-R script, click `File > New File` (see the [RStudio
-website](http://www.rstudio.com/ide/docs/using/keyboard_shortcuts) for
-shortcuts.) Try typing and running (by pressing `ctl-Enter` in an
-RStudio script) the following calculations to see how R works and plot
-the result.
-
-~~~~ {.r}
-t <- seq(from = 0, to = 20, by = 0.1)
-x <- sin(t) * exp(-0.2 * t)
-plot(t, x)
-~~~~
-
-![plot of chunk A preliminary plot](figure/A_preliminary_plot.png)
-
-R code consists of *functions*, usually proceeded by brackets (e.g.
-`seq`) and *objects* (`d`, `t` and `x`). Each function contains
-*arguments*, the names of which often do not need to be stated: the
-function `seq(0, 20, 0.1)`, for example, would also work because `from`,
-`to` and `by` are the *default* arguments. Knowing this is important as
-it can save typing. In this chapter, however, we generally spell out
-each of the argument names, for clarity.
-
-Note the use of the assignment arrow `<-` to create new objects. Objects
-are entities that can be called to by name in R and can be renamed
-through additional assignements (e.g `y <- x` if y seems a more
-appropriate name). This is an efficient way of referring to large data
-objects or sets of commands.
-
-Spatial Data in R
------------------
+The first stage, as with most GIS projects, is to obtain and load the
+data. In this case, all the data has been uploaded to an on-line
+repository that provides a detailed tutorial to accompany this Chapter:
+[github.com/geocomPP/sdvwR](https://github.com/geocomPP/sdvwR/blob/master/sdv-tutorial.pdf?raw=true).
+Upon visiting this page you will see many files: the pdf file is the
+additional tutorial. To download the data, click on the "Download ZIP"
+button on the right, and unpack the folder to a sensible place on your
+computer (e.g. the Desktop). Explore the folder and try opening some of
+the files, especially those from the sub-folder entitled "data": these
+are the input files. For those new to R, we recom
 
 In any data analysis project, spatial or otherwise, it is important to
-have a strong understanding of the dataset before progressing. This
-section will therefore begin with a description of the input data. We
-will see how data can be loaded into R and exported to other formats,
-before going into more detail about the underlying structure of spatial
-data in R.
+have a strong understanding of the dataset before progressing. We will
+see how data can be loaded into R (ready for the next section) and
+exported to other formats.
 
-### Loading spatial data in R
+Loading spatial data in R
+-------------------------
 
-In most situations, the starting point of a spatial analysis project is
-to load in the datasets. These may originate from government agencies,
-remote sensing devices or 'volunteered geographical information'
-(Goodchild 2007). R is able to import a very wide range of spatial data
-formats thanks to its interface with the Geospatial Data Abstraction
-Library (GDAL), which is enabled by the package `rgdal`. Below we will
-install the rgdal package using the function `install.packages` (this
-can be used to install any packages) and then load data from two spatial
-data formats: GPS eXchange (`.gpx`) and ESRI's Shapefile.
+R is able to import a very wide range of spatial data formats thanks to
+its interface with the Geospatial Data Abstraction Library (GDAL). The
+`rgdal` package makes this possible and it can be installed and loaded
+by entering `install.packages("rgdal")` and `library(rgdal)`. The former
+only needs to be typed once, as it saves the data from the internet. The
+latter must be typed for each new R session that requires the package.
 
-`readOGR` is in fact capable of loading dozens more file formats, so the
-focus is on the *method* rather than the specific formats. Let's start
-with a `.gpx` file, a tracklog recording a bicycle ride from Sheffield
-to Wakefield uploaded OpenStreetMap [3].
-
-~~~~ {.r}
-install.packages("rgdal")
-library(rgdal)  # load the gdal package
-ogrListLayers(dsn = "data/gps-trace.gpx")
-shf2lds <- readOGR(dsn = "data/gps-trace.gpx", layer = "tracks")  # load track
-plot(shf2lds)
-shf2lds.p <- readOGR(dsn = "data/gps-trace.gpx", layer = "track_points")  # load points
-points(shf2lds.p[seq(1, 3000, 100), ])
-~~~~
-
-    ## Error: plot.new has not been called yet
-
-    ## Error: plot.new has not been called yet
-
-In the code above we first used R to *download* a file from the
-internet, using the function `download.file` (note this has been
-*commented out* using the `#` symbol). The two essential arguments of
-this function are `url` (we could have typed `url =` before the link)
-and `destfile`, the destination file. As with any function, more
-optional arguments can be viewed by by typing `?download.file`.
-
-When `rgdal` has successfully loaded, the next task is not to import the
-file directly, but to find out which *layers* are available to import,
-with `ogrListLayers`. The output from this command tells us that various
-layers are available, including `tracks` and `track_points`. These are
-imported into R's *workspace* using `readOGR`.
-
-Finally, the basic `plot` function is used to visualize the newly
-imported objects, ensuring they make sense. In the second plot function
-(`points`), we add points for a subset of the object. There will be no
-axes in the plot; to see how to add them, enter `?axis`
-
-Try discovering more about the function by typing `?readOGR`. The
-documentation explains that the `dsn =` argument is interpreted
-differently depending on the type of file used. In the above example,
-the `dsn` was set to as the name of the file. To load Shapefiles, by
-contrast, the *folder* containing the data is used:
+The world map we use is available from the Natural Earth website and a
+slightly modified version of it (entitled "world") is loaded using the
+following code. A common problem preventing the data being loaded
+correctly is that R is not in the correct *working directory*. Please
+refer to the online
+[tutorial](https://github.com/geocomPP/sdvwR/blob/master/sdv-tutorial.pdf?raw=true)
+if this is an issue.
 
 ~~~~ {.r}
-lnd <- readOGR(dsn = "data/", "london_sport")
+library(rgdal)  # load the package (needs to be installed)
+wrld <- readOGR("data/", "world")
+plot(wrld)
 ~~~~
 
-Here, the files reside in a folder entitled `data`, which is in R's
-current working directory (you can check this using `getwd()`). If the
-files were stored in the working directory, one would use `dsn = "."`
-instead. Again, it may be wise to plot the data that results, to ensure
-that it has worked correctly. Now that the data has been loaded into R's
-own `sp` format, try interrogating and plotting it, using functions such
-as `summary` and `plot`.
+![plot of chunk A Basic Map of the
+World](figure/A_Basic_Map_of_the_World.png)
 
-The london\_sport file contains data pertaining to the percentage of
-people within each London Borough who regularly undertake physical
-activity and also the 2001 population of each borough.
+The above block of code loaded the rgdal library, created a new *object*
+called `wrld` and plotted this object to ensure it is as we expect. This
+operation should be fast on most computers because `wrld` is quite
+small. Spatial data can get very large indeed, however. It is thus
+useful to understand how 'large' the object you are dealing with is, and
+know how to reduce unnecessary complexity in its *geometry* to make it
+more manageable to analyse, plot and store. Fortunately, R makes this
+easy, as described in Section 2 of the
+[tutorial](https://github.com/geocomPP/sdvwR/blob/master/sdv-tutorial.pdf?raw=true)
+that accompanies this Chapter. For now, let us continue with an even
+more important topic: how R 'sees' spatial data.
 
-Both of the datasets we have loaded so far are relatively small. But
-spatial data can get very large indeed. It is thus useful to understand
-how 'large' the object you are dealing with is, and know how to reduce
-unnecessary complexity in its *geometry* to make it more manageable to
-analyse, plot and store. Fortunately, R makes this easy, with the
-commands `object.size` and `gSimplify`. For more information on these
-useful commands, readers are referred to an [on-line
-vignette](http://rpubs.com/RobinLovelace/11962) based on the `lnd` and
-`shf2lds` objects we have just loaded. For now, let us continue with an
-even more important topic: how R 'sees' spatial data.
-
-### The structure of spatial data in R
+How R 'sees' spatial data
+-------------------------
 
 Spatial datasets in R are saved in their own format, defined as
-`Spatial...` classes within the `sp` package. For this reason, `sp` is
-the basic spatial package in R, upon which the others depend. Spatial
-classes range from the basic `Spatial` class to the complex
-`SpatialPolygonsDataFrame`: the `Spatial` class contains only two
-required *slots* [5]:
+`Spatial` classes within the `sp` package. This data class divides the
+spatial information into different *slots* so the attribute and geometry
+data are stored separately. This makes handling spatial data in R memory
+efficient. For more detail on this topic, see "The structure of spatial
+data in R" in the on line tutorial. We will see in the next section that
+this complex data structure can be simplified in R using the `fortify`
+function.
+
+For now, let us ask some basic questions about the `wrld` object, using
+functions that would apply to any spatial dataset in R, to gain an
+understanding of what we have loaded.
+
+How many rows of attribute data are there? This query can be answered
+using `nrow`:
 
 ~~~~ {.r}
-getSlots("Spatial")
+nrow(wrld)
 ~~~~
 
-    ##        bbox proj4string 
-    ##    "matrix"       "CRS"
+    ## [1] 175
 
-This tells us that `Spatial` objects must contain a bounding box
-(`bbox`) and a coordinate reference system (CRS) accessed via the
-function `proj4string`. Further details on these can be found by typing
-`?bbox` and `?proj4string`. All other spatial classes in R build on this
-foundation of a bounding box and a projection system (which is set
-automatically to `NA` if it is not known). However, more complex classes
-contain more slots, some of which are lists which contain additional
-lists. To find out the slots of `shf2lds.simple`, for example, we would
-first ascertain its class and then use the `getSlots` command:
+What do the first 2 rows and 5 columns of attribute data contain? To
+answer this question, we need to refer to the `data` slot of the object
+using the `@` symbol and square brackets to define the subset of the
+data to be displayed. In R, the rows are always referred to before the
+comma within the square brackets and the column numbers after. Try
+playing with the following line of code, for example by removing the
+square brackets entirely:
 
 ~~~~ {.r}
-class(shf2lds.simple)  # identify the object's class
+wrld@data[1:2, 1:5]
 ~~~~
 
-    ## Error: object 'shf2lds.simple' not found
+    ##   scalerank      featurecla labelrank  sovereignt sov_a3
+    ## 0         1 Admin-0 country         3 Afghanistan    AFG
+    ## 1         1 Admin-0 country         3      Angola    AGO
 
-~~~~ {.r}
-getSlots("SpatialLinesDataFrame")  # find the associated slots
-~~~~
-
-    ##         data        lines         bbox  proj4string 
-    ## "data.frame"       "list"     "matrix"        "CRS"
-
-The same principles apply to all spatial classes including
-`Spatial* Points`, `Polygons` `Grids` and `Pixels` as well as associated
-`*DataFrame` classes. For more information on this, see the `sp`
-documentation: `?Spatial`.
-
-To flatten a `Spatial*` object in R, so it becomes a simple data frame,
-the `fortify` function can be used (more on this later). For most
-spatial data handling tasks the `Spatial*` object classes are idea, as
-illustrated below.
-
-### Saving and exporting spatial objects
-
-A typical R workflow involves loading the data, processing/analysing the
-data and finally exporting the data in a new form. `writeOGR`, the
-logical counterpart of `readOGR` is ideal for this task. This is
-performed using the following command (in this case we are exporting to
-an ESRI Shapefile):
-
-~~~~ {.r}
-shf2lds.simple <- SpatialLinesDataFrame(shf2lds.simple, data.frame(row.names = "0", 
-    a = 1))
-~~~~
-
-    ## Error: object 'shf2lds.simple' not found
-
-~~~~ {.r}
-writeOGR(shf2lds.simple, layer = "shf2lds", dsn = "data/", driver = "ESRI Shapefile")
-~~~~
-
-    ## Error: object 'shf2lds.simple' not found
-
-In the above code, the object was first converted into a spatial
-dataframe class required by the `writeOGR` command, before being
-exported as a shapefile entitled shf2lds. Unlike with `readOGR`, the
-driver must be specified, in this case with "ESRI Shapefile" [4]. The
-simplified GPS data are now available to other GIS programs for further
-analysis. Alternatively,
-`save(shf2lds.simple, file = "data/shf2lds.RData")` will save the object
-in R's own spatial data format.
-
-### Attribute joins
-
-London Boroughs are official administrative zones so we can easily join
-a range of other datasets to the polygons in the `lnd` object. We will
-use the example of crime data to illustrate this data availability,
-which is stored in the `data` folder available from this project's
-github page.
-
-~~~~ {.r}
-load("data/crimeAg.Rdata")  # load the crime dataset from an R dataset
-~~~~
-
-After the dataset has been explored (e.g. using the `summary` and `head`
-functions) to ensure compatibility, it can be joined to `lnd`. We will
-use the the `join` function in the `plyr` package but the `merge`
-function could equally be used (remember to type `library(plyr)` if
-needed).
-
-`join` requires all joining variables to have the same name, which has
-already been done [7].
-
-~~~~ {.r}
-lnd@data <- join(lnd@data, crimeAg)
-~~~~
-
-Take a look at the `lnd@data` object. You should see new variables
-added, meaning the attribute join was successful.
-
-Summary
--------
-
-To summarise this section, we have learned how to perform the crucial
-tasks of loading and saving spatial datasets in R. This should have been
-surprisingly painless considering the dread surrounding some
-command-line programs (watch out for typos!). We have also taken a look
-inside R's representation of spatial data, learned how to manipulate
-these datasets with a simple attribute join. Much more complex
-procedures are possible, but for now we will move on to visualisation.
+The output shows that the first country in the `wrld` object is
+Afganistan. Now that we have a basic understanding of the attributes of
+the spatial dataset, and know where to look for more detailed
+information about spatial data in R via the online tutorial, it is time
+to move on to the topic of visualisation.
 
 Fundamentals of Spatial Data Visualisation
 ==========================================
@@ -394,12 +227,11 @@ than firm principles.
 Effective map making is hard process – as Krygier and Wood (2011) put it
 "there is a lot to see, think about, and do" (p6). It often comes at the
 end of a period of intense data analysis and perhaps when the priority
-is to get a paper finished or results published and can therefore be
-rushed as a result. The beauty of R (and other scripting languages) is
-the ability to save code and simply re-run it with different data.
-Colours, map adornments and other parameters can therefore be quickly
-applied, so it is well worth creating a template script that adheres to
-best practice.
+is to get a paper finished and can therefore be rushed as a result. The
+beauty of R (and other scripting languages) is the ability to save code
+and simply re-run it with different data. Colours, map adornments and
+other parameters can therefore be quickly applied, so it is well worth
+creating a template script that adheres to best practice.
 
 We have selected ggplot2 as our package of choice for the bulk of our
 maps and spatial data visualisations because it has a number of these
@@ -417,65 +249,43 @@ is conceptually the same as map layers in Geographical Information
 Systems (GIS).
 
 First ensure that the necessary packages are installed and that R is in
-the correct working directory (see above). Then load the packages used
-in this section.
+the correct working directory (see above). Then load the ggplot2 package
+used in this section.
 
 ~~~~ {.r}
-library(rgdal)
 library(ggplot2)
-library(gridExtra)
 ~~~~
 
-We are going to use a map of the world to demonstrate some of the
-cartographic principles as they are introduced. The world map used is
-available from the Natural Earth website. Because these are already
-saved in the data folder, we can proceed to load the data.
+We are going to use the previously loaded map of the world to
+demonstrate some of the cartographic principles as they are introduced.
+To establish the starting point, find the first 35 column names of the
+`wrld` object:
 
 ~~~~ {.r}
-wrld <- readOGR("data/", "ne_110m_admin_0_countries")
+names(wrld@data)[1:35]
 ~~~~
 
-    ## OGR data source with driver: ESRI Shapefile 
-    ## Source: "data/", layer: "ne_110m_admin_0_countries"
-    ## with 177 features and 63 fields
-    ## Feature type: wkbPolygon with 2 dimensions
-
-~~~~ {.r}
-plot(wrld)
-~~~~
-
-![plot of chunk A Basic Map of the
-World](figure/A_Basic_Map_of_the_World.png)
-
-Let's see a sample of the attribute data and remove the Falklands and
-French Southern and Antarctic Lands (to demonstrate the method - type
-`?regex` if interested how this works - and because these countries
-cause continent mis-assignment later on):
-
-~~~~ {.r}
-head(wrld@data)[1:3, 1:5]
-~~~~
-
-    ##   scalerank      featurecla labelrank  sovereignt sov_a3
-    ## 0         1 Admin-0 country         3 Afghanistan    AFG
-    ## 1         1 Admin-0 country         3      Angola    AGO
-    ## 2         1 Admin-0 country         6     Albania    ALB
-
-~~~~ {.r}
-wrld <- wrld[!grepl("Falk|French Southern", wrld$name_long), ]
-~~~~
+    ##  [1] "scalerank"  "featurecla" "labelrank"  "sovereignt" "sov_a3"    
+    ##  [6] "adm0_dif"   "level"      "type"       "admin"      "adm0_a3"   
+    ## [11] "geou_dif"   "geounit"    "gu_a3"      "su_dif"     "subunit"   
+    ## [16] "su_a3"      "brk_diff"   "name"       "name_long"  "brk_a3"    
+    ## [21] "brk_name"   "brk_group"  "abbrev"     "postal"     "formal_en" 
+    ## [26] "formal_fr"  "note_adm0"  "note_brk"   "name_sort"  "name_alt"  
+    ## [31] "mapcolor7"  "mapcolor8"  "mapcolor9"  "mapcolor13" "pop_est"
 
 You can see there are a lot of columns associated with this file.
 Although we will keep all of them, we are only really interested in the
-population estimate ("pop\_est") field. Before progressing it is is
-worth reprojecting the data in order that the population data can be
-seen better. The coordinate reference system of the wrld shapefile is
-currently WGS84. This is the common latitude and longitude format that
-all spatial software packages understand. From a cartographic
-perspective the standard plots of this projection, of the kind produced
-above, are not suitable since they heavily distort the shapes of those
-countries further from the equator. Instead the Robinson projection
-provides a good compromise between areal distortion and shape
+population estimate `("pop_est")` field. Typing `summary(wrld$pop_est)`
+provides basic descriptive statistics on population.
+
+Before progressing it is is worth reprojecting the data in order that
+the population data can be seen better. The coordinate reference system
+of the wrld shapefile is currently WGS84. This is the common latitude
+and longitude format that all spatial software packages understand. From
+a cartographic perspective the standard plots of this projection, of the
+kind produced above, are not suitable since they heavily distort the
+shapes of those countries further from the equator. Instead the Robinson
+projection provides a good compromise between areal distortion and shape
 preservation. We therefore project it as follows.
 
 ~~~~ {.r}
@@ -500,7 +310,7 @@ wrld.rob.f <- fortify(wrld.rob, region = "sov_a3")
 
     ## Loading required package: rgeos
     ## rgeos version: 0.3-2, (SVN revision 413M)
-    ##  GEOS runtime version: 3.3.8-CAPI-1.7.8 
+    ##  GEOS runtime version: 3.3.9-CAPI-1.7.9 
     ##  Polygon checking: TRUE
 
 ~~~~ {.r}
@@ -594,20 +404,26 @@ map + scale_fill_gradientn(colours = brewer.pal(7, "YlGn"))
 In addition to altering the colour scale used to represent continuous
 data it may also be desirable to adjust the breaks at which the colour
 transitions occur. There are many ways to select both the optimum number
-of breaks (i.e colour transtions) and the locations in the dataset at
+of breaks (i.e colour transitions) and the locations in the dataset at
 which they occur. The `classINT` package contains many ways to
 automatically create these breaks. We use the `grid.arrange` function
 from the gridExtra package to display the maps side by side.
 
 ~~~~ {.r}
 library(classInt)
+library(gridExtra)
+~~~~
+
+    ## Loading required package: grid
+
+~~~~ {.r}
 
 # Specify how many breaks you want - generally this should be fewer than 7.
 
 nbrks <- 6
 
 # Here quantiles are used to identify the breaks (note that we are using the
-# original 'wrld.rob' object and not the 'wrld.rob@data$pop_est.f'). USe the
+# original 'wrld.rob' object and not the 'wrld.rob@data$pop_est.f'). Use the
 # help files to see the full range of options.
 brks <- classIntervals(wrld.rob@data$pop_est, n = nbrks, style = "quantile")
 
@@ -631,7 +447,7 @@ PuBu <- map + scale_fill_gradientn(colours = brewer.pal(nbrks, "PuBu"), breaks =
 grid.arrange(YlGn, PuBu, ncol = 2)
 ~~~~
 
-If you are not happy with the automatic methods of specifying breaks it
+If you are not happy with the automatic methods for specifying breaks it
 can also be done manually:
 
 ~~~~ {.r}
@@ -641,11 +457,10 @@ brks <- c(1e+08, 2.5e+08, 5e+07, 1e+09)
 map + scale_fill_gradientn(colours = brewer.pal(nbrks, "PuBu"), breaks = c(brks))
 ~~~~
 
-![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5.png)
+![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6.png)
 
 There are many other ways to specify and alter the colours in ggplot2
-and these are outlined in the help documentation. There are also many
-examples online.
+and these are outlined in the help documentation.
 
 If the map's purpose is to clearly communicate data then it is often
 advisable to conform to conventions so as not to disorientate readers to
@@ -715,13 +530,13 @@ automatically but they can be customised.
 
 ### North arrow
 
-In the maps created so far, we have defined the *aesthetics* of the map
-in the foundation function ggplot. The result of this is that all
-subsequent layers are expected to have the same variables and
-essentially contain data with the same dimensions as original dataset.
-But what if we want to add a new layer from a completely different
-dataset, e.g. to add an arrow? To do this, we must not add any arguments
-to the `ggplot` function, only adding data sources one layer at a time:
+In the maps created so far, we have defined the *aesthetics* (`aes`) of
+the map in the foundation function `ggplot()`. The result of this is
+that all subsequent layers are expected to have the same variables. But
+what if we want to add a new layer from a completely different dataset,
+for example to add a north arrow? To do this, we must not add any
+arguments to the `ggplot` function, only adding data sources one layer
+at a time:
 
 Here we create an empty plot, meaning that each new layer must be given
 its own dataset. While more code is needed in this example, it enables
@@ -740,17 +555,18 @@ ggplot() + geom_polygon(data = wrld.pop.f, aes(long, lat, group = group, fill = 
 
 ### Scale bar
 
-ggplot2's scale bar capabilities are perhaps the least satisfactory
-element of the package. For this example we use the `geom_line()`
-function to draw a line of approximately 1km in length using the `lnd.f`
-object containing the London Boroughs discussed in Section 2. The reason
-for this is that it is in a projected coordinate system - British
-National Grid - so each map unit is worth 1m. In the case of the world
-map the distances at the equator in terms of degrees east to west are
-very different from those further north or south. Any line drawn using
-the the simple approach below would therefore be inaccurate. For maps
-covering large areas - such as the entire world - leaving the axis
-labels on will enable them to act as a graticule which will indicate
+ggplot2's scale bar capabilities are perhaps the least advanced element
+of the package. For this example we use the `geom_line()` function to
+draw a line of approximately 1km in length using the `lnd.f` object
+containing the London Boroughs discussed in Section XXXX. This approach
+will only work if the spatial data are in a projected coordinate system
+- in this case British National Grid - to ensure there are no
+distortions as a result of the curvature of the earth. In the case of
+the world map the distances at the equator in terms of degrees east to
+west are very different from those further north or south. Any line
+drawn using the the simple approach below would therefore be inaccurate.
+For maps covering large areas - such as the entire world - leaving the
+axis labels on will enable them to act as a graticule to indicate
 distance.
 
 ~~~~ {.r}
@@ -765,8 +581,12 @@ ggplot() + geom_polygon(data = lnd.f, aes(long, lat, group = group)) + geom_line
 ### Legends
 
 Legends are added automatically but can be customised in a number of
-ways. A few examples are included below with more details avaialble in
-the `ggplot2` documentation.
+ways. They are an important adornment of any map since they describe
+what its colours mean. Try to select colour breaks that are easy to
+follow and avoid labelling the legend with values that go to a large
+number of significant figures. A few examples of legend customisation
+are included below by way of introduction, but there are many more
+examples avaialble in the `ggplot2` documentation.
 
 ~~~~ {.r}
 # Position
@@ -872,44 +692,11 @@ lnd.b2 + geom_polygon(data = lnd.wgs84.f, aes(x = long, y = lat, group = group,
     fill = Partic_Per), alpha = 0.5)
 ~~~~
 
-Finally, if we want to increase the detail of the base map, `get_map`
-has a zoom parameter.
-
-~~~~ {.r}
-lnd.b3 <- ggmap(get_map(location = b, source = "stamen", maptype = "toner", 
-    crop = T, zoom = 11))
-
-lnd.b3 + geom_polygon(data = lnd.wgs84.f, aes(x = long, y = lat, group = group, 
-    fill = Partic_Per), alpha = 0.5)
-~~~~
-
-![plot of chunk Using the Stamen Toner
-basemap](figure/Using_the_Stamen_Toner_basemap.png)
-
-Spatial polygons are not the only data types compatible with `ggmap` -
-you can use any plot type and set of parameters available in `ggplot2`,
-making it an ideal companion package for spatial data visualisation.
-
-Summary
--------
-
-There are an almost infinite number of different combinations colours,
-adornments and line widths that could be applied to a map, so take
-inspiration from maps and graphics you have seen and liked. The process
-is an iterative one, it will take multiple attempts to get right. Show
-your map to friends and colleagues - all will have an opinion but don’t
-be afraid to stand by the decisions you have taken. To give your maps a
-final polish you may wish to export them as a pdf using the `ggsave()`
-function and importing them into a vector graphics package such as Adobe
-Illustrator or Inkscape.
-
-The beauty of producing maps in a programming environment as opposed to
-the GUI offered by the majority of GIS software packages lies in the
-fact that each line of code can be easily adapted to a different
-dataset. Users can therefore create a series of scripts that act as
-templates and simply call them when required. This saves a huge amount
-of time and has the added advantage that all outputs will have a
-consistent style and thus offer more professional looking publications.
+This produces a much clearer map and enables readers to focus on the
+data rather than the basemap. Spatial polygons are not the only data
+types compatible with `ggmap` - you can use any plot type and set of
+parameters available in `ggplot2`, making it an ideal companion package
+for spatial data visualisation.
 
 A Final Example
 ===============
@@ -947,11 +734,6 @@ wrld <- readOGR("data/", "ne_110m_admin_0_countries")
 ~~~~ {.r}
 btitle <- readPNG("figure/brit_titles.png")
 compass <- readPNG("figure/windrose.png")
-~~~~
-
-    ## Error: unable to open figure/windrose.png
-
-~~~~ {.r}
 bdata <- read.csv("data/british_shipping_example.csv")
 ~~~~
 
@@ -986,7 +768,7 @@ wrld <- c(geom_polygon(aes(group = group), size = 0.1, colour = "black", fill = 
 To see the result of this simply type:
 
 ~~~~ {.r}
-base + wrld
+base + wrld + coord_fixed()
 ~~~~
 
 ![plot of chunk World Map](figure/World_Map.png)
@@ -1020,7 +802,7 @@ base + route + wrld + theme(panel.background = element_rect(fill = "#BAC4B9",
     ymax = 65) + coord_equal() + quiet
 ~~~~
 
-    ## Error: object 'compass' not found
+![plot of chunk World Shipping](figure/World_Shipping.png)
 
 In the plot example we have chosen the colours carefully to give the
 appearance of a historic map. An alternative approach could be to use a
@@ -1038,11 +820,6 @@ background.
 
 ~~~~ {.r}
 earth <- readPNG("figure/earth_raster.png")
-~~~~
-
-    ## Error: unable to open figure/earth_raster.png
-
-~~~~ {.r}
 
 base + annotation_raster(earth, xmin = -180, xmax = 180, ymin = -90, ymax = 90) + 
     route + theme(panel.background = element_rect(fill = "#BAC4B9", colour = "black")) + 
@@ -1051,102 +828,29 @@ base + annotation_raster(earth, xmin = -180, xmax = 180, ymin = -90, ymax = 90) 
     coord_equal() + quiet
 ~~~~
 
-    ## Error: object 'earth' not found
+![plot of chunk World Shipping with raster
+background](figure/World_Shipping_with_raster_background.png)
 
-Animating your plots
---------------------
+Conclusions
+===========
 
-R is not designed to produce animated graphics and as such it has very
-few functions that enable straightforward animation. To produce animated
-graphics users can use a loop to plot and then export a series of images
-that can then be stitched together into a video. There are two
-approaches to this; the first is to create a loop that fills a folder
-with the desired images and then utilise third party software to stitch
-the images together, whilst the second uses R's own animation package.
-The latter option still requires the installation of an additional
-software package called ImageMagick but it has the benefit of creating
-the animation for you within R and faciliting the export to a range of
-formats, not least HTML and GIF. Here we demonstrate the use of the
-package to produce an HTML animation of the shipping tracks completed in
-each year of the bdata object. The code snippet below appears extremely
-dense, but it only contains a few addtions to the plot code utilised
-above.
+There are an almost infinite number of different combinations colours,
+adornments and line widths that could be applied to a map, so take
+inspiration from maps and graphics you have seen and liked. The process
+is an iterative one, it will take multiple attempts to get right. Show
+your map to friends and colleagues - all will have an opinion but don’t
+be afraid to stand by the decisions you have taken. To give your maps a
+final polish you may wish to export them as a pdf using the `ggsave()`
+function and importing them into a vector graphics package such as Adobe
+Illustrator or Inkscape.
 
-First load the package:
-
-~~~~ {.r}
-library(animation)
-~~~~
-
-Then clear any previous animation. Obviously the first time you run this
-it is unnecessary, but it is a good habit to get into.
-
-~~~~ {.r}
-ani.record(reset = TRUE)
-~~~~
-
-We then initiate the "for loop". In this case we are using the
-`unique()` function to list the unique years within the `bdata` object.
-The loop will take the first year, in this case 1791, and assign it to
-the object `i`. The code inside the `{}` brackets will then run with
-`i=1791`. You will spot that `i` is used in a number of places- first to
-subset the data when creating the route plot and then as the title in
-the `ggtitle()` function. We need to force ggplot to create the graphic
-within the loop so the entire plot call is wrapped in the `print()`
-function. Once the plot is called `ani.record()` is used to save the
-plot still and `dev.off()` used to clear the plot window ready for the
-next iteration. `i` is then assigned the next year in the list and the
-code runs again until all years are plotted.
-
-~~~~ {.r}
-for (i in unique(bdata$year)) {
-    route <- c(geom_path(aes(long, lat, group = paste(trp, group.regroup, sep = ".")), 
-        colour = "#0F3B5F", size = 0.2, data = bdata[which(bdata$year == i), 
-            ], alpha = 0.5, lineend = "round"))
-    print(base + route + wrld + theme(panel.background = element_rect(fill = "#BAC4B9", 
-        colour = "black")) + annotation_raster(btitle, xmin = 30, xmax = 140, 
-        ymin = 51, ymax = 87) + annotation_raster(compass, xmin = 65, xmax = 105, 
-        ymin = 25, ymax = 65) + coord_equal() + quiet + ggtitle(i))
-    ani.record()
-    dev.off()
-}
-~~~~
-
-The final step in the process is to save the animation to HTML and view
-it in your web browser. `ani.replay()` retrieves the animation stored by
-the `ani.record()` function and `outdir = getwd()` ensures the final
-file is stored in your working directory.
-
-~~~~ {.r}
-saveHTML(ani.replay(), img.name = "record_plot", outdir = getwd())
-~~~~
-
-You will note that there is something a little odd about the order in
-which the years appear. This can be solved by an additional step before
-the loop code above. Have a think then add this in and then regenerate
-the animation.
-
-Recap and Conclusions
-=====================
-
-This chapter has covered a large number of techniques and approaches for
-the preparation, analysis and visualisation of spatial data in R. Whilst
-it only covers the tip of the iceberg in terms of R's capabilities, it
-does lay the foundations to the use of the multitude of other spatial
-data packages available. These can be discovered online and through the
-help documentation and other chapters provided by the R community. By
-utilising the data visualisation techniques and examples of best
-practice we have covered it is hoped that you will be able to
-communicate your results in a compelling and effective way without the
-need for the repetitive "pointing and clicking" required of many GIS
-packages; you can now tweak colours and other aspects of the plots
-without the need to start from scratch each time an iterative
-improvement is required. As the R community grows so will its range of
-applications and available packages so there will be many exciting
-opportunities ahead to improve on what is presented here.
-
-Recap and Conclusions
-=====================
+The beauty of producing maps in a programming environment as opposed to
+the GUI offered by the majority of GIS software packages lies in the
+fact that each line of code can be easily adapted to a different
+dataset. Users can therefore create a series of scripts that act as
+templates and simply call them when required. This saves a huge amount
+of time and has the added advantage that all outputs will have a
+consistent style and thus offer more professional looking publications.
 
 This chapter has covered a large number of techniques and approaches for
 the preparation, analysis and visualisation of spatial data in R. Whilst
