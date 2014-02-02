@@ -1,22 +1,20 @@
 A practical primer on spatial data in R
 ==================
 
-This section briefly introduces the input data
-and how they can be loaded in R. It is a *practical* chapter, 
+This section briefly introduces some of the key steps to get started with R. It, like the rest of the chapter, has a large *practical* element, 
 so R code will be provided that will allow the steps described to 
 be reproduced on your own computer.
 
-The first stage, as with most GIS projects, 
-is to obtain and load the data. In this case, all the 
+The first stage 
+is to obtain and load the data used in the examples. In this case, all the 
 data has been uploaded to an on-line repository that provides 
 a detailed tutorial to accompany this Chapter:
 [github.com/geocomPP/sdvwR](https://github.com/geocomPP/sdvwR/blob/master/sdv-tutorial.pdf?raw=true). 
-Upon visiting this page you will see many files: the pdf file
-is the additional tutorial. To download the data, click on the "Download ZIP" 
+Upon visiting this page you will see many files. For those completely new to R, there is a PDF file on the page that offers a comprehensive introductory tutorial - we recommend you complete this tutorial to get the best possible start to using the software. To download the data, click on the "Download ZIP" 
 button on the right, and unpack the folder to a sensible place
-on your computer (e.g. the Desktop). Explore the folder and try opening some of the files, 
+on your computer (for example, the Desktop). Explore the folder and try opening some of the files, 
 especially those from the sub-folder entitled "data": these are the input 
-files. For those new to R, we recom
+files.
 
 In any data analysis project, spatial or otherwise, it is important to
 have a strong understanding of the dataset before progressing. 

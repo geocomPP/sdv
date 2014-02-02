@@ -7,7 +7,7 @@ What is R?
 R is a free and open source computer program that runs on all major
 operating systems. It relies primarily on the *command line* for data
 input. This means that instead of interacting with the program by clicking on different 
-parts of the screen, users type commands. This will seem a little daunting at first but 
+parts of the screen, users type commands for the operations they wish to complete. This seems a little daunting at first but 
 the approach has a number of benefits, as highlighted by Gary Sherman (2008,
 p. 283), developer of the popular Geographical Information System (GIS) QGIS:
 
@@ -20,22 +20,16 @@ p. 283), developer of the popular Geographical Information System (GIS) QGIS:
 The joy of this, when you get accustomed to it, is that any command is
 only ever a few keystrokes away, and the order of the commands sent to R
 can be stored and repeated in scripts, saving time in the
-long-term and ensuring reproducible results (see "R and reproducible research").
+long-term.In addition, R encourages truly transparent and reproducible research by making it possible for those with the software installed to duplicate the code used by previous studies. This process is facilitated by the RStudio software
+that allows 'live' R code and results to be embedded in documents. 
 
-Another important attribute of R, related to its command line interface,
-is that it is a fully fledged open source *programming language*. 
 In R what the user inputs is the same
 as what R sees when it processes the request. Access to
-R's source code and openness about how it works has enabled a veritable
-army of programmers to improve R over time and add an incredible number
+R's source code and openness about how it works has enabled many programmers to improve R over time and add an incredible number
 of extensions to its capabilities. There
-are now more than 4000 official packages for R, allowing it to tackle
-almost any computational or numerical problem.
-
-Although writing R source code and creating new packages will not appeal
-to most R users, it inspires confidence to know that there is a strong
-and highly skilled community of R developers. If there is a useful
-function that R cannot currently perform, there is a reasonable
+are now more than 4000 official add-on packages for R, allowing it to tackle
+almost any computational or numerical problem. If there is a useful
+function that R cannot currently perform, there is a good
 chance that someone is working on a solution that will become available
 at a later date. One area
 where extension of R's basic capabilities has been particularly
@@ -44,13 +38,6 @@ successful is the addition of a wide variety of spatial analysis and visualisati
 
 Why R for spatial data visualisation?
 -------------------------------------
-
-Aside from confusion surrounding its one character name [1] and 
-uncertainty about how to search for help [2],
-R may also seem a strange choice for a chapter on
-*spatial* data visualisation specifically. "I thought R was just for
-statistics?" and "Why not use a proper GIS package like ArcGIS?" are valid
-questions.
 
 R was conceived - and is
 still primarily known - for its capabilities as a "statistical programming language" (Bivand
@@ -78,7 +65,7 @@ graphics; a process fuelled by the increased demand for data visualisation and t
 development of sophisticated packages, such as ggplot2, that augment the basic plot
 functions of R. It is now the case that R has become a key analysis and visualisation
 tool used by the likes of Twitter, the New York Times and Google and thousands of
-consultants, design houses and journalists. It is not longer the preserve of academic 
+consultants, design houses and journalists. It is no longer the preserve of academic 
 research, with many graduate jobs listing R as a desirable skill. 
 
 Finally, it is worth noting that while dedicated GIS programs handle spatial data by default and
@@ -88,15 +75,3 @@ graphics or a dedicated graphics package such as ggplot2. On the other
 hand, the main benefits of R for spatial data visualisation lie in the
 *reproducibility* of its outputs, a feature that we will be using to
 great effect in this chapter.
-
-### R and reproducible research
-
-There is a drive towards transparent data and methods in academic publishing. 
-R encourages truly transparent and reproducible research by enabling anyone with an 
-R installation reproduce results described in a previous paper. 
-This process is facilitated by the RStudio software
-that allows 'live' R code and results to be embedded in documents. 
-
-
-
-
