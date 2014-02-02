@@ -15,13 +15,13 @@ system(mess) # reduce plot size
 # mess <- paste("sed -i -e 's/\\\\section{References}/\\\\newpage \\\\section{References}/g' chapter.tex")
 # system(mess) # Put refs on new page
 
-mess <- "sed -i -e '71i\\\\\\maketitle' chapter.tex"
+mess <- "sed -i -e '65i\\\\\\maketitle' chapter.tex"
 system(mess) # make title, after \begin{document}
 
-mess <- "sed -i -e '68i\\\\\\usepackage[margin=1.8cm]{geometry}' chapter.tex"
+mess <- "sed -i -e '63i\\\\\\usepackage[margin=1.8cm]{geometry}' chapter.tex"
 system(mess) # shrink margins
 
-idx <- 69
+idx <- 64
 # open the file and read in all the lines
 conn <- file("chapter.tex")
 text <- readLines(conn)

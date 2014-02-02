@@ -7,10 +7,11 @@ What is R?
 R is a free and open source computer program that runs on all major
 operating systems. It relies primarily on the *command line* for data
 input. This means that instead of interacting with the program by
-clicking on different parts of the screen, users type commands. This
-will seem a little daunting at first but the approach has a number of
-benefits, as highlighted by Gary Sherman (2008, p. 283), developer of
-the popular Geographical Information System (GIS) QGIS:
+clicking on different parts of the screen, users type commands for the
+operations they wish to complete. This seems a little daunting at first
+but the approach has a number of benefits, as highlighted by Gary
+Sherman (2008, p. 283), developer of the popular Geographical
+Information System (GIS) QGIS:
 
 > With the advent of “modern” GIS software, most people want to point
 > and click their way through life. That’s good, but there is a
@@ -20,36 +21,29 @@ the popular Geographical Information System (GIS) QGIS:
 
 The joy of this, when you get accustomed to it, is that any command is
 only ever a few keystrokes away, and the order of the commands sent to R
-can be stored and repeated in scripts, saving time in the long-term and
-ensuring reproducible results (see "R and reproducible research").
+can be stored and repeated in scripts, saving time in the long-term. In
+addition, R encourages truly transparent and reproducible research by
+removing an economic barrier to quantitative analysis and encouraging
+documentation of code. It is possible for anyone with the R installed to
+reproduce all the steps used by othered. This is facilitated by the
+RStudio program, that makes it easy to include 'live' R code in text
+documents.
 
-Another important attribute of R, related to its command line interface,
-is that it is a fully fledged open source *programming language*. In R
-what the user inputs is the same as what R sees when it processes the
-request. Access to R's source code and openness about how it works has
-enabled a veritable army of programmers to improve R over time and add
-an incredible number of extensions to its capabilities. There are now
-more than 4000 official packages for R, allowing it to tackle almost any
-computational or numerical problem.
-
-Although writing R source code and creating new packages will not appeal
-to most R users, it inspires confidence to know that there is a strong
-and highly skilled community of R developers. If there is a useful
-function that R cannot currently perform, there is a reasonable chance
-that someone is working on a solution that will become available at a
-later date. One area where extension of R's basic capabilities has been
-particularly successful is the addition of a wide variety of spatial
-analysis and visualisation tools. The latter will be the focus of this
-chapter.
+In R what the user inputs is the same as what R sees when it processes
+the request. Access to R's source code and openness about how it works
+has enabled many programmers to improve R over time and add an
+incredible number of extensions to its capabilities. There are now more
+than 4000 official add-on *packages* for R, allowing it to tackle almost
+any numerical problem. If there is a useful function that R cannot
+currently perform, there is a good chance that someone is working on a
+solution that will become available at a later date. One area where
+extension of R's basic capabilities has been particularly successful in
+recent years is the addition of a wide variety of spatial analysis and
+visualisation tools (Bivand et al. 2013). The latter will be the focus
+of this chapter.
 
 Why R for spatial data visualisation?
 -------------------------------------
-
-Aside from confusion surrounding its one character name [1] and
-uncertainty about how to search for help [2], R may also seem a strange
-choice for a chapter on *spatial* data visualisation specifically. "I
-thought R was just for statistics?" and "Why not use a proper GIS
-package like ArcGIS?" are valid questions.
 
 R was conceived - and is still primarily known - for its capabilities as
 a "statistical programming language" (Bivand and Gebhardt 2000).
@@ -60,27 +54,25 @@ for data manipulation, calculation and graphical display" (Venables et
 al. 2013). Spatial data analysis and visualisation is an important
 growth area within this increased functionality. The map of Facebook
 friendships produced by Paul Butler, for example, is iconic in this
-regard, and reached a global audience. He mapped the linkages between
-friends by calculating the great circle arcs between them (using the
-`geosphere` package) and plotted the result, displayed in Figure 1. The
-secret to the success of this map was the time taken to select the
-appropriate colour palette, line widths and transparency for the plot.
-As we discuss in Section 3 the importance of these cannot be understated
-and are the difference between a stunning graphic and an impenetrable
-mess.
+regard, and has reached a global audience (Figure 1). This shows
+linkages between friends by calculating the great circle arcs between
+them (using the `geosphere` package). The secret to the success of this
+map was the time taken to select the appropriate colour palette, line
+widths and transparency for the plot. As we discuss in Section 3 the
+importance of these cannot be understated and are the difference between
+a stunning graphic and an impenetrable mess.
 
 ![Iconic plot of Facebook friendship networks worldwide, by Paul
 Butler](figure/butler_facebook_2.jpg)
 
-The impact of the map was to inspire the R community to produce more
-ambitious graphics; a process fuelled by the increased demand for data
-visualisation and the development of sophisticated packages, such as
-ggplot2, that augment the basic plot functions of R. It is now the case
-that R has become a key analysis and visualisation tool used by the
-likes of Twitter, the New York Times and Google and thousands of
-consultants, design houses and journalists. It is not longer the
-preserve of academic research, with many graduate jobs listing R as a
-desirable skill.
+The map helped inspire the R community to produce more ambitious
+graphics; a process fuelled by the increased demand for data
+visualisation and the development of sophisticated packages that augment
+R's basic 'base graphics'. Thus R has become a key analysis and
+visualisation tool used by the likes of Twitter, the New York Times and
+Google. Thousands of consultants, design houses and journalists rely on
+R: it is no longer merely the preserve of academic research and many
+graduate jobs now list R as a desirable skill.
 
 Finally, it is worth noting that while dedicated GIS programs handle
 spatial data by default and display the results in a single way, there
@@ -90,32 +82,26 @@ ggplot2. On the other hand, the main benefits of R for spatial data
 visualisation lie in the *reproducibility* of its outputs, a feature
 that we will be using to great effect in this chapter.
 
-### R and reproducible research
-
-There is a drive towards transparent data and methods in academic
-publishing. R encourages truly transparent and reproducible research by
-enabling anyone with an R installation reproduce results described in a
-previous paper. This process is facilitated by the RStudio software that
-allows 'live' R code and results to be embedded in documents.
-
 A practical primer on spatial data in R
 =======================================
 
-This section briefly introduces the input data and how they can be
-loaded in R. It is a *practical* chapter, so R code will be provided
-that will allow the steps described to be reproduced on your own
-computer.
+This section briefly introduces some of the key steps to get started
+with R. It, like the rest of the chapter, has a large *practical*
+element, so R code will be provided that will allow the steps described
+to be reproduced on your own computer.
 
-The first stage, as with most GIS projects, is to obtain and load the
-data. In this case, all the data has been uploaded to an on-line
-repository that provides a detailed tutorial to accompany this Chapter:
+The first stage is to obtain and load the data used in the examples. In
+this case, all the data has been uploaded to an on-line repository that
+provides a detailed tutorial to accompany this Chapter:
 [github.com/geocomPP/sdvwR](https://github.com/geocomPP/sdvwR/blob/master/sdv-tutorial.pdf?raw=true).
-Upon visiting this page you will see many files: the pdf file is the
-additional tutorial. To download the data, click on the "Download ZIP"
-button on the right, and unpack the folder to a sensible place on your
-computer (e.g. the Desktop). Explore the folder and try opening some of
-the files, especially those from the sub-folder entitled "data": these
-are the input files. For those new to R, we recom
+Upon visiting this page you will see many files. For those completely
+new to R, there is a PDF file on the page that offers a comprehensive
+introductory tutorial - we recommend you complete this tutorial to get
+the best possible start to using the software. To download the data,
+click on the "Download ZIP" button on the right, and unpack the folder
+to a sensible place on your computer (for example, the Desktop). Explore
+the folder and try opening some of the files, especially those from the
+sub-folder entitled "data": these are the input files.
 
 In any data analysis project, spatial or otherwise, it is important to
 have a strong understanding of the dataset before progressing. We will
@@ -212,8 +198,8 @@ Fundamentals of Spatial Data Visualisation
 ==========================================
 
 Good maps depend on sound analysis and can have an enormous impact on
-the understanding and communication of results. It has never been easier
-to produce a map. The underlying data required are available in
+the understanding and communication of results. But, it has never been
+easier to produce a map. The underlying data required are available in
 unprecedented volumes and the technological capabilities of transforming
 them into compelling maps and graphics are increasingly sophisticated
 and straightforward to use. Data and software, however, only offer the
@@ -233,7 +219,7 @@ and simply re-run it with different data. Colours, map adornments and
 other parameters can therefore be quickly applied, so it is well worth
 creating a template script that adheres to best practice.
 
-We have selected ggplot2 as our package of choice for the bulk of our
+We have selected *ggplot2* as our package of choice for the bulk of our
 maps and spatial data visualisations because it has a number of these
 elements at its core. The "gg" in its slightly odd name stands for
 "Grammar of Graphics", which is a set of rules developed by Leland
@@ -241,12 +227,12 @@ Wilkinson (2005) in a book of the same name. Grammar in the context of
 graphics works in much the same way as it does in language - it provides
 a structure. The structure is informed by both human perception and also
 mathematics to ensure that the resulting visualisations are both
-technically sound and comprehensible. By creating ggplot2, Hadley
-Wickham, implemented these rules as well as developing ways in which
-plots can be built up in layers (see Wickham, 2010). This layering
-component is especially useful in the context of spatial data since it
-is conceptually the same as map layers in Geographical Information
-Systems (GIS).
+technically sound and comprehensible. By creating ggplot2 Hadley Wickham
+implemented these rules as well as developing ways in which plots can be
+built up in layers (see Wickham, 2010). This layering component is
+especially useful in the context of spatial data since it is
+conceptually the same as map layers in Geographical Information Systems
+(GIS).
 
 First ensure that the necessary packages are installed and that R is in
 the correct working directory (see above). Then load the ggplot2 package
@@ -289,16 +275,15 @@ projection provides a good compromise between areal distortion and shape
 preservation. We therefore project it as follows.
 
 ~~~~ {.r}
-wrld.rob <- spTransform(wrld, CRS("+proj=robin"))
+wrld.rob <- spTransform(wrld, CRS("+proj=robin"))  #`+proj=robin` refers to the Robinson projection
 plot(wrld.rob)
 ~~~~
 
 ![plot of chunk The Robinson
 Projection](figure/The_Robinson_Projection.png)
 
-`+proj=robin` refers to the Robinson projection. You will have spotted
-from the plot that the countries in the world map are much better
-proportioned.
+You will have spotted from the plot that the countries in the world map
+are much better proportioned.
 
 We now need to `fortify` this spatial data to convert it into a format
 that ggplot2 understands, we also use `merge` to re-attach the attribute
@@ -309,13 +294,13 @@ wrld.rob.f <- fortify(wrld.rob, region = "sov_a3")
 ~~~~
 
     ## Loading required package: rgeos
-    ## rgeos version: 0.3-2, (SVN revision 413M)
-    ##  GEOS runtime version: 3.3.9-CAPI-1.7.9 
+    ## rgeos version: 0.2-19, (SVN revision 394)
+    ##  GEOS runtime version: 3.3.8-CAPI-1.7.8 
     ##  Polygon checking: TRUE
 
 ~~~~ {.r}
 
-wrld.pop.f <- merge(wrld.rob.f, wrld.rob@data, by.x = "id", by.y = "sov_a3")
+wrld.pop.f <- merge(wrld.rob.f, wrld.rob@data, by.x = "id", by.y = "sov_a3")  # by.x and by.y refer to the columns that match the two dataframes together
 ~~~~
 
 The code below produces a map coloured by the population variable. It
@@ -342,8 +327,13 @@ Colour and other aesthetics
 ---------------------------
 
 Colour has an enormous impact on how people will percieve a graphic.
-Readers of a map come to it with a range of pre-conceptions about how
-the world looks.
+Adjusting a colour palette from yellow to red from green to blue, for
+example, can completely alter the readers' response. In addition, the
+use of colour to highlight particular regions or de-emphasise others are
+important tricks to the cartographers trade that shouldn't be
+overlooked. Here we present a few examples of how best to create high
+quality maps with R. For more information about the importance of
+different features of a map to its meaning see Monmonier (1996).
 
 ### Choropleth Maps
 
@@ -385,11 +375,11 @@ map + scale_fill_continuous(low = "white", high = "black")
 ~~~~
 
 It is well worth looking at the *Color Brewer* palettes developed by
-Cynthia Brewer. These are designed to be colour blind safe and
-perceptually uniform such that no one colour jumps out more than any
-others. This latter characteristic is important when trying to produce
-impartial maps. R has a package that contains the colour palettes and
-these can be easily utlised by ggplot2.
+Cynthia Brewer (see http://colorbrewer2.org). These are designed to be
+colour blind safe and perceptually uniform such that no one colour jumps
+out more than any others. This latter characteristic is important when
+trying to produce impartial maps. R has a package that contains the
+colour palettes and these can be easily utlised by ggplot2.
 
 ~~~~ {.r}
 library(RColorBrewer)
@@ -405,12 +395,20 @@ In addition to altering the colour scale used to represent continuous
 data it may also be desirable to adjust the breaks at which the colour
 transitions occur. There are many ways to select both the optimum number
 of breaks (i.e colour transitions) and the locations in the dataset at
-which they occur. The `classINT` package contains many ways to
-automatically create these breaks. We use the `grid.arrange` function
-from the gridExtra package to display the maps side by side.
+which they occur. This is important for the comprehension of a graphic
+since it alters the colours associated with each value. The `classINT`
+package contains many ways to automatically create these breaks. We use
+the `grid.arrange` function from the gridExtra package to display the
+maps side by side.
 
 ~~~~ {.r}
 library(classInt)
+~~~~
+
+    ## Loading required package: class
+    ## Loading required package: e1071
+
+~~~~ {.r}
 library(gridExtra)
 ~~~~
 
@@ -452,6 +450,11 @@ can also be done manually:
 
 ~~~~ {.r}
 library()
+~~~~
+
+    ## Warning: library '/usr/lib/R/site-library' contains no packages
+
+~~~~ {.r}
 nbrks <- 4
 brks <- c(1e+08, 2.5e+08, 5e+07, 1e+09)
 map + scale_fill_gradientn(colours = brewer.pal(nbrks, "PuBu"), breaks = c(brks))
@@ -487,7 +490,7 @@ Convention](figure/Conforming_to_Colour_Convention.png)
 ### Experimenting with line colour and line widths
 
 In addition to conforming to colour conventions, line colour and width
-offer important parameters, which are often overlooked tools for
+offer important parameters that are often overlooked tools for
 increasing the legibility of a graphic. As the code below demonstrates,
 it is possible to adjust line colour through using the `colour`
 parameter and the line width using the `lwd` parameter. The impact of
@@ -526,7 +529,7 @@ provide context; they include graticules, north arrows, scale bars and
 data attribution. Not all are required on a single map, indeed it is
 often best that they are used sparingly to avoid unecessary clutter
 (Monkhouse and Wilkinson, 1971). With ggplot2 many of these are added
-automatically but they can be customised.
+automatically, but they can be customised.
 
 ### North arrow
 
@@ -556,18 +559,16 @@ ggplot() + geom_polygon(data = wrld.pop.f, aes(long, lat, group = group, fill = 
 ### Scale bar
 
 ggplot2's scale bar capabilities are perhaps the least advanced element
-of the package. For this example we use the `geom_line()` function to
-draw a line of approximately 1km in length using the `lnd.f` object
-containing the London Boroughs discussed in Section XXXX. This approach
-will only work if the spatial data are in a projected coordinate system
-- in this case British National Grid - to ensure there are no
-distortions as a result of the curvature of the earth. In the case of
-the world map the distances at the equator in terms of degrees east to
-west are very different from those further north or south. Any line
-drawn using the the simple approach below would therefore be inaccurate.
-For maps covering large areas - such as the entire world - leaving the
-axis labels on will enable them to act as a graticule to indicate
-distance.
+of the package. This approach will only work if the spatial data are in
+a projected coordinate system to ensure there are no distortions as a
+result of the curvature of the earth. In the case of the world map the
+distances at the equator in terms of degrees east to west are very
+different from those further north or south. Any line drawn using the
+the simple approach below would therefore be inaccurate. For maps
+covering large areas - such as the entire world - leaving the axis
+labels on will enable them to act as a graticule to indicate distance.
+We therefore load in a file containing the geometry of London's
+Boroughs.
 
 ~~~~ {.r}
 load("data/lnd.f.RData")
@@ -619,11 +620,10 @@ in context as users can easily orientate themselves to streets and
 landmarks.
 
 For this example we are going to use the shapefile of London sports
-participation introduced in Section 2. The data were originally
-projected to British National Grid (BNG) which is not compatible with
-the online map services used in the following examples. It therefore
-needs reprojecting - a step we completed earlier. The reprojected file
-can be loaded as follows:
+participation. The data were originally projected to British National
+Grid (BNG) which is not compatible with the online map services used in
+the following examples. It therefore needs reprojecting - a step we
+completed earlier. The reprojected file can be loaded as follows:
 
 ~~~~ {.r}
 load("data/lnd.wgs84.RData")
@@ -709,9 +709,7 @@ We are using a very small sample of the the full dataset, which is
 available from here: http://pendientedemigracion.ucm.es/info/cliwoc/.
 The example has been chosen to demonstrate a range of capabilities
 within ggplot2 and the ways in which they can be applied to produce
-high-quality maps with only a few lines of code. We end by showing how
-the maps can be animated to chart the routes over time and the ability
-of R to produce many maps very quickly.
+high-quality maps with only a few lines of code.
 
 As always, the first step is to load in the required packages and
 datasets. Here we are using the png package to load in a series of map
@@ -791,7 +789,7 @@ layers together with the `+` sign as shown in the code below. The first
 changing the background colour to sea blue. `annotation_raster()` plots
 the png map adornments loaded in earlier- this requires the bounding box
 of each image to be specified. In this case we use latitude and
-longitude (in WGS84) and we can use these paramrters to change the png's
+longitude (in WGS84) and we can use these parameters to change the png's
 position and also its size. The final two arguments fix the aspect ratio
 of the plot and remove the axis labels.
 
@@ -835,14 +833,14 @@ Conclusions
 ===========
 
 There are an almost infinite number of different combinations colours,
-adornments and line widths that could be applied to a map, so take
-inspiration from maps and graphics you have seen and liked. The process
-is an iterative one, it will take multiple attempts to get right. Show
-your map to friends and colleagues - all will have an opinion but don’t
-be afraid to stand by the decisions you have taken. To give your maps a
-final polish you may wish to export them as a pdf using the `ggsave()`
-function and importing them into a vector graphics package such as Adobe
-Illustrator or Inkscape.
+adornments and line widths that could be applied to a map (or any other
+data visualisation), so take inspiration from maps and graphics you have
+seen and liked. The process is an iterative one, it will take multiple
+attempts to get right. Show your map to friends and colleagues - all
+will have an opinion but don’t be afraid to stand by the decisions you
+have taken. To give your maps a final polish you may wish to export them
+as a pdf using the `ggsave()` function and importing them into a vector
+graphics package such as Adobe Illustrator or Inkscape.
 
 The beauty of producing maps in a programming environment as opposed to
 the GUI offered by the majority of GIS software packages lies in the
@@ -899,6 +897,9 @@ Monkhouse, F.J. and Wilkinson, H. R. 1973. Maps and Diagrams Their
 Compilation and Construction (3rd Edition, reprinted with revisions).
 London: Methuen & Co Ltd.
 
+Monmonier, M. 1996. How to Lie with Maps (2nd Ed.). Chicago: University
+of Chicago Press.
+
 Ramsey, P., & Dubovsky, D. (2013). Geospatial Software's Open Future.
 GeoInformatics, 16(4).
 
@@ -919,26 +920,6 @@ Wickham, H. 2010. A Layered Grammar of Graphics. American Statistical
 Association, Institute of Mathematics Statistics and Interface
 Foundation of North America Journal of Computational and Graphical
 Statistics. 19, 1: 3-28
-
-Endnotes
-========
-
-1.  "What kind of a name is R?" common question. R's name originates
-    from the creators of R, Ross Ihaka and Robert Gentleman. R is an
-    open source implementation of the statistical programming language
-    S, so its name is also a play on words that makes implicit reference
-    to this.
-
-2.  R is notoriously difficult to search for on major search engines, as
-    it is such a common letter with many other uses beyond the name of a
-    statistical programming language. This should not be a deterrent, as
-    R has a wealth of excellent online resources. To overcome the issue,
-    you can either be more specific with the search term (e.g. "R
-    spatial statistics") or use an R specific search engine such as
-    [rseek.org](http://www.rseek.org/). You can also search of online
-    help *from within R* using the command `RSiteSearch`. E.g.
-    `RSiteSearch("spatial statistics")`. Experiment and see which you
-    prefer!
 
 ~~~~ {.r}
 source("md2pdf.R")  # convert chapter to tex
