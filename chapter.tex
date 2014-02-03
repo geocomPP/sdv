@@ -1,20 +1,16 @@
 \documentclass[]{article}
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}
 \usepackage{amssymb,amsmath}
-\usepackage{ifxetex}
-\usepackage{fixltx2e} % provides \textsubscript
-% use microtype if available
-\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
-\ifnum 0\ifxetex 1\fi=0 % if pdftex
-  \usepackage[utf8]{inputenc}
-\else % if xelatex
-  \usepackage{fontspec}
-  \ifxetex
-    \usepackage{xltxtra,xunicode}
-  \fi
+\usepackage{ifxetex,ifluatex}
+\ifxetex
+  \usepackage{fontspec,xltxtra,xunicode}
   \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
-  \newcommand{\euro}{€}
+\else
+  \ifluatex
+    \usepackage{fontspec}
+    \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \else
+    \usepackage[utf8]{inputenc}
+  \fi
 \fi
 \usepackage{color}
 \usepackage{fancyvrb}
@@ -49,19 +45,23 @@
 \ifxetex
   \usepackage[setpagesize=false, % page size defined by xetex
               unicode=false, % unicode breaks when used with xetex
-              xetex]{hyperref}
+              xetex,
+              colorlinks=true,
+              linkcolor=blue]{hyperref}
 \else
-  \usepackage[unicode=true]{hyperref}
+  \usepackage[unicode=true,
+              colorlinks=true,
+              linkcolor=blue]{hyperref}
 \fi
-\hypersetup{breaklinks=true,
-            bookmarks=true,
-            pdfauthor={},
-            pdftitle={},
-            colorlinks=true,
-            urlcolor=blue,
-            linkcolor=magenta,
+\hypersetup{breaklinks=true, pdfborder={0 0 0}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\setcounter{secnumdepth}{0}
+
+
 \usepackage[margin=1.8cm]{geometry}
-            pdfborder={0 0 0}}
+\begin{document}
 \author{
 Cheshire, James\\
 \texttt{james.cheshire@ucl.ac.uk}
@@ -70,17 +70,8 @@ Lovelace, Robin\\
 \texttt{r.lovelace@leeds.ac.uk}
 }
 \title{Spatial data visualisation with R}
-\setlength{\parindent}{0pt}
+
 \maketitle
-\setlength{\parskip}{6pt plus 2pt minus 1pt}
-\setlength{\emergencystretch}{3em}  % prevent overfull lines
-\setcounter{secnumdepth}{0}
-
-\author{}
-\date{}
-
-\begin{document}
-
 \section{Introduction}
 
 \subsection{What is R?}
@@ -100,8 +91,8 @@ and click their way through life. That's good, but there is a tremendous
 amount of flexibility and power waiting for you with the command line.
 Many times you can do something on the command line in a fraction of the
 time you can do it with a GUI.
-\end{quote}
 
+\end{quote}
 The joy of this, when you get accustomed to it, is that any command is
 only ever a few keystrokes away, and the order of the commands sent to R
 can be stored and repeated in scripts, saving time in the long-term. In
@@ -177,7 +168,11 @@ modified) at home, as described in the next section.
 
 This section briefly introduces some of the key steps to get started
 with R. Like the rest of the chapter, it has a large \emph{practical}
-element, including R code to run on your own computer.
+element, including R code to run on your own computer. For users
+completely new to R, we recommend beginning with an `introduction to R'
+type tutorial, such as Torf and Brauer (2012) or the frequently updated
+tutorial ``Introduction to Visualising Spatial Data in R'' (Lovelace and
+Cheshire 2014). Both are available free online.
 
 The first stage is to obtain and load the data used in the examples. In
 this case, all the data has been uploaded to an on-line repository that
@@ -223,7 +218,6 @@ if this is an issue.
 \KeywordTok{plot}\NormalTok{(wrld)}
 \end{Highlighting}
 \end{Shaded}
-
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/A_Basic_Map_of_the_World.png}
@@ -262,11 +256,9 @@ are there? This query can be answered using \texttt{nrow}:
 \KeywordTok{nrow}\NormalTok{(wrld)}
 \end{Highlighting}
 \end{Shaded}
-
 \begin{verbatim}
 ## [1] 175
 \end{verbatim}
-
 What do the first 2 rows and 5 columns of attribute data contain? To
 answer this question, we need to refer to the \texttt{data} slot of the
 object using the \texttt{@} symbol and use square brackets to define the
@@ -280,13 +272,11 @@ removing the square brackets entirely:
 \NormalTok{wrld@data[}\DecValTok{1}\NormalTok{:}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{:}\DecValTok{5}\NormalTok{]}
 \end{Highlighting}
 \end{Shaded}
-
 \begin{verbatim}
 ##   scalerank      featurecla labelrank  sovereignt sov_a3
 ## 0         1 Admin-0 country         3 Afghanistan    AFG
 ## 1         1 Admin-0 country         3      Angola    AGO
 \end{verbatim}
-
 The output shows that the first country in the \texttt{wrld} object is
 Afganistan. Now that we have a basic understanding of the attributes of
 the spatial dataset, and know where to look for more detailed
@@ -340,7 +330,6 @@ used in this section.
 \KeywordTok{library}\NormalTok{(ggplot2)}
 \end{Highlighting}
 \end{Shaded}
-
 We are going to use the previously loaded map of the world to
 demonstrate some of the cartographic principles as they are introduced.
 To establish the starting point, find the first 35 column names of the
@@ -351,7 +340,6 @@ To establish the starting point, find the first 35 column names of the
 \KeywordTok{names}\NormalTok{(wrld@data)[}\DecValTok{1}\NormalTok{:}\DecValTok{35}\NormalTok{]}
 \end{Highlighting}
 \end{Shaded}
-
 \begin{verbatim}
 ##  [1] "scalerank"  "featurecla" "labelrank"  "sovereignt" "sov_a3"    
 ##  [6] "adm0_dif"   "level"      "type"       "admin"      "adm0_a3"   
@@ -361,7 +349,6 @@ To establish the starting point, find the first 35 column names of the
 ## [26] "formal_fr"  "note_adm0"  "note_brk"   "name_sort"  "name_alt"  
 ## [31] "mapcolor7"  "mapcolor8"  "mapcolor9"  "mapcolor13" "pop_est"
 \end{verbatim}
-
 This shows many attribute columns associated with the \texttt{wrld}
 object. Although we will keep all of them, we are only really interested
 in population \texttt{("pop\_est")}. Typing
@@ -383,7 +370,6 @@ and shape preservation:
 \KeywordTok{plot}\NormalTok{(wrld.rob)}
 \end{Highlighting}
 \end{Shaded}
-
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/The_Robinson_Projection.png}
@@ -401,14 +387,12 @@ attribute data lost during the fortify operation.
 \NormalTok{wrld.rob.f <- }\KeywordTok{fortify}\NormalTok{(wrld.rob, }\DataTypeTok{region =} \StringTok{"sov_a3"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-
 \begin{verbatim}
 ## Loading required package: rgeos
 ## rgeos version: 0.3-2, (SVN revision 413M)
 ##  GEOS runtime version: 3.3.9-CAPI-1.7.9 
 ##  Polygon checking: TRUE
 \end{verbatim}
-
 \begin{Shaded}
 \begin{Highlighting}[]
 
@@ -417,7 +401,6 @@ attribute data lost during the fortify operation.
 \NormalTok{wrld.pop.f <- }\KeywordTok{merge}\NormalTok{(wrld.rob.f, wrld.rob@data, }\DataTypeTok{by.x =} \StringTok{"id"}\NormalTok{, }\DataTypeTok{by.y =} \StringTok{"sov_a3"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-
 The code below produces a map coloured by the population variable. It
 demonstrates the syntax of ggplot2 by first stringing together a series
 of plot commands and assigning them to a single R object called
@@ -439,7 +422,6 @@ produce different maps.
 \NormalTok{map}
 \end{Highlighting}
 \end{Shaded}
-
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/World_Population_Map.png}
@@ -478,7 +460,6 @@ categorical data, \texttt{scale\_fill\_manual()} can be used:
 \NormalTok{map.cont}
 \end{Highlighting}
 \end{Shaded}
-
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/A_Map_of_the_Continents_Using_Default_Colours.png}
@@ -493,7 +474,6 @@ To change the colour scheme, we can set our own colours:
     \StringTok{"orange"}\NormalTok{, }\StringTok{"blue"}\NormalTok{, }\StringTok{"green"}\NormalTok{, }\StringTok{"black"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
-
 Whilst \texttt{scale\_fill\_continuous()} works with continuous
 datasets:
 
@@ -503,7 +483,6 @@ datasets:
 \NormalTok{map + }\KeywordTok{scale_fill_continuous}\NormalTok{(}\DataTypeTok{low =} \StringTok{"white"}\NormalTok{, }\DataTypeTok{high =} \StringTok{"black"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-
 It is well worth looking at the \emph{Color Brewer} palettes developed
 by Cynthia Brewer (see http://colorbrewer2.org). These are designed to
 be colour blind safe and perceptually uniform such that no one colour
@@ -522,7 +501,6 @@ colour palettes and these can be easily utlised by ggplot2.
 \NormalTok{map + }\KeywordTok{scale_fill_gradientn}\NormalTok{(}\DataTypeTok{colours =} \KeywordTok{brewer.pal}\NormalTok{(}\DecValTok{7}\NormalTok{, }\StringTok{"YlGn"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
-
 In addition to altering the colour scale used to represent continuous
 data it may also be desirable to adjust the breaks at which the colour
 transitions occur. There are many ways to select both the optimum number
@@ -539,11 +517,9 @@ gridExtra package to display the maps side by side.
 \KeywordTok{library}\NormalTok{(gridExtra)}
 \end{Highlighting}
 \end{Shaded}
-
 \begin{verbatim}
 ## Loading required package: grid
 \end{verbatim}
-
 \begin{Shaded}
 \begin{Highlighting}[]
 
@@ -566,7 +542,6 @@ gridExtra package to display the maps side by side.
 \KeywordTok{grid.arrange}\NormalTok{(YlGn, PuBu, }\DataTypeTok{ncol =} \DecValTok{2}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-
 If you are not happy with the automatic methods for specifying breaks it
 can also be done manually:
 
@@ -578,7 +553,6 @@ can also be done manually:
 \NormalTok{map + }\KeywordTok{scale_fill_gradientn}\NormalTok{(}\DataTypeTok{colours =} \KeywordTok{brewer.pal}\NormalTok{(nbrks, }\StringTok{"PuBu"}\NormalTok{), }\DataTypeTok{breaks =} \KeywordTok{c}\NormalTok{(brks))}
 \end{Highlighting}
 \end{Shaded}
-
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/unnamed-chunk-6.png}
@@ -606,7 +580,6 @@ map) green. The second plot is more conventional.
 \KeywordTok{grid.arrange}\NormalTok{(blue, green, }\DataTypeTok{ncol =} \DecValTok{2}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/Conforming_to_Colour_Convention.png}
@@ -638,7 +611,6 @@ widths.
 \KeywordTok{grid.arrange}\NormalTok{(yellow, black, thick, thin, }\DataTypeTok{ncol =} \DecValTok{2}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/The_Impact_of_Line_Width.png}
@@ -685,7 +657,6 @@ refinements):
     \KeywordTok{coord_fixed}\NormalTok{()  }\CommentTok{# correct aspect ratio}
 \end{Highlighting}
 \end{Shaded}
-
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/North_Arrow_Example.png}
@@ -714,7 +685,6 @@ Boroughs.
     \DataTypeTok{x =} \DecValTok{510000}\NormalTok{, }\DataTypeTok{y =} \DecValTok{160000}\NormalTok{) + }\KeywordTok{coord_fixed}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
-
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/Scale_Bar_Example.png}
@@ -737,7 +707,6 @@ examples avaialble in the \texttt{ggplot2} documentation.
 \NormalTok{map + }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"top"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/Formatting_the_Legend.png}
@@ -759,7 +728,6 @@ for customization are available, as highlighed in the examples below.
 \NormalTok{map + }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"gray90"}\NormalTok{, }\DataTypeTok{size =} \FloatTok{0.5}\NormalTok{, }\DataTypeTok{linetype =} \StringTok{"dotted"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
-
 \subsection{Adding Basemaps To Your Plots}
 
 The development of the ggmap package has enabled the simple use of
@@ -779,7 +747,6 @@ reprojected file can be loaded as follows:
 \KeywordTok{load}\NormalTok{(}\StringTok{"data/lnd.wgs84.RData"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-
 The first job is to calculate the bounding box (bb for short) of the
 \texttt{lnd.wgs84} object to identify the geographic extent of the map.
 This information is used to request the appropriate map tiles from the
@@ -798,7 +765,6 @@ around the edges of the data to be plotted.
 \CommentTok{# with 1.xx for an xx% increase in the plot size}
 \end{Highlighting}
 \end{Shaded}
-
 This is then fed into the \texttt{get\_map} function as the location
 parameter. The syntax below contains 2 functions. \texttt{ggmap} is
 required to produce the plot and provides the base map data.
@@ -810,11 +776,9 @@ required to produce the plot and provides the base map data.
 \NormalTok{lnd.b1 <- }\KeywordTok{ggmap}\NormalTok{(}\KeywordTok{get_map}\NormalTok{(}\DataTypeTok{location =} \NormalTok{b))}
 \end{Highlighting}
 \end{Shaded}
-
 \begin{verbatim}
 ## Warning: bounding box given to google - spatial extent only approximate.
 \end{verbatim}
-
 \texttt{ggmap} follows the same syntax structures as ggplot2 and so can
 easily be integrated with the other examples included here. First
 \texttt{fortify} the \texttt{lnd.wgs84} object and then merge with the
@@ -826,7 +790,6 @@ required attribute data.
 \NormalTok{lnd.wgs84.f <- }\KeywordTok{merge}\NormalTok{(lnd.wgs84.f, lnd.wgs84@data, }\DataTypeTok{by.x =} \StringTok{"id"}\NormalTok{, }\DataTypeTok{by.y =} \StringTok{"ons_label"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-
 We can now overlay this on our base map using the
 \texttt{geom\_polygon()} function.
 
@@ -836,7 +799,6 @@ We can now overlay this on our base map using the
     \DataTypeTok{fill =} \NormalTok{Partic_Per), }\DataTypeTok{alpha =} \FloatTok{0.5}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-
 The resulting map looks reasonable, but it would be improved with a
 simpler base map in black and white. A design firm called \emph{stamen}
 provide the tiles we need and they can be brought into the plot with the
@@ -848,7 +810,6 @@ provide the tiles we need and they can be brought into the plot with the
     \DataTypeTok{crop =} \NormalTok{T))  }\CommentTok{# note the addition of the maptype parameter.}
 \end{Highlighting}
 \end{Shaded}
-
 We can then produce the plot as before.
 
 \begin{Shaded}
@@ -857,7 +818,6 @@ We can then produce the plot as before.
     \DataTypeTok{fill =} \NormalTok{Partic_Per), }\DataTypeTok{alpha =} \FloatTok{0.5}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-
 This produces a much clearer map and enables readers to focus on the
 data rather than the basemap. Spatial polygons are not the only data
 types compatible with \texttt{ggmap} - you can use any plot type and set
@@ -891,14 +851,12 @@ shapefile and the shipping data itself.
 \NormalTok{wrld <- }\KeywordTok{readOGR}\NormalTok{(}\StringTok{"data/"}\NormalTok{, }\StringTok{"ne_110m_admin_0_countries"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-
 \begin{verbatim}
 ## OGR data source with driver: ESRI Shapefile 
 ## Source: "data/", layer: "ne_110m_admin_0_countries"
 ## with 177 features and 63 fields
 ## Feature type: wkbPolygon with 2 dimensions
 \end{verbatim}
-
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{btitle <- }\KeywordTok{readPNG}\NormalTok{(}\StringTok{"figure/brit_titles.png"}\NormalTok{)}
@@ -906,7 +864,6 @@ shapefile and the shipping data itself.
 \NormalTok{bdata <- }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"data/british_shipping_example.csv"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-
 If you look at the first few lines in the \texttt{bdata} object you will
 see there are 7 columns with each row representing a single point on the
 ships course. The year of the journey and the nationality of the ship
@@ -923,7 +880,6 @@ We first specify some plot parameters that remove the axis labels.
 \NormalTok{quiet <- }\KeywordTok{list}\NormalTok{(xquiet, yquiet)}
 \end{Highlighting}
 \end{Shaded}
-
 The next step is to \texttt{fortify} the World coastlines and create the
 base plot. This sets the extents of the plot window and provides the
 blank canvas on which we will build up the layers. The first layer
@@ -938,7 +894,6 @@ prevent it from executing by simply storing it as the plot's parameters.
     \DataTypeTok{data =} \NormalTok{wrld.f, }\DataTypeTok{alpha =} \DecValTok{1}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
-
 To see the result of this simply type:
 
 \begin{Shaded}
@@ -946,7 +901,6 @@ To see the result of this simply type:
 \NormalTok{base + wrld + }\KeywordTok{coord_fixed}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
-
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/World_Map.png}
@@ -967,7 +921,6 @@ unique paths.
     \DataTypeTok{lineend =} \StringTok{"round"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
-
 We now have all we need to generate the final plot by building the
 layers together with the \texttt{+} sign as shown in the code below. The
 first 3 arguments are the plot layers, and the parameters within
@@ -987,7 +940,6 @@ labels.
     \DataTypeTok{ymax =} \DecValTok{65}\NormalTok{) + }\KeywordTok{coord_equal}\NormalTok{() + quiet}
 \end{Highlighting}
 \end{Shaded}
-
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/World_Shipping.png}
@@ -1019,7 +971,6 @@ background.
     \KeywordTok{coord_equal}\NormalTok{() + quiet}
 \end{Highlighting}
 \end{Shaded}
-
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/World_Shipping_with_raster_background.png}
@@ -1053,17 +1004,21 @@ the iceberg in terms of R's spatial capabilities, the simple worked
 examples lay the foundations for further exploration of spatial data in
 R, using the multitude of spatial data packages available. These can be
 discovered online, through R's internal help (we recommend frequent use
-of R queries such as \texttt{?plot}) and other books on the subject. It
-is hoped that the techniques and examples covered in this chapter will
-help communicate the results of spatial data analysis to the target
-audience in a compelling and effective way, without the need for the
-repetitive ``pointing and clicking'' described in the chapter's opening
-quote. Enjoy the ability to now tweak colours and other aspects of
-graphics without the need to start from scratch each time an iterative
-improvement is required. As the R community grows, so will its range of
-applications and available packages. There will be many exciting
-opportunities ahead and many of these will be more accessible following
-the foundation in spatial data visualisation presented here.
+of R queries such as \texttt{?plot}) and other book chapters on the
+subject. It is hoped that the techniques and examples covered in this
+chapter will help communicate the results of spatial data analysis to
+the target audience in a compelling and effective way, without the need
+for the repetitive ``pointing and clicking'' described in the chapter's
+opening quote. Enjoy the ability to now tweak colours and other aspects
+of graphics without the need to start from scratch each time an
+iterative improvement is required. As the R community grows, so will its
+range of applications and available packages. The supportive online
+communities surrounding large open source programs such as R are one of
+their greatest assets, so we recommend you become an active ``open
+source'' citizen rather than merely a passive consumer of new software
+(Ramsey \& Dubovsky, 2013). There will be many exciting opportunities
+ahead and many of these will be more accessible following the foundation
+in spatial data visualisation presented here.
 
 \section{References}
 
@@ -1074,22 +1029,16 @@ Systems, 2(3), 307--317.
 Bivand, R. S., Pebesma, E. J., \& Rubio, V. G. (2013). Applied spatial
 data: analysis with R. Springer.
 
-Burrough, P. A. \& McDonnell, R. A. (1998). Principals of Geographic
-Information Systems (revised edition). Clarendon Press, Oxford.
-
 Goodchild, M. F. (2007). Citizens as sensors: the world of volunteered
 geography. GeoJournal, 69(4), 211--221.
 
-Harris, R. (2012). A Short Introduction to R.
-\href{http://www.social-statistics.org/}{social-statistics.org}.
+Krygier, J. Wood, D. (2011). Making Maps: A Visual Guide to Map Design
+for GIS (2nd Ed.). New York: The Guildford Press.
 
-Kabacoff, R. (2011). R in Action. Manning Publications Co.
-
-Krygier, J. Wood, D. 2011. Making Maps: A Visual Guide to Map Design for
-GIS (2nd Ed.). New York: The Guildford Press.
-
-Longley, P., Goodchild, M. F., Maguire, D. J., \& Rhind, D. W. (2005).
-Geographic information systems and science. John Wiley \& Sons.
+Lovelace, R. and Cheshire, J. (2014). Introduction to visualising
+spatial data in R. National Centre for Research Methods Working Paper.
+Updated pdf version available from
+\href{https://github.com/Robinlovelace/Creating-maps-in-R}{github.com/Robinlovelace/Creating-maps-in-R}.
 
 Monkhouse, F.J. and Wilkinson, H. R. 1973. Maps and Diagrams Their
 Compilation and Construction (3rd Edition, reprinted with revisions).
@@ -1099,7 +1048,9 @@ Monmonier, M. 1996. How to Lie with Maps (2nd Ed.). Chicago: University
 of Chicago Press.
 
 Ramsey, P., \& Dubovsky, D. (2013). Geospatial Software's Open Future.
-GeoInformatics, 16(4).
+GeoInformatics, 16(4). See also a talk by Paul Ramsey entitled ``Being
+an open source citizen'':
+blog.cleverelephant.ca/2013/10/being-open-source-citizen.
 
 Sherman, G. (2008). Desktop GIS: Mapping the Planet with Open Source
 Tools. Pragmatic Bookshelf.
@@ -1114,7 +1065,7 @@ http://cran.ma.imperial.ac.uk/doc/manuals/r-devel/R-intro.pdf .
 Wickham, H. (2009). ggplot2: elegant graphics for data analysis.
 Springer.
 
-Wickham, H. 2010. A Layered Grammar of Graphics. American Statistical
+Wickham, H. (2010). A Layered Grammar of Graphics. American Statistical
 Association, Institute of Mathematics Statistics and Interface
 Foundation of North America Journal of Computational and Graphical
 Statistics. 19, 1: 3-28

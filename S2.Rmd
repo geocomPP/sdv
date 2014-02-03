@@ -3,7 +3,11 @@ A practical primer on spatial data in R
 
 This section briefly introduces some of the key steps to get started with R. 
 Like the rest of the chapter, it has a large *practical* element, 
-including R code to run on your own computer.
+including R code to run on your own computer. For users completely new 
+to R, we recommend beginning with an `introduction to R' type tutorial, 
+such as Torf and Brauer (2012) or the frequently updated tutorial "Introduction
+to Visualising Spatial Data in R" (Lovelace and Cheshire 2014). Both 
+are available free online.
 
 The first stage 
 is to obtain and load the data used in the examples. In this case, all the 

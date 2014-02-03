@@ -92,7 +92,11 @@ A practical primer on spatial data in R
 
 This section briefly introduces some of the key steps to get started
 with R. Like the rest of the chapter, it has a large *practical*
-element, including R code to run on your own computer.
+element, including R code to run on your own computer. For users
+completely new to R, we recommend beginning with an \`introduction to R'
+type tutorial, such as Torf and Brauer (2012) or the frequently updated
+tutorial "Introduction to Visualising Spatial Data in R" (Lovelace and
+Cheshire 2014). Both are available free online.
 
 The first stage is to obtain and load the data used in the examples. In
 this case, all the data has been uploaded to an on-line repository that
@@ -833,16 +837,20 @@ the iceberg in terms of R's spatial capabilities, the simple worked
 examples lay the foundations for further exploration of spatial data in
 R, using the multitude of spatial data packages available. These can be
 discovered online, through R's internal help (we recommend frequent use
-of R queries such as `?plot`) and other books on the subject. It is
-hoped that the techniques and examples covered in this chapter will help
-communicate the results of spatial data analysis to the target audience
-in a compelling and effective way, without the need for the repetitive
-"pointing and clicking" described in the chapter's opening quote. Enjoy
-the ability to now tweak colours and other aspects of graphics without
-the need to start from scratch each time an iterative improvement is
-required. As the R community grows, so will its range of applications
-and available packages. There will be many exciting opportunities ahead
-and many of these will be more accessible following the foundation in
+of R queries such as `?plot`) and other book chapters on the subject. It
+is hoped that the techniques and examples covered in this chapter will
+help communicate the results of spatial data analysis to the target
+audience in a compelling and effective way, without the need for the
+repetitive "pointing and clicking" described in the chapter's opening
+quote. Enjoy the ability to now tweak colours and other aspects of
+graphics without the need to start from scratch each time an iterative
+improvement is required. As the R community grows, so will its range of
+applications and available packages. The supportive online communities
+surrounding large open source programs such as R are one of their
+greatest assets, so we recommend you become an active "open source"
+citizen rather than merely a passive consumer of new software (Ramsey &
+Dubovsky, 2013). There will be many exciting opportunities ahead and
+many of these will be more accessible following the foundation in
 spatial data visualisation presented here.
 
 References
@@ -855,22 +863,16 @@ Systems, 2(3), 307–317.
 Bivand, R. S., Pebesma, E. J., & Rubio, V. G. (2013). Applied spatial
 data: analysis with R. Springer.
 
-Burrough, P. A. & McDonnell, R. A. (1998). Principals of Geographic
-Information Systems (revised edition). Clarendon Press, Oxford.
-
 Goodchild, M. F. (2007). Citizens as sensors: the world of volunteered
 geography. GeoJournal, 69(4), 211–221.
 
-Harris, R. (2012). A Short Introduction to R.
-[social-statistics.org](http://www.social-statistics.org/).
+Krygier, J. Wood, D. (2011). Making Maps: A Visual Guide to Map Design
+for GIS (2nd Ed.). New York: The Guildford Press.
 
-Kabacoff, R. (2011). R in Action. Manning Publications Co.
-
-Krygier, J. Wood, D. 2011. Making Maps: A Visual Guide to Map Design for
-GIS (2nd Ed.). New York: The Guildford Press.
-
-Longley, P., Goodchild, M. F., Maguire, D. J., & Rhind, D. W. (2005).
-Geographic information systems and science. John Wiley & Sons.
+Lovelace, R. and Cheshire, J. (2014). Introduction to visualising
+spatial data in R. National Centre for Research Methods Working Paper.
+Updated pdf version available from
+[github.com/Robinlovelace/Creating-maps-in-R](https://github.com/Robinlovelace/Creating-maps-in-R).
 
 Monkhouse, F.J. and Wilkinson, H. R. 1973. Maps and Diagrams Their
 Compilation and Construction (3rd Edition, reprinted with revisions).
@@ -880,7 +882,9 @@ Monmonier, M. 1996. How to Lie with Maps (2nd Ed.). Chicago: University
 of Chicago Press.
 
 Ramsey, P., & Dubovsky, D. (2013). Geospatial Software's Open Future.
-GeoInformatics, 16(4).
+GeoInformatics, 16(4). See also a talk by Paul Ramsey entitled "Being an
+open source citizen":
+blog.cleverelephant.ca/2013/10/being-open-source-citizen.
 
 Sherman, G. (2008). Desktop GIS: Mapping the Planet with Open Source
 Tools. Pragmatic Bookshelf.
@@ -895,7 +899,7 @@ http://cran.ma.imperial.ac.uk/doc/manuals/r-devel/R-intro.pdf .
 Wickham, H. (2009). ggplot2: elegant graphics for data analysis.
 Springer.
 
-Wickham, H. 2010. A Layered Grammar of Graphics. American Statistical
+Wickham, H. (2010). A Layered Grammar of Graphics. American Statistical
 Association, Institute of Mathematics Statistics and Interface
 Foundation of North America Journal of Computational and Graphical
 Statistics. 19, 1: 3-28
