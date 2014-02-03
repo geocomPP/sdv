@@ -3,40 +3,40 @@ Fundamentals of Spatial Data Visualisation
 
 Good maps depend on sound analysis and can have an enormous impact on the 
 understanding and communication of results. 
-But, it has never been easier to produce a map. 
-The underlying data required are available in unprecedented volumes 
-and the technological capabilities of transforming them into compelling
-maps and graphics are increasingly sophisticated and straightforward to use. 
+Thanks to new data sources and programs such as R, it has never been easier to produce a map. 
+Spatial datasets are now available in unprecedented volumes 
+and tools for transforming them into compelling
+maps and graphics are becoming increasingly sophisticated accessible. 
 Data and software, however, only offer the starting points of good spatial 
-data visualisation since they need to be refined and calibrated by the researchers
-seeking to communicate their findings.  In this section we will run through the
-features of a good map. It is worth noting that not all good maps and 
-graphics contain all the features below – they should simply be seen 
+data visualisation. Graphics need to be refined and calibrated 
+to best communicate the message contained in the data.  This section describes the
+features of a good map. Not all good maps and 
+graphics *must* contain all the features below: they should be seen 
 as suggestions rather than firm principles.
 
-Effective map making is hard process – as Krygier and Wood (2011)
-put it "there is a lot to see, think about, and do" (p6). 
-It often comes at the end of a period of intense data analysis
-and perhaps when the priority is to get a paper finished and can therefore be rushed as a result. 
+Effective map making is difficult process. as Krygier and Wood (2011)
+put it: "there is a lot to see, think about, and do" (p6). 
+Visualisation usually comes at the end of a period of data analysis
+and, perhaps when the priority is to finish an assignment, is tempting to rush. 
 The beauty of R (and other scripting languages) is the ability to 
-save code and simply re-run it with different data. 
+save code and re-run it. 
 Colours, map adornments and other parameters can therefore be quickly applied, 
-so it is well worth creating a template script that adheres to best practice.
+so it is worth spending time creating a template script that adheres to best practice.
 
-We have selected *ggplot2* as our package of choice for the bulk of 
-our maps and spatial data visualisations because it has a number 
-of these elements at its core. The "gg" in its slightly odd name stands for
-"Grammar of Graphics", which is a set of rules developed 
-by Leland Wilkinson (2005) in a book of the same name. 
-Grammar in the context of graphics works in much the same way as it does in language - 
+We use *ggplot2* as the package of choice to produce most of 
+the maps presented in this chapter because it easily facilitates good practice in data visualisation. 
+The "gg" in its name stands for
+"Grammar of Graphics", a set of rules developed 
+by Wilkinson (2005). 
+Grammar in the context of graphics works in much the same way as it does in language:
 it provides a structure. The structure is informed by both human perception 
 and also mathematics to ensure that the resulting visualisations are 
-both technically sound and comprehensible. By creating ggplot2 
-Hadley Wickham implemented these rules as well as developing ways
-in which plots can be built up in layers (see Wickham, 2010).
+technically sound and comprehensible. By creating ggplot2 
+Hadley Wickham implemented these rules, including a syntax
+for building graphics in layers using the `+` symbol (see Wickham, 2010).
 This layering component is especially useful in the context of
 spatial data since it is conceptually the same as map layers in
-Geographical Information Systems (GIS).
+conventional GIS.
 
 First ensure that the necessary packages are installed and 
 that R is in the correct working directory (see above).
@@ -59,49 +59,49 @@ wrld <- readOGR("data/", "world")
 names(wrld@data)[1:35]
 ```
 
-You can see there are a lot of columns associated with this file.
+This shows many attribute columns associated with the `wrld` object.
 Although we will keep all of them, we are only really interested in
-the population estimate `("pop_est")` field. Typing `summary(wrld$pop_est)`
+population `("pop_est")`. Typing `summary(wrld$pop_est)`
 provides basic descriptive statistics on population.
 
-Before progressing it is is worth reprojecting the data in order that the
-population data can be seen better. The coordinate reference system of 
-the wrld shapefile is currently WGS84. This is the common latitude and 
+Before progressing, we will reproject the data to reduce 
+distortion in the size of countries close to the North and South poles
+(at the top and bottom of the above plot). 
+The coordinate reference system of 
+the wrld shapefile is currently WGS84, the most common latitude and 
 longitude format that all spatial software packages understand. 
-From a cartographic perspective the standard plots of this projection, 
-of the kind produced above, are not suitable since they heavily distort
-the shapes of those countries further from the equator. 
-Instead the Robinson projection provides a good compromise
-between areal distortion and shape preservation. We therefore project it as follows.
+From a cartographic perspective this projection this is not ideal. 
+Instead, the Robinson projection provides a good compromise
+between areal distortion and shape preservation:
 
 ```{r The Robinson Projection, fig.width = 8, fig.height= 5, message=FALSE}
 wrld.rob <- spTransform(wrld, CRS("+proj=robin")) #`+proj=robin` refers to the Robinson projection
 plot(wrld.rob)
 ```
 
-You will have spotted
-from the plot that the countries in the world map are much better proportioned.
-
-We now need to `fortify` this spatial data to convert it into a format
-that ggplot2 understands, we also use `merge` to re-attach the
-attribute data that is lost in the fortify operation.
+Now the countries in the world map are much better proportioned.
+The above plots use R's *base graphics*. The function `fortify` must be used to convert
+the spatial data it into a format
+that ggplot2 understands. Then the `merge` function is used to re-attach the
+attribute data lost during the fortify operation.
 
 ```{r}
 wrld.rob.f <- fortify(wrld.rob, region = "sov_a3")
 
-wrld.pop.f <- merge(wrld.rob.f, wrld.rob@data, by.x = "id", by.y = "sov_a3") # by.x and by.y refer to the columns that match the two dataframes together
+# Use by.x and by.y arguments to specify the columns that match the two dataframes together:
+wrld.pop.f <- merge(wrld.rob.f, wrld.rob@data, by.x = "id", by.y = "sov_a3") 
 ```
 
 The code below produces a map coloured by the population variable.
-It demonstrates the sophistication of ggplot2 by first stringing 
+It demonstrates the syntax of ggplot2 by first stringing 
 together a series of plot commands and assigning them to a single R 
 object called `map`. If you type `map` into the command line, 
-R will then execute the code and generate the plot. By simple 
-specifing our `fill` variable within the `aes()` part of the 
-code and then using the `geom_polygon()` command ggplot2 will 
-fill colour the countries using a default colour pallette and 
-auto-generated key. As will be shown in the next section these
-defaults can be easily altered to produce different looking maps.
+R will then execute the code and generate the plot. By  
+specifing the `fill` variable within the `aes()` (short for 'aesthetics') arguement, ggplot2 
+colours the countries using a default colour pallette and 
+automatically generates a legend. `geom_polygon()` 
+tells ggplot2 to plot polygons. As will be shown in the next section these
+defaults can be easily altered to produce different maps.
 
 ```{r World Population Map, fig.width = 8, fig.height= 5}
 map <- ggplot(wrld.pop.f, aes(long, lat, group = group, fill = pop_est)) + 
@@ -115,25 +115,30 @@ map
 
 ## Colour and other aesthetics
 
-Colour has an enormous impact on how people will percieve a graphic. Adjusting a colour palette from yellow to red from green to blue, for example, can completely alter the readers' response. In addition, the use of colour to highlight particular regions or de-emphasise others are important tricks to the cartographers trade that shouldn't be overlooked. Here we present a few examples of how best to create high quality maps with R. For more information about the importance of different features of a map to its meaning see Monmonier (1996).
+Colour has an enormous impact on how people will percieve a graphic. 
+Adjusting a colour palette from yellow to red or from green to blue, 
+for example, can alter the readers' response. 
+In addition, the use of colour to highlight particular regions 
+or de-emphasise others are important tricks in cartography that shouldn't be overlooked. 
+Below we present a few examples of how to create high quality maps with R. For more information about the importance of different features of a map for its interpretation, see Monmonier (1996).
 
 ### Choropleth Maps
 
-ggplot2 knows the different between continuous and categorical (nominal) data and will automatically assign the appropriate colour palettes when producing choropleth maps such as the one above. The default colour palettes are generally a good place to start but users may wish to vary them for a whole host of reasons, such as the need to print in black and white. The `scale_fill_` family of commands facilitate such customisation. For categorical data `scale_fill_manual()` is a useful command:
+ggplot2 knows the difference between continuous and categorical (nominal) variables and will automatically assign the appropriate colour palettes accordingly. The default colour palettes are generally a sensible place to start but users may wish to vary them for a whole host of reasons, such as the need to print in black and white. The `scale_fill_` family of commands enable such customisation. For categorical data, `scale_fill_manual()` can be used:
 
 ```{r A Map of the Continents Using Default Colours, fig.width = 8, fig.height= 5}
-#Produce a map of continents
+# Produce a map of continents
 map.cont <- ggplot(wrld.pop.f, aes(long, lat, group = group, fill = continent)) + 
   geom_polygon() + 
   coord_equal() + 
   labs(x = "Longitude", y = "Latitude", fill = "World Continents") + 
   ggtitle("World Continents")
 
-#To see the default colours
+# To see the default colours
 map.cont
 ```
 
-To change the colour scheme:
+To change the colour scheme, we can set our own colours:
 
 ```{r, eval=FALSE}
 map.cont + scale_fill_manual(values = c("yellow", "red", "purple", "white", "orange", "blue", "green", "black"))
@@ -142,8 +147,7 @@ map.cont + scale_fill_manual(values = c("yellow", "red", "purple", "white", "ora
 Whilst `scale_fill_continuous()` works with continuous datasets:
 
 ```{r Black and White Population Map, eval=FALSE}
-#note the use of the "map" object created earler
-
+# Note the use of the "map" object created earler
 map + scale_fill_continuous(low = "white", high = "black")
 
 ```
@@ -160,20 +164,21 @@ map + scale_fill_gradientn(colours = brewer.pal(7,"YlGn"))
 
 In addition to altering the colour scale used to represent continuous data it may also be desirable to adjust the breaks at which the colour transitions occur. There are many ways to select both the optimum number of breaks (i.e colour transitions) and the locations in the dataset at which they occur. This is important for the comprehension of a graphic since it alters the colours associated with each value. The `classINT` package contains many ways to automatically create these breaks. We use the `grid.arrange` function from the gridExtra package to display the maps side by side.
 
-```{r Different Colour Palettes with Bespoke Breaks,fig.keep='none'}
+```{r Different Colour Palettes with Bespoke Breaks, fig.keep='none', results='hide'}
 library(classInt)
 library(gridExtra)
 
-#Specify how many breaks you want - generally this should be fewer than 7.
-
+# Specify how number of breaks - generally this should be fewer than 7
 nbrks <- 6
 
-#Here quantiles are used to identify the breaks (note that we are using the original "wrld.rob" object and not the "wrld.rob@data$pop_est.f"). Use the help files to see the full range of options.
+# Here quantiles are used to identify the breaks
+# Note that we are using the original "wrld.rob" object and not the "wrld.rob@data$pop_est.f" 
+# Use the help files (by typing ?classIntervals) to see the full range of options
 brks <- classIntervals(wrld.rob@data$pop_est, n = nbrks, style = "quantile")
 
 print(brks)
 
-#Now the breaks can be easily inserted into the code above for a range of colour palettes
+# Now the breaks can be easily inserted into the code above for a range of colour palettes
 YlGn <- map + scale_fill_gradientn(colours = brewer.pal(nbrks,"YlGn"), breaks = c(brks$brks))
 
 PuBu<-map+scale_fill_gradientn(colours=brewer.pal(nbrks,"PuBu"), breaks=c(brks$brks))
@@ -192,7 +197,7 @@ map + scale_fill_gradientn(colours = brewer.pal(nbrks,"PuBu"), breaks = c(brks))
 
 There are many other ways to specify and alter the colours in ggplot2 and these are outlined in the help documentation.
 
-If the map's purpose is to clearly communicate data then it is often advisable to conform to conventions so as not to disorientate readers to ensure they can focus on the key messages contained in the data. A good example of this is the use of blue for bodies of water and green for landmasses. The code example below generates two plots with our wrld.pop.f object. The first colours the land blue and the sea (in this case the background to the map) green and the second is more conventional.
+If the map's purpose is to clearly communicate data then it is advisable to conform to widely used conventions. A good example of this is the use of blue for water and green for landmasses. The code example below generates two plots with the `wrld.pop.f` object. The first colours the land blue and the sea (in this case the background to the map) green. The second plot is more conventional.
 
 ```{r Conforming to Colour Convention}
 map2 <- ggplot(wrld.pop.f, aes(long, lat, group = group)) + coord_equal()
@@ -204,9 +209,9 @@ green <- map2 + geom_polygon(fill="dark green") + theme(panel.background = eleme
 grid.arrange(blue, green, ncol = 2)
 ```
 
-### Experimenting with line colour and line widths
+### Experimenting with line colour and widths
 
-In addition to conforming to colour conventions, line colour and width offer important parameters that are often overlooked tools for increasing the legibility of a graphic. As the code below demonstrates, it is possible to adjust line colour through using the `colour` parameter and the line width using the `lwd` parameter. The impact of different line widths will vary depending on your screen size and resolution. If you save the plot to pdf (or an image) then the size at which you do this will also affect the line widths.
+Line colour and width are important parameters too often overlooked for increasing the legibility of a graphic. The code below demonstrates it is possible to adjust these using the `colour` and `lwd` arguments. The impact of different line widths will vary depending on your screen size and resolution. If you save the plot to pdf (e.g. using the `ggsave` command), this will also affect the relative line widths.
 
 ```{r The Impact of Line Width}
 map3 <- map2 + theme(panel.background = element_rect(fill = "light blue"))
@@ -222,12 +227,12 @@ thick <- map3 + geom_polygon(fill = "dark green", colour = "black", lwd = 1.5)
 grid.arrange(yellow, black, thick, thin, ncol = 2)
 ```
 
-There are other parameters such as layer transparency (use the `alpha` parameter for this) that can be applied to all aspects of the plot - both points, lines and polygons. Space does not permit their full exploration here but more information is available from the many online examples and the ggplot2 package documentation.
+There are other parameters such as layer transparency (use the `alpha` parameter for this) that can be applied to all aspects of the plot - both points, lines and polygons. Space does not permit full exploration here but more information is available from the ggplot2 package documentation (see [ggplot2.org](http://ggplot2.org/)).
 
 ## Map Adornments and Annotations
 
 
-Map adornments and annotations are essential to orientate the viewer and provide context; they include graticules, north arrows, scale bars and data attribution. Not all are required on a single map, indeed it is often best that they are used sparingly to avoid unecessary clutter (Monkhouse and Wilkinson, 1971). With ggplot2 many of these are added automatically, but they can be customised.
+Map adornments and annotations orientate the viewer and provide context. They include grids (also known as graticules), orientation arrows, scale bars and data attribution. Not all are required on a single map, indeed it is often best that they are used sparingly to avoid unecessary clutter (Monkhouse and Wilkinson, 1971). With ggplot2 scales and legends are provided by default, but they can be customised.
 
 
 ### North arrow
@@ -253,6 +258,7 @@ ggplot() + geom_polygon(data = wrld.pop.f, aes(long, lat, group = group, fill = 
 ```
 
 ### Scale bar
+
 ggplot2's scale bar capabilities are perhaps the least advanced element of the package. This approach will only work if the spatial data are in a projected coordinate system to ensure there are no distortions as a result of the curvature of the earth. In the case of the world map the distances at the equator in terms of degrees east to west are very different from those further north or south. Any line drawn using the the simple approach below would therefore be inaccurate. For maps covering large areas - such as the entire world - leaving the axis labels on will enable them to act as a graticule to indicate distance. We therefore load in a file containing the geometry of London's Boroughs. 
 
 ```{r Scale Bar Example}
@@ -289,7 +295,7 @@ Adding Basemaps To Your Plots
 
 The development of the ggmap package has enabled the simple use of online mapping services such as Google Maps and OpenStreetMap for base maps. Using image tiles from these services spatial data can be placed in context as users can easily orientate themselves to streets and landmarks.
 
-For this example we are going to use the shapefile of London sports participation. The data were originally projected to British National Grid (BNG) which is not compatible with the online map services used in the following examples. It therefore needs reprojecting - a step we completed earlier. The reprojected file can be loaded as follows:
+For this example we use data on London sports participation. The data were originally projected to British National Grid (BNG) which is not compatible with the online map services used in the following examples. It therefore needs reprojecting - a step we completed earlier. The reprojected file can be loaded as follows:
 
 ```{r}
 load("data/lnd.wgs84.RData")
@@ -338,7 +344,7 @@ plot with the `get_map` function:
 
 ```{r}
 lnd.b2 <- ggmap(get_map(location = b, source = "stamen", 
-                        maptype = "toner", crop = T)) #note the addition of the maptype parameter.
+                        maptype = "toner", crop = T)) # note the addition of the maptype parameter.
 ```
 
 We can then produce the plot as before.

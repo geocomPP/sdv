@@ -55,27 +55,31 @@ Spatial data analysis and visualisation is an important growth area within this
 increased functionality.
 The map of Facebook friendships produced by Paul Butler, for example, is iconic in this regard, 
 and has reached a global audience (Figure 1). 
-This shows linkages between friends by calculating the great 
-circle arcs between them (using the `geosphere` package). The secret to the success of this map
+This shows linkages between friends as lines across the curved surface of the 
+Earth (using the `geosphere` package). The secret to the success of this map
 was the time taken to select the appropriate colour palette,
 line widths and transparency for the plot. 
-As we discuss in Section 3 the importance of these cannot be understated 
-and are the difference between a stunning graphic and an impenetrable mess.
+As we discuss in Section 3 the importance of such details cannot be overstated.
+They can be the difference between a stunning graphic and an impenetrable mess.
 
 ![Iconic plot of Facebook friendship networks worldwide, by Paul Butler](figure/butler_facebook_2.jpg)
 
 The map helped inspire the R community to produce more ambitious
-graphics; a process fuelled by the increased demand for data visualisation and the
-development of sophisticated packages that augment R's basic 'base graphics'. 
-Thus R has become a key analysis and visualisation
-tool used by the likes of Twitter, the New York Times and Google. Thousands of
-consultants, design houses and journalists rely on R: it is no longer merely the preserve of academic 
+graphics, a process fuelled by increased demand for data visualisation and the
+development of packages that augment R's preinstalled 'base graphics'. 
+Thus R has become a key tool for analysis and visualisation
+used by the likes of Twitter, the New York Times and Google. Thousands of
+consultants, design houses and journalists also rely on R: it is no longer merely the preserve of academic 
 research and many graduate jobs now list R as a desirable skill. 
 
-Finally, it is worth noting that while dedicated GIS programs handle spatial data by default and
+Finally, it is worth noting a few key differences between R and traditional GIS
+software such as QGIS. While dedicated GIS programs handle spatial data by default and
 display the results in a single way, there are various options in R that
-must be decided by the user, for example whether to use R's base
-graphics or a dedicated graphics package such as ggplot2. On the other
-hand, the main benefits of R for spatial data visualisation lie in the
-*reproducibility* of its outputs, a feature that we will be using to
-great effect in this chapter.
+must be decided by the user (for example whether to use R's base
+graphics or a dedicated graphics package such as ggplot2).
+Indeed, it is this flexibility, illustrated by the custom map of shipping 
+routes in Section 4 of this chapter, that makes R so attractive.
+Another benefit of R compared with traditional approaches to GIS is that it facilitates
+*transparency* of research, a feature that we will be using to
+great effect in this chapter: all of the results presented in the subsequent sections
+can be reproduced (and modified) at home, as described in the next section. 

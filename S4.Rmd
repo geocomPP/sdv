@@ -4,8 +4,8 @@ A Final Example
 Here we present a final example that draws upon the many advanced concepts discussed in 
 this chapter to produce a map of 18th Century Shipping flows. The data have been obtained 
 from the CLIWOC project and they represent a sample of digitised ships' logs from the 18th Century. 
-We are using a very small sample of the the full dataset, which is available from here: 
-http://pendientedemigracion.ucm.es/info/cliwoc/. 
+We are using a very small sample of the the full dataset, which is available from  
+[pendientedemigracion.ucm.es/info/cliwoc/](http://pendientedemigracion.ucm.es/info/cliwoc/). 
 The example has been chosen to demonstrate a range of capabilities 
 within ggplot2 and the ways in which they can be applied to produce 
 high-quality maps with only a few lines of code. 

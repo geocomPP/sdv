@@ -1,20 +1,24 @@
 A practical primer on spatial data in R
 ==================
 
-This section briefly introduces some of the key steps to get started with R. It, like the rest of the chapter, has a large *practical* element, 
-so R code will be provided that will allow the steps described to 
-be reproduced on your own computer.
+This section briefly introduces some of the key steps to get started with R. 
+Like the rest of the chapter, it has a large *practical* element, 
+including R code to run on your own computer.
 
 The first stage 
 is to obtain and load the data used in the examples. In this case, all the 
 data has been uploaded to an on-line repository that provides 
 a detailed tutorial to accompany this Chapter:
 [github.com/geocomPP/sdvwR](https://github.com/geocomPP/sdvwR/blob/master/sdv-tutorial.pdf?raw=true). 
-Upon visiting this page you will see many files. For those completely new to R, there is a PDF file on the page that offers a comprehensive introductory tutorial - we recommend you complete this tutorial to get the best possible start to using the software. To download the data, click on the "Download ZIP" 
-button on the right, and unpack the folder to a sensible place
-on your computer (for example, the Desktop). Explore the folder and try opening some of the files, 
-especially those from the sub-folder entitled "data": these are the input 
-files.
+Upon visiting this page you will see many files. One of these 
+is 'sdv-tutorial.pdf', which offers a comprehensive introductory tutorial - we recommend new R users 
+refer to this to accompany the chapter. To download the data
+that will allow the examples to be reproduced, click on the "Download ZIP" 
+button on the right, and unpack this to a sensible place
+on your computer (for example, the Desktop). 
+This should result in a folder called 'sdvwR-master' being created.
+Explore this and try opening some of the files, 
+especially those from the sub-folder entitled "data", the input datsets.
 
 In any data analysis project, spatial or otherwise, it is important to
 have a strong understanding of the dataset before progressing. 
@@ -25,8 +29,9 @@ to other formats.
 
 R is able to import a very wide range of spatial data formats thanks to
 its interface with the Geospatial Data Abstraction Library (GDAL). 
-The `rgdal` package makes this possible and it can be installed and 
-loaded by entering `install.packages("rgdal")` and `library(rgdal)`. 
+The `rgdal` package makes this possible: install and 
+load it by by entering `install.packages("rgdal")` followed by `library(rgdal)`, 
+on separate lines. 
 The former only needs to be typed once, as it saves the data from the internet. 
 The latter must be typed for each new R session that requires the package.
 
@@ -46,10 +51,8 @@ The above block of code loaded the rgdal library, created a new *object* called 
 plotted this object to ensure it is as we expect.
 This operation should be fast on most computers because `wrld` is quite small.
 Spatial data can get very large indeed, however. 
-It is thus useful to 
-understand how 'large' the object you are dealing with is, and
-know how to reduce unnecessary complexity in its *geometry* to 
-make it more manageable to analyse, plot and store. Fortunately, 
+It can therefore be useful to 
+know the size spatial objects and simplify them when necessary.
 R makes this easy, as described in Section 2 of the 
 [tutorial](https://github.com/geocomPP/sdvwR/blob/master/sdv-tutorial.pdf?raw=true) that accompanies this Chapter. 
 For now, let us continue with an even more important topic: how R 'sees' spatial data.
@@ -57,18 +60,16 @@ For now, let us continue with an even more important topic: how R 'sees' spatial
 ## How R 'sees' spatial data
 
 Spatial datasets in R are saved in their own format, defined as 
-`Spatial` classes within the `sp` package.  This data class divides the 
+`Spatial` classes within the `sp` package (Bivand et al. 2013). This data class divides the 
 spatial information into different *slots* so the attribute and geometry data
-are stored separately. This makes handling spatial data in R memory efficient.
+are stored separately. This makes handling spatial data in R efficient.
 For more detail on this topic, see "The structure of spatial data in R" in 
 the on line tutorial. We will see in the next section that this complex data
 structure can be simplified in R using the `fortify` function. 
 
 For now, let us ask some basic questions about the `wrld` object, using 
 functions that would apply to any spatial dataset in R, to gain an understanding
-of what we have loaded.
-
-How many rows of attribute data are there? This query can be answered using `nrow`:
+of what we have loaded. How many rows of attribute data are there? This query can be answered using `nrow`:
 
 ```{r}
 nrow(wrld)
@@ -76,7 +77,7 @@ nrow(wrld)
 
 What do the first 2 rows and 5 columns of attribute data contain?
 To answer this question, we need to refer to the `data` slot of the 
-object using the `@` symbol and square brackets to define the subset
+object using the `@` symbol and use square brackets to define the subset
 of the data to be displayed. In R, the rows are always referred to before
 the comma within the square brackets and the column numbers after. Try
 playing with the following line of code, for example by removing the square
