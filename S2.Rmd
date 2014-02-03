@@ -68,7 +68,7 @@ Spatial datasets in R are saved in their own format, defined as
 spatial information into different *slots* so the attribute and geometry data
 are stored separately. This makes handling spatial data in R efficient.
 For more detail on this topic, see "The structure of spatial data in R" in 
-the on line tutorial. We will see in the next section that this complex data
+the online tutorial. We will see in the next section that this complex data
 structure can be simplified in R using the `fortify` function. 
 
 For now, let us ask some basic questions about the `wrld` object, using 

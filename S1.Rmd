@@ -20,11 +20,10 @@ p. 283), developer of the popular Geographical Information System (GIS) QGIS:
 The joy of this, when you get accustomed to it, is that any command is
 only ever a few keystrokes away, and the order of the commands sent to R
 can be stored and repeated in scripts, saving time in the
-long-term. In addition, R encourages truly transparent and reproducible 
-research by removing an economic barrier to quantitative analysis and encouraging documentation of code.
+long-term. In addition, R facilitates truly transparent and reproducible 
+research by removing the need for expensive software licenses and encouraging documentation of code.
 It is possible for anyone with the R installed 
-to reproduce all the steps used by othered. This 
-is facilitated by the RStudio program, that makes it easy to include
+to reproduce all the steps used by others. With the RStudio program it is even possible to include
 'live' R code in text documents. 
 
 In R what the user inputs is the same
@@ -53,7 +52,7 @@ R has become "an integrated suite of software facilities for data manipulation,
 calculation and graphical display" (Venables et al. 2013). 
 Spatial data analysis and visualisation is an important growth area within this 
 increased functionality.
-The map of Facebook friendships produced by Paul Butler, for example, is iconic in this regard, 
+The map of Facebook friendships produced by Paul Butler, for example, is iconic in this regard 
 and has reached a global audience (Figure 1). 
 This shows linkages between friends as lines across the curved surface of the 
 Earth (using the `geosphere` package). The secret to the success of this map
@@ -69,7 +68,7 @@ graphics, a process fuelled by increased demand for data visualisation and the
 development of packages that augment R's preinstalled 'base graphics'. 
 Thus R has become a key tool for analysis and visualisation
 used by the likes of Twitter, the New York Times and Google. Thousands of
-consultants, design houses and journalists also rely on R: it is no longer merely the preserve of academic 
+consultants, design houses and journalists also rely on R - it is no longer merely the preserve of academic 
 research and many graduate jobs now list R as a desirable skill. 
 
 Finally, it is worth noting a few key differences between R and traditional GIS

@@ -14,7 +14,7 @@ features of a good map. Not all good maps and
 graphics *must* contain all the features below: they should be seen 
 as suggestions rather than firm principles.
 
-Effective map making is difficult process. as Krygier and Wood (2011)
+Effective map making is difficult process, as Krygier and Wood (2011)
 put it: "there is a lot to see, think about, and do" (p6). 
 Visualisation usually comes at the end of a period of data analysis
 and, perhaps when the priority is to finish an assignment, is tempting to rush. 
@@ -39,7 +39,7 @@ spatial data since it is conceptually the same as map layers in
 conventional GIS.
 
 First ensure that the necessary packages are installed and 
-that R is in the correct working directory (see above).
+that R is in the correct working directory.
 Then load the ggplot2 package used in this section.
 
 ```{r, message=FALSE}
@@ -101,7 +101,7 @@ specifing the `fill` variable within the `aes()` (short for 'aesthetics') arguem
 colours the countries using a default colour pallette and 
 automatically generates a legend. `geom_polygon()` 
 tells ggplot2 to plot polygons. As will be shown in the next section these
-defaults can be easily altered to produce different maps.
+defaults can be easily altered to change a map's appearance.
 
 ```{r World Population Map, fig.width = 8, fig.height= 5}
 map <- ggplot(wrld.pop.f, aes(long, lat, group = group, fill = pop_est)) + 
@@ -156,7 +156,7 @@ It is well worth looking at the *Color Brewer* palettes developed by Cynthia Bre
 
 ```{r World Map with Yellow Green Colour Brewer Palette, fig.keep='none'}
 library(RColorBrewer)
-# look at the help documents to see the palettes available. See http://colorbrewer2.org/ 
+# look at the help documents to see the palettes available.
 ?RColorBrewer
 # note the use of the scale_fill_gradientn() function rather than scale_fill_continuous() used above
 map + scale_fill_gradientn(colours = brewer.pal(7,"YlGn"))
@@ -189,7 +189,6 @@ grid.arrange(YlGn, PuBu, ncol = 2)
 If you are not happy with the automatic methods for specifying breaks it can also be done manually:
 
 ```{r}
-library()
 nbrks <- 4
 brks <- c(100000000,250000000,50000000,1000000000)
 map + scale_fill_gradientn(colours = brewer.pal(nbrks,"PuBu"), breaks = c(brks))
@@ -232,7 +231,7 @@ There are other parameters such as layer transparency (use the `alpha` parameter
 ## Map Adornments and Annotations
 
 
-Map adornments and annotations orientate the viewer and provide context. They include grids (also known as graticules), orientation arrows, scale bars and data attribution. Not all are required on a single map, indeed it is often best that they are used sparingly to avoid unecessary clutter (Monkhouse and Wilkinson, 1971). With ggplot2 scales and legends are provided by default, but they can be customised.
+Map adornments and annotations orientate the viewer and provide context. They include grids (also known as graticules), orientation arrows, scale bars and data attribution. Not all are required on a single map, indeed it is often best that they are used sparingly to avoid unecessary clutter (Monkhouse and Wilkinson 1971). With ggplot2 scales and legends are provided by default, but they can be customised.
 
 
 ### North arrow
@@ -269,7 +268,7 @@ ggplot() + geom_polygon(data = lnd.f, aes(long, lat, group = group)) +
 
 ### Legends
 
-Legends are added automatically but can be customised in a number of ways. They are an important adornment of any map since they describe what its colours mean. Try to select colour breaks that are easy to follow and avoid labelling the legend with values that go to a large number of significant figures. A few examples of legend customisation are included below by way of introduction, but there are many more examples avaialble in the `ggplot2` documentation. 
+Legends are added automatically but can be customised in a number of ways. They are an important adornment of any map since they describe what its colours mean. Try to select colour breaks that are easy to follow and avoid labelling the legend with values that go to a large number of significant figures. A few examples of legend customisation are included below by way of introduction, but there are many more examples available in the ggplot2 documentation. 
 
 ```{r Formatting the Legend}
 #Position
@@ -302,7 +301,7 @@ load("data/lnd.wgs84.RData")
 ``` 
 
 The first job is to calculate the bounding box (bb for short) of the 
-`lnd.wgs84` object to identify the geographic extent of the map. This information is used to request the appropriate map tiles from the map service of our choice. This process is conceptually the same as the size of your web browser or smartphone screen when using Google maps for navigation. The first line of code in the snippet below retrieves the bounding box and the two that follow add 5% so there is a little space around the edges of the data to be plotted.
+`lnd.wgs84` object to identify the geographic extent of the map. This information is used to request the appropriate map tiles from the map service of our choice - a process conceptually the same as the size of your web browser or smartphone screen when using Google maps for navigation. The first line of code in the snippet below retrieves the bounding box and the two that follow add 5% so there is a little space around the edges of the data to be plotted.
 
 
 ```{r}

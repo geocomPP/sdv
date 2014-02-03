@@ -22,7 +22,7 @@ compass <- readPNG("figure/windrose.png")
 bdata <- read.csv("data/british_shipping_example.csv")
 ```
 
-If you look at the first few lines in the `bdata` object you will see there are 7 columns with each row representing a single point on the ships course. The year of the journey and the nationality of the ship are also included. The final 3 columns are identifiers that are used later to group the coordinate points together into the paths that ggplot2 plots.
+If you look at the first few lines in the `bdata` object you will see there are 7 columns with each row representing a single point on the ship's course. The year of the journey and the nationality of the ship are also included. The final 3 columns are identifiers that are used later to group the coordinate points together into the paths that ggplot2 plots.
 
 We first specify some plot parameters that remove the axis labels.
 
@@ -65,7 +65,7 @@ base + route + wrld + theme(panel.background = element_rect(fill='#BAC4B9',colou
 
 In the plot example we have chosen the colours carefully to give the appearance of a historic map. 
 An alternative approach could be to use a satellite image as a base map. It is possible to use 
-the readPNG function to import NASA's "Blue Marble" image for this purpose. Given that the 
+the `readPNG` function to import NASA's "Blue Marble" image for this purpose. Given that the 
 route information is the same projection as the image it is very straightforward to set the 
 image extent to span -180 to 180 degrees and -90 to 90 degrees and have it align with the 
 shipping data. Producing the plot is accomplished using the code below. This offers a good 
