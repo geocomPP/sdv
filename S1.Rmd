@@ -7,7 +7,7 @@ What is R?
 R is a free and open source computer program that runs on all major
 operating systems. It relies primarily on the *command line* for data
 input. This means that instead of interacting with the program by clicking on different 
-parts of the screen, users type commands for the operations they wish to complete. This seems a little daunting at first but 
+parts of the screen via a *graphical user interface* (GUI), users type commands for the operations they wish to complete. This seems a little daunting at first but 
 the approach has a number of benefits, as highlighted by Gary Sherman (2008,
 p. 283), developer of the popular Geographical Information System (GIS) QGIS:
 

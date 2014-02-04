@@ -7,11 +7,11 @@ What is R?
 R is a free and open source computer program that runs on all major
 operating systems. It relies primarily on the *command line* for data
 input. This means that instead of interacting with the program by
-clicking on different parts of the screen, users type commands for the
-operations they wish to complete. This seems a little daunting at first
-but the approach has a number of benefits, as highlighted by Gary
-Sherman (2008, p. 283), developer of the popular Geographical
-Information System (GIS) QGIS:
+clicking on different parts of the screen via a *graphical user
+interface* (GUI), users type commands for the operations they wish to
+complete. This seems a little daunting at first but the approach has a
+number of benefits, as highlighted by Gary Sherman (2008, p. 283),
+developer of the popular Geographical Information System (GIS) QGIS:
 
 > With the advent of “modern” GIS software, most people want to point
 > and click their way through life. That’s good, but there is a
@@ -98,7 +98,7 @@ tutorial "Introduction to Visualising Spatial Data in R" (Lovelace and
 Cheshire 2014). Both are available free online.
 
 The first stage is to obtain and load the data used in the examples. In
-this case, all the data has been uploaded to an on-line repository that
+this case, all the data has been uploaded to an online repository that
 provides a detailed tutorial to accompany this Chapter:
 [github.com/geocomPP/sdvwR](https://github.com/geocomPP/sdvwR/blob/master/sdv-tutorial.pdf?raw=true).
 Upon visiting this page you will see many files. One of these is
