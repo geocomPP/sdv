@@ -49,7 +49,7 @@ base + wrld + coord_fixed()
 The code snipped below creates the plot layer containing the the shipping routes. The `geom_path()`
 function is used to string together the coordinates into the routes. 
 You can see within the `aes()` component we have specified long and 
-lat plus pasted together the trp and `group.regroup` variables to identify the unique paths.
+lat plus pasted together the `trp` and `group.regroup` variables to identify the unique paths.
 
 ```{r}
 route <- c(geom_path(aes(long,lat,group = paste(bdata$trp, bdata$group.regroup, sep = ".")), colour="#0F3B5F", size = 0.2, data= bdata, alpha = 0.5, lineend = "round")) 

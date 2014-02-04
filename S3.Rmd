@@ -97,8 +97,8 @@ It demonstrates the syntax of ggplot2 by first stringing
 together a series of plot commands and assigning them to a single R 
 object called `map`. If you type `map` into the command line, 
 R will then execute the code and generate the plot. By  
-specifing the `fill` variable within the `aes()` (short for 'aesthetics') arguement, ggplot2 
-colours the countries using a default colour pallette and 
+specifying the `fill` variable within the `aes()` (short for 'aesthetics') argument, ggplot2 
+colours the countries using a default colour palette and 
 automatically generates a legend. `geom_polygon()` 
 tells ggplot2 to plot polygons. As will be shown in the next section these
 defaults can be easily altered to change a map's appearance.
@@ -115,7 +115,7 @@ map
 
 ## Colour and other aesthetics
 
-Colour has an enormous impact on how people will percieve a graphic. 
+Colour has an enormous impact on how people will perceive a graphic. 
 Adjusting a colour palette from yellow to red or from green to blue, 
 for example, can alter the readers' response. 
 In addition, the use of colour to highlight particular regions 
@@ -152,7 +152,7 @@ map + scale_fill_continuous(low = "white", high = "black")
 
 ```
 
-It is well worth looking at the *Color Brewer* palettes developed by Cynthia Brewer (see http://colorbrewer2.org). These are designed to be colour blind safe and perceptually uniform such that no one colour jumps out more than any others. This latter characteristic is important when trying to produce impartial maps. R has a package that contains the colour palettes and these can be easily utlised by ggplot2.
+It is well worth looking at the *Color Brewer* palettes developed by Cynthia Brewer (see http://colorbrewer2.org). These are designed to be colour blind safe and perceptually uniform such that no one colour jumps out more than any others. This latter characteristic is important when trying to produce impartial maps. R has a package that contains the colour palettes and these can be easily utilised by ggplot2.
 
 ```{r World Map with Yellow Green Colour Brewer Palette, fig.keep='none'}
 library(RColorBrewer)
@@ -231,7 +231,7 @@ There are other parameters such as layer transparency (use the `alpha` parameter
 ## Map Adornments and Annotations
 
 
-Map adornments and annotations orientate the viewer and provide context. They include grids (also known as graticules), orientation arrows, scale bars and data attribution. Not all are required on a single map, indeed it is often best that they are used sparingly to avoid unecessary clutter (Monkhouse and Wilkinson 1971). With ggplot2 scales and legends are provided by default, but they can be customised.
+Map adornments and annotations orientate the viewer and provide context. They include grids (also known as graticules), orientation arrows, scale bars and data attribution. Not all are required on a single map, indeed it is often best that they are used sparingly to avoid unnecessary clutter (Monkhouse and Wilkinson 1971). With ggplot2 scales and legends are provided by default, but they can be customised.
 
 
 ### North arrow
@@ -268,7 +268,7 @@ ggplot() + geom_polygon(data = lnd.f, aes(long, lat, group = group)) +
 
 ### Legends
 
-Legends are added automatically but can be customised in a number of ways. They are an important adornment of any map since they describe what its colours mean. Try to select colour breaks that are easy to follow and avoid labelling the legend with values that go to a large number of significant figures. A few examples of legend customisation are included below by way of introduction, but there are many more examples available in the ggplot2 documentation. 
+Legends are added automatically but can be customised in a number of ways. They are an important adornment of any map since they describe what its colours mean. Try to select colour breaks that are easy to follow and avoid labeling the legend with values that go to a large number of significant figures. A few examples of legend customisation are included below by way of introduction, but there are many more examples available in the ggplot2 documentation. 
 
 ```{r Formatting the Legend}
 #Position
@@ -276,7 +276,7 @@ map + theme(legend.position = "top")
 ```
 
 As you can see, this added the legend in a new place. Many more options for customization 
-are available, as highlighed in the examples below.
+are available, as highlighted in the examples below.
 
 ```{r, eval=FALSE}
 #Title
