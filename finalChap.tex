@@ -76,8 +76,9 @@ Lovelace, Robin\\
 
 \subsection{What is R?}
 
-R is a free and open source computer program that runs on all major
-operating systems. It relies primarily on the \emph{command line} for
+R is a free and open source computer program for
+processing data. It runs on all major operating systems and
+relies primarily on the \emph{command line} for
 data input. This means that instead of interacting with the program by
 clicking on different parts of the screen via a \emph{graphical user
 interface} (GUI), users type commands for the operations they wish to
@@ -151,7 +152,10 @@ custom map of shipping routes presented later in this chapter, that makes R
 an attractive visualisation solution. 
 
 All of the
-results presented in this chapter can be reproduced (and modified) by typing the short code snippets that are presented into R. Elsewhere in this book, these principles are extended in the context of reproducible geographic information science (****CB Chapter****).
+results presented in this chapter can be reproduced (and modified) by typing
+the short code snippets that are presented into R. Elsewhere in this book,
+these principles are extended in the context of reproducible geographic
+information science ***(TODO: reference Chris Brunsden's Chapter)***.
 
 \section{A practical primer on spatial data in R}
 
@@ -164,11 +168,16 @@ The first stage is to obtain and load the data used for the examples into R. The
 \href{https://github.com/geocomPP/sdvwR/blob/master/sdv-tutorial.pdf?raw=true}{github.com/geocomPP/sdvwR}.
 Upon visiting this page you will see many files. One of these is
 `sdv-tutorial.pdf', which offers a comprehensive introductory tutorial -
-we recommend new R users refer to this as accompaniment to the chapter. ***Put in Footnote from here**** To
+we recommend new R users refer to this as accompaniment to the
+chapter.\footnote{To
+% ***Put in Footnote from here**** 
 download the data that will allow the examples to be reproduced, click
-on the ``Download ZIP'' button on the right hand side of the page, and unzip this to a
+on the ``\href{https://github.com/geocomPP/sdvwR/archive/master.zip}{Download ZIP}''
+button on the right hand side of the 
+\href{https://github.com/geocomPP/sdvwR/}{page}, 
+and unzip this to a
 convenient place on your computer (for example, the Desktop). This should
-result in a folder called `sdvwR-master' being created.****to here****
+result in a folder called `sdvwR-master' being created.}
 
 In any data analysis project, spatial or otherwise, it is important to
 have a strong understanding of the dataset before progressing. R is able to import a very wide range of spatial data formats by linking with the Geospatial Data Abstraction Library (GDAL). An interface to this library
@@ -367,7 +376,7 @@ categorical data, \texttt{scale\_fill\_manual()} can be used (see Figure 5).
 \caption{A Map of the Continents Using Default Colours}
 \end{figure}
 
-\CommentTok{#Colours can be specified manually, either using words, as illustrated in the example, or more flexibly, such as through the use of hexadecimal colour codes}
+Colours can be specified manually, either using words, as illustrated in the example, or more flexibly, such as through the use of hexadecimal colour codes:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -375,8 +384,9 @@ categorical data, \texttt{scale\_fill\_manual()} can be used (see Figure 5).
     \StringTok{"orange"}\NormalTok{, }\StringTok{"blue"}\NormalTok{, }\StringTok{"green"}\NormalTok{, }\StringTok{"black"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
-\CommentTok{#Whilst \texttt{scale\_fill\_continuous()} works with continuous
-datasets}:
+
+The command \texttt{scale\_fill\_continuous()} is used to set
+a continuum-based colour scheme:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -409,7 +419,8 @@ which they occur. This is important for the comprehension of a graphic
 since it alters the colours associated with each value. The
 \texttt{classINT} package contains many ways to automatically create
 these breaks. We use the \texttt{grid.arrange} function from the
-gridExtra package to display a series of maps side by side,  illustrating different break choices. ***you don't do this, but I think it would be useful***
+gridExtra package to display a series of maps side by side,  illustrating different break choices. 
+% ***you don't do this, but I think it would be useful***
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -450,8 +461,8 @@ gridExtra package to display a series of maps side by side,  illustrating differ
 \KeywordTok{grid.arrange}\NormalTok{(YlGn, PuBu, }\DataTypeTok{ncol =} \DecValTok{2}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-\CommentTok{#If you are not happy with the automatic methods for specifying breaks it
-can also be done manually:}
+% \CommentTok{#If you are not happy with the automatic methods for specifying breaks it
+% can also be done manually:}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -461,7 +472,7 @@ can also be done manually:}
 \end{Highlighting}
 \end{Shaded}
 
-***I have deleted what was Figure 6 so double check numbering in text from here****
+% ***I have deleted what was Figure 6 so double check numbering in text from here****
 
 Line colour and width are also important parameters for enhancing the legibility of a graphic (see Figure 6). The code below demonstrates it
 is possible to adjust these using the \texttt{colour} and \texttt{lwd}
@@ -496,9 +507,11 @@ the plot - both points, lines and polygons. Space does not permit full
 exploration here, but more information is available in the ggplot2
 package documentation (see \href{http://ggplot2.org/}{ggplot2.org}).
 
-\subsection{Map Adornments and Annotations}
+\subsection{Map Adornments}
 
-***I think scale bar and north arrow sections can be consolidated. also not sure about the layering point in this context. Might be worht mentioning furhter up***
+% ***I think scale bar and north arrow sections can be consolidated. 
+% also not sure about the layering point in this context. Might be worht 
+% mentioning furhter up***
 
 Map adornments and annotations orientate the viewer and provide context.
 They include grids (also known as graticules), orientation arrows, scale
@@ -523,13 +536,13 @@ refinements):
     \KeywordTok{coord_fixed}\NormalTok{()  }\CommentTok{# correct aspect ratio}
 \end{Highlighting}
 \end{Shaded}
-\begin{figure}[htbp]
-\centering
-\includegraphics{figure/North_Arrow_Example.png}
-\caption{North Arrow Example}
-\end{figure}
+% \begin{figure}[htbp]
+% \centering
+% \includegraphics{figure/North_Arrow_Example.png}
+% \caption{North Arrow Example}
+% \end{figure}
 
-\subsubsection{Scale bar}
+% \subsubsection{Scale bar}
 
 ggplot2's scale bar capabilities are perhaps the least advanced element
 of the package. This approach will only work if the spatial data are in
@@ -551,11 +564,11 @@ Boroughs.
     \DataTypeTok{x =} \DecValTok{510000}\NormalTok{, }\DataTypeTok{y =} \DecValTok{160000}\NormalTok{) + }\KeywordTok{coord_fixed}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
-\begin{figure}[htbp]
-\centering
-\includegraphics{figure/Scale_Bar_Example.png}
-\caption{Scale Bar Example}
-\end{figure}
+% \begin{figure}[htbp]
+% \centering
+% \includegraphics{figure/Scale_Bar_Example.png}
+% \caption{Scale Bar Example}
+% \end{figure}
 
 \subsubsection{Legends}
 
@@ -590,7 +603,7 @@ Many more options are available, such as adding a title, adjusting the font size
 \end{Highlighting}
 \end{Shaded}
 
-***I think we can delete Figs 9 and 10***
+% ***I think we can delete Figs 9 and 10***
 
 \subsection{Plotting over a base map}
 
@@ -751,7 +764,7 @@ identify the unique paths.
 \end{Highlighting}
 \end{Shaded}
 
-We now have all we need to generate the final plot, shown in Figure ***, by building the
+We now have all we need to generate the final plot, shown in Figure \ref{fship}, by building the
 layers together with the \texttt{+} sign as shown in the code below. The
 first 3 arguments are the plot layers, and the parameters within
 \texttt{theme()} are changing the background colour to sea blue.
@@ -771,9 +784,9 @@ labels.
 \end{Highlighting}
 \end{Shaded}
 \begin{figure}[htbp]
-\centering
+\centering 
 \includegraphics{figure/World_Shipping.png}
-\caption{World Shipping}
+\caption{World Shipping} \label{fship}
 \end{figure}
 
 In the plot example we have chosen the colours carefully to give the
@@ -850,17 +863,15 @@ R is a constantly evolving and as its user community grows the number of online 
 This chapter has focussed on the use of vector data. For those who would like to use R for processing and visualising rasters, we would recommend this vignette: http://cran.r-project.org/web/packages/raster/vignettes/Raster.pdf
 This is a good tutorial plotting raster data with ggplot2: http://nrelscience.org/2013/05/30/this-is-how-i-did-it-mapping-in-r-with-ggplot2/
 
-Map projections are a complex and important topic that we only touch on here. The following two web pages offer some further context and techincal information.
-http://spatial.ly/2011/03/flattening-the-earth/
-http://en.wikipedia.org/wiki/Map_projection
+Map projections are a complex and important topic that we only touch on here. The following two web pages offer some further context and technical information:
+\href{http://spatial.ly/2011/03/flattening-the-earth/}{spatial.ly/2011/03/flattening-the-earth/}
+and \href{http://en.wikipedia.org/wiki/Map_projection}{en.wikipedia.org/wiki/Map\_projection}.
 
-To stay abreast of current developments and tutorials in R we recommend you follow:
 
-http://www.r-bloggers.com/
-https://rpubs.com/
-
-Both compile tutorials and information from the R community and therefore provide a useful resource for those starting out on R or looking to hone their skills.
-
+To stay abreast of current developments and tutorials in R we recommend:
+\href{http://www.r-bloggers.com/}{r-bloggers.com}, a feed aggregator about R, and 
+the \href{https://rpubs.com/}{rpubs.com/}
+code repository.
 
 \section{References}
 
