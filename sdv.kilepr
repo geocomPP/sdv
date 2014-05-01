@@ -1,4 +1,45 @@
 [General]
+def_graphic_ext=
+img_extIsRegExp=false
+img_extensions=.eps .jpg .jpeg .png .pdf .ps .fig .gif
 kileprversion=2
-kileversion=2.1.3
+kileversion=2.1.0
+lastDocument=finalChap.tex
+masterDocument=
 name=sdv
+pkg_extIsRegExp=false
+pkg_extensions=.cls .sty .bbx .cbx .lbx
+src_extIsRegExp=false
+src_extensions=.tex .ltx .latex .dtx .ins
+
+[Tools]
+MakeIndex=
+QuickBuild=
+
+[item:chapter.tex]
+archive=true
+column=0
+encoding=UTF-8
+highlight=LaTeX
+line=87
+mode=LaTeX
+open=true
+order=1
+
+[item:finalChap.tex]
+archive=true
+column=30
+encoding=UTF-8
+highlight=LaTeX
+line=928
+mode=LaTeX
+open=true
+order=0
+
+[view-settings,view=0,item:chapter.tex]
+CursorColumn=0
+CursorLine=87
+
+[view-settings,view=0,item:finalChap.tex]
+CursorColumn=30
+CursorLine=928

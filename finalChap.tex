@@ -87,7 +87,8 @@ number of benefits, as highlighted by Gary Sherman (2008, p.~283),
 developer of the popular Geographical Information System (GIS) QGIS:
 
 \begin{quote}
-With the advent of ``modern'' GIS software, most people have become accustomed to menu driven by point and click operations. That's good, but there is a tremendous
+With the advent of ``modern'' GIS software, most people want to point
+and click their way through life. That's good, but there is a tremendous
 amount of flexibility and power waiting for you with the command line.
 Many times you can do something on the command line in a fraction of the
 time you can do it with a GUI.
@@ -120,7 +121,7 @@ growth area within this increased functionality. The map of Facebook
 friendships produced by Paul Butler, for example, is iconic in this
 regard and has reached a global audience (Figure 1). This shows linkages
 between friends as lines pass across the curved surface of the Earth (using
-the \texttt{geosphere} package). The secret to the success of this map
+the geosphere package). The secret to the success of this map
 was the time taken to select the appropriate colour palette, line widths
 and transparency for the plot. As we discuss in Section 3, the importance
 of such details cannot be overstated. They can be the difference between
@@ -145,9 +146,26 @@ now list R as a desirable skill.
 Finally, it is worth noting that there are a few key differences between R and
 traditional desktop GIS software. While dedicated GIS programs
 handle spatial data by default and display the results in a single way,
-there are various options in R that must be decided by the user (for
-example whether to use R's base graphics or a dedicated graphics package
-such as ggplot2). Indeed, it is this flexibility, illustrated by the
+there are various options in R that must be decided by the user.
+
+One example of this is the choice between R's base graphics or a dedicated graphics package
+such as ggplot2. The former option requires no additional packages and
+can provide very quick feedback about the nature of the dataset in question
+with the generic \texttt{plot} function. The ggplot2 option, by contrast,
+requires a new package to be loaded but opens up a very wide range of
+functions for visualising data, beyond the base graphics. ggplot2 also
+has sensible defaults for grid axes, legends and other adornments,
+allowing the user to create complex and beautiful graphics with
+minimal effort. We encourage users to try both but, following the
+focus on \emph{visualisation}, have used ggplot2 for all but the first two plots
+presented in this chapter.
+
+An innovative feature of this chapter is that \emph{all} of the graphics
+presented in it are reproducible (see the next section for how).
+We encorage users not only to reproduce the
+graphics presented here but to play around with the code, taking advantage of
+the wide range of visual analysis uptions opened up by R.
+Indeed, it is this flexibility, illustrated by the
 custom map of shipping routes presented later in this chapter, that makes R
 an attractive visualisation solution. 
 
@@ -155,11 +173,13 @@ All of the
 results presented in this chapter can be reproduced (and modified) by typing
 the short code snippets that are presented into R. Elsewhere in this book,
 these principles are extended in the context of reproducible geographic
-information science ***(TODO: reference Chris Brunsden's Chapter)***.
+information science.
+%  ***(TODO: reference Chris Brunsden's Chapter)***.
 
 \section{A practical primer on spatial data in R}
 
-This section introduces those steps required to get started with processing spatial data in R. The focuses of the chapter is on the visualisation of so-calleed vector data (common in socio-economic examples), however, R also provides functionality for the analysis and visualisation of raster data (see supporting materials). As with the rest of the chapter,  a practical element is embedded, including R code that can be run on your own computer. For users
+This section introduces those steps required to get started with processing spatial data in R.
+ The focuses of the chapter is on the visualisation of so-calleed vector data (common in socio-economic examples), however, R also provides functionality for the analysis and visualisation of raster data (see supporting materials). As with the rest of the chapter,  a practical element is embedded, including R code that can be run on your own computer. For users
 completely new to R, we would recommend beginning with an introductory
 type tutorial, such as Torf and Brauer (2012) or ``Introduction to Visualising Spatial Data in R'' (Lovelace and
 Cheshire 2014). Both are available free online.
@@ -181,7 +201,7 @@ result in a folder called `sdvwR-master' being created.}
 
 In any data analysis project, spatial or otherwise, it is important to
 have a strong understanding of the dataset before progressing. R is able to import a very wide range of spatial data formats by linking with the Geospatial Data Abstraction Library (GDAL). An interface to this library
-is contained in the \texttt{rgdal} package: install and load it by by
+is contained in the rgdal package: install and load it by by
 entering \texttt{install.packages("rgdal")} followed by
 \texttt{library(rgdal)}, on separate lines. The former only needs to be
 typed once to install the package, however, the latter must be
@@ -189,11 +209,12 @@ run for each new R session that requires use of the functions contained within t
 
 The world map that we use is available from the Natural Earth website and a
 slightly modified version of it (entitled ``world'') is loaded using the
-following code. \footnote{ A common problem preventing the data being loaded
+following code (see Figure \ref{frobmap}).\footnote{A
+common problem preventing the data being loaded
 correctly is that R is not set with the correct working directory.
-For more information, please refer online:
+For more information, please refer to the online
 \href{https://github.com/geocomPP/sdvwR/blob/master/sdv-tutorial.pdf?raw=true}{tutorial}
-if this is an issue.}
+hosted at github.com/geocomPP/sdvwR.}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -202,11 +223,11 @@ if this is an issue.}
 \KeywordTok{plot}\NormalTok{(wrld)}
 \end{Highlighting}
 \end{Shaded}
-\begin{figure}[htbp]
-\centering
-\includegraphics{figure/A_Basic_Map_of_the_World.png}
-\caption{A Basic Map of the World}
-\end{figure}
+% \begin{figure}[htbp]
+% \centering
+% \includegraphics{figure/A_Basic_Map_of_the_World.png}
+% \caption{A Basic Map of the World}
+% \end{figure}
 
 The above block of code loads the rgdal library, creates and then plots, in Figure 2, a new
 \emph{object} called \texttt{wrld}. This operation should be fast on most computers because
@@ -214,11 +235,11 @@ The above block of code loads the rgdal library, creates and then plots, in Figu
 simplify them when necessary prior to visualisation \footnote{R makes this easy, and is described in Section
 2 of the
 \href{https://github.com/geocomPP/sdvwR/blob/master/sdv-tutorial.pdf?raw=true}{tutorial}
-that accompanies this Chapter.
+that accompanies this Chapter (github.com/geocomPP/sdvwR).
 }.
 
 When spatial data are imported into R, they are saved in a
-\texttt{spatial} object class using the \texttt{sp} package (Bivand et al.
+\texttt{spatial} object class using the sp package (Bivand et al.
 2013). The spatial data are divided into a series of different
 \emph{slots}, storing the attribute and geometry data separately \footnote{For more detail on this
 topic, see ``The structure of spatial data in R'' in the online
@@ -249,7 +270,8 @@ contain all the features discussed: they should be seen as suggestions
 rather than firm principles.
 
 Effective map making is a difficult process, as Krygier and Wood (2011)
-put it: ``there is a lot to see, think about, and do'' (p6). We use \emph{ggplot2} as the package of choice to produce most of the
+put it: ``there is a lot to see, think about, and do'' (p6). We use a
+package called ggplot2 as the package of choice to produce most of the
 maps presented in this chapter because it easily facilitates good
 practice in data visualisation. The ``gg'' in its name stands for
 ``Grammar of Graphics'', a set of rules developed by Wilkinson (2005).
@@ -285,10 +307,13 @@ There are many different projections which can be set by adjusting to a differen
 \KeywordTok{plot}\NormalTok{(wrld.rob)}
 \end{Highlighting}
 \end{Shaded}
+
 \begin{figure}[htbp]
-\centering
-\includegraphics{figure/The_Robinson_Projection.png}
-\caption{The Robinson Projection}
+\includegraphics{figure/A_Basic_Map_of_the_World.png}
+\includegraphics{figure/The_Robinson_Projection.png} 
+\caption{A Basic Map of the World in geographic (cartesian) coordinates (left) and the Robinson Projection (right).}
+% TODO Editor: adjust these images so they fit better in the book's geometry
+\label{frobmap}
 \end{figure}
 
 Plotting the reprojected spatial object results in a world map that is much better proportioned, and as such, when 
@@ -299,17 +324,6 @@ package introduced above. This requires the data to be in a slightly different f
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{wrld.rob.f <- }\KeywordTok{fortify}\NormalTok{(wrld.rob, }\DataTypeTok{region =} \StringTok{"sov_a3"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-\begin{verbatim}
-## Loading required package: rgeos
-## rgeos version: 0.2-19, (SVN revision 394)
-##  GEOS runtime version: 3.3.8-CAPI-1.7.8 
-##  Polygon checking: TRUE
-\end{verbatim}
-\begin{Shaded}
-\begin{Highlighting}[]
-
 \CommentTok{# Use by.x and by.y arguments to specify the columns that match the two}
 \CommentTok{# dataframes together:}
 \NormalTok{wrld.pop.f <- }\KeywordTok{merge}\NormalTok{(wrld.rob.f, wrld.rob@data, }\DataTypeTok{by.x =} \StringTok{"id"}\NormalTok{, }\DataTypeTok{by.y =} \StringTok{"sov_a3"}\NormalTok{)}
@@ -321,7 +335,7 @@ Now that the R object is in the correct format to be plotted with ggplot2, the c
 demonstrates the syntax of ggplot2 by first linking together a series
 of plot commands, and assigning them to a single R object called
 \texttt{map}. If you type \texttt{map} into the command line, R will
-then execute the code and generate the plot shown in Figure 4. By specifying the
+then execute the code and generate the plot shown in Figure \ref{fworldpop}. By specifying the
 \texttt{fill} variable within the \texttt{aes()} (short for
 `aesthetics') argument, ggplot2 colours the countries using a default
 colour palette and automatically generates a legend.
@@ -341,7 +355,7 @@ a map's appearance.
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/World_Population_Map.png}
-\caption{World Population Map}
+\caption{World Population Map} \label{fworldpop}
 \end{figure}
 
 Colour has an enormous impact on how people will perceive a graphic.
@@ -354,10 +368,10 @@ interpretation, see Monmonier (1996).
 
 ggplot2 recognises the difference between continuous and categorical
 (nominal) variables and will automatically assign an appropriate colour
-palette accordingly (see Figure 5). The default colour palettes are a
+palette accordingly (see Figure \ref{fworldconts}). The default colour palettes are a
 good place to start, but users can specify them, for example, if they needed to print a  map in black and white. The
 \texttt{scale\_fill\_} family of commands enable such customisation. For
-categorical data, \texttt{scale\_fill\_manual()} can be used (see Figure 5).
+categorical data, \texttt{scale\_fill\_manual()} can be used.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -373,7 +387,7 @@ categorical data, \texttt{scale\_fill\_manual()} can be used (see Figure 5).
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/A_Map_of_the_Continents_Using_Default_Colours.png}
-\caption{A Map of the Continents Using Default Colours}
+\caption{A Map of the Continents Using Default Colours} \label{fworldconts}
 \end{figure}
 
 Colours can be specified manually, either using words, as illustrated in the example, or more flexibly, such as through the use of hexadecimal colour codes:
@@ -417,7 +431,7 @@ transitions occur. There are many ways to select both the optimum number
 of breaks and the locations in the dataset at
 which they occur. This is important for the comprehension of a graphic
 since it alters the colours associated with each value. The
-\texttt{classINT} package contains many ways to automatically create
+classINT package contains many ways to automatically create
 these breaks. We use the \texttt{grid.arrange} function from the
 gridExtra package to display a series of maps side by side,  illustrating different break choices. 
 % ***you don't do this, but I think it would be useful***
@@ -426,20 +440,9 @@ gridExtra package to display a series of maps side by side,  illustrating differ
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(classInt)}
 \end{Highlighting}
-\end{Shaded}
-\begin{verbatim}
-## Loading required package: class
-## Loading required package: e1071
-\end{verbatim}
-\begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(gridExtra)}
 \end{Highlighting}
-\end{Shaded}
-\begin{verbatim}
-## Loading required package: grid
-\end{verbatim}
-\begin{Shaded}
 \begin{Highlighting}[]
 
 \CommentTok{# Specify how number of breaks - generally this should be fewer than 7}
@@ -474,7 +477,7 @@ gridExtra package to display a series of maps side by side,  illustrating differ
 
 % ***I have deleted what was Figure 6 so double check numbering in text from here****
 
-Line colour and width are also important parameters for enhancing the legibility of a graphic (see Figure 6). The code below demonstrates it
+Line colour and width are also important parameters for enhancing the legibility of a graphic (see Figure \ref{flinew}). The code below demonstrates it
 is possible to adjust these using the \texttt{colour} and \texttt{lwd}
 arguments. The impact of different line widths will vary depending on screen size and resolution. Also, if you save the plot to pdf (e.g.~using
 the \texttt{ggsave} command), this will also alter the relative line widths. As such, it is often useful to generate and check plots in the desired output format, and then adjust the code until these
@@ -498,7 +501,7 @@ are appropriate.
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/The_Impact_of_Line_Width.png}
-\caption{The Impact of Line Width}
+\caption{The Impact of Line Width} \label{flinew}
 \end{figure}
 
 There are other parameters, such as layer transparency (use the
@@ -860,8 +863,11 @@ creating compelling maps are only set to grow.
 \section{Supporting Materials}
 
 R is a constantly evolving and as its user community grows the number of online resources is set to increase. 
-This chapter has focussed on the use of vector data. For those who would like to use R for processing and visualising rasters, we would recommend this vignette: http://cran.r-project.org/web/packages/raster/vignettes/Raster.pdf
-This is a good tutorial plotting raster data with ggplot2: http://nrelscience.org/2013/05/30/this-is-how-i-did-it-mapping-in-r-with-ggplot2/
+This chapter has focussed on the use of vector data. For those who would like to use R for processing and visualising raster datasets,
+we would recommend a vignette from the raster package:
+\href{http://cran.r-project.org/web/packages/raster/vignettes/Raster.pdf}{cran.r-project.org/web/packages/raster/vignettes/Raster.pdf}
+We also recommend the following tutorial on plotting raster data with ggplot2:
+\href{http://nrelscience.org/2013/05/30/this-is-how-i-did-it-mapping-in-r-with-ggplot2/}{tinyurl.com/nencrgf}.
 
 Map projections are a complex and important topic that we only touch on here. The following two web pages offer some further context and technical information:
 \href{http://spatial.ly/2011/03/flattening-the-earth/}{spatial.ly/2011/03/flattening-the-earth/}
@@ -923,10 +929,10 @@ Association, Institute of Mathematics Statistics and Interface
 Foundation of North America Journal of Computational and Graphical
 Statistics. 19, 1: 3-28
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{source}\NormalTok{(}\StringTok{"md2pdf.R"}\NormalTok{)  }\CommentTok{# convert chapter to tex}
-\end{Highlighting}
-\end{Shaded}
+% \begin{Shaded}
+% \begin{Highlighting}[]
+% \KeywordTok{source}\NormalTok{(}\StringTok{"md2pdf.R"}\NormalTok{)  }\CommentTok{# convert chapter to tex}
+% \end{Highlighting}
+% \end{Shaded}
 
 \end{document}
