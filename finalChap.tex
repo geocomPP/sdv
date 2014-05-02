@@ -356,7 +356,7 @@ a map's appearance.
 \begin{Highlighting}[]
 \NormalTok{map <- }\KeywordTok{ggplot}\NormalTok{(wrld.pop.f, }\KeywordTok{aes}\NormalTok{(long, lat, }\DataTypeTok{group =} \NormalTok{group, }\DataTypeTok{fill =} \NormalTok{pop_est/1000000)) + }\KeywordTok{geom_polygon}\NormalTok{() + }
 \KeywordTok{coord_equal}\NormalTok{() + }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Longitude"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"Latitude"}\NormalTok{, }\DataTypeTok{fill =} \StringTok{"World Population"}\NormalTok{) + }
-\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"World Population (Millions)"}\NormalTok{)}
+\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"World Population"}\NormalTok{)}
 \NormalTok{map}
 \end{Highlighting}
 \end{Shaded}
