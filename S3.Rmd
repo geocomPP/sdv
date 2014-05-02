@@ -104,12 +104,10 @@ tells ggplot2 to plot polygons. As will be shown in the next section these
 defaults can be easily altered to change a map's appearance.
 
 ```{r World Population Map, fig.width = 8, fig.height= 5}
-map <- ggplot(wrld.pop.f, aes(long, lat, group = group, fill = pop_est)) + 
-  geom_polygon() + 
-  coord_equal() + 
-  labs(x = "Longitude", y = "Latitude", fill = "World Population") + 
-  ggtitle("World Population")
-
+map <- ggplot(wrld.pop.f, aes(long, lat, group = group, fill = pop_est/1000000)) + geom_polygon() +
+coord_equal() + labs(x = "Longitude", y = "Latitude", fill = "World Population") +
+ggtitle("World Population") +
+scale_fill_continuous(name="Population\n(millions)")
 map
 ```
 

@@ -304,10 +304,9 @@ shapefile (named \texttt{wrld}) is WGS84, which is a very common latitude and lo
 format. Without projecting the data when plotted this format distorts
 the size of countries close to the North and South poles (at the top and
 bottom of the above plot). Instead, the
-Robinson projection (see Figure \ref{frobmap}) can be used to provide a better compromise between areal distortion
-and shape preservation. Changes of projection can be accomplished using \texttt{spTransform()},
-with the projection required set with the CRS (coordinate reference system) parameter.
-
+Robinson projection (see Figure 3) can be used to provide a better compromise between areal distortion
+and shape preservation. Changes of projection can be accomplished using the spTransform(), with the projection required set with the CRS (coordinate reference system) parameter. 
+There are many different projections which can be set by adjusting to a different CRS value. 
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -354,9 +353,10 @@ a map's appearance.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{map <- }\KeywordTok{ggplot}\NormalTok{(wrld.pop.f, }\KeywordTok{aes}\NormalTok{(long, lat, }\DataTypeTok{group =} \NormalTok{group, }\DataTypeTok{fill =} \NormalTok{pop_est/1000000)) + }\KeywordTok{geom_polygon}\NormalTok{() + }
-\KeywordTok{coord_equal}\NormalTok{() + }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Longitude"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"Latitude"}\NormalTok{, }\DataTypeTok{fill =} \StringTok{"World Population"}\NormalTok{) + }
-\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"World Population (Millions)"}\NormalTok{)}
+\NormalTok{map <- }\KeywordTok{ggplot}\NormalTok{(wrld.pop.f, }\KeywordTok{aes}\NormalTok{(long, lat, }\DataTypeTok{group =} \NormalTok{group, }\DataTypeTok{fill =} \NormalTok{pop_est)) + }\KeywordTok{geom_polygon}\NormalTok{() + }
+    \KeywordTok{coord_equal}\NormalTok{() + }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Longitude"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"Latitude"}\NormalTok{, }\DataTypeTok{fill =} \StringTok{"World Population"}\NormalTok{) + }
+    \KeywordTok{ggtitle}\NormalTok{(}\StringTok{"World Population"}\NormalTok{)}
+
 \NormalTok{map}
 \end{Highlighting}
 \end{Shaded}
