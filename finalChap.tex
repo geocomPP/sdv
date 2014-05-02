@@ -354,12 +354,13 @@ a map's appearance.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{map <- }\KeywordTok{ggplot}\NormalTok{(wrld.pop.f, }\KeywordTok{aes}\NormalTok{(long, lat, }\DataTypeTok{group =} \NormalTok{group, }\DataTypeTok{fill =} \NormalTok{pop_est/1000000)) + }\KeywordTok{geom_polygon}\NormalTok{() + }
-\KeywordTok{coord_equal}\NormalTok{() + }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Longitude"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"Latitude"}\NormalTok{, }\DataTypeTok{fill =} \StringTok{"World Population"}\NormalTok{) + }
-\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"World Population"}\NormalTok{)}
+\NormalTok{map <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(wrld.pop.f, }\KeywordTok{aes}\NormalTok{(long, lat, }\DataTypeTok{group =} \NormalTok{group, }\DataTypeTok{fill =} \NormalTok{pop_est/}\FloatTok{1e+06}\NormalTok{)) +}\StringTok{ }
+\StringTok{    }\KeywordTok{geom_polygon}\NormalTok{() +}\StringTok{ }\KeywordTok{coord_equal}\NormalTok{() +}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Longitude"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"Latitude"}\NormalTok{, }\DataTypeTok{fill =} \StringTok{"World Population"}\NormalTok{) +}\StringTok{ }
+\StringTok{    }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"World Population"}\NormalTok{) +}\StringTok{ }\KeywordTok{scale_fill_continuous}\NormalTok{(}\DataTypeTok{name =} \StringTok{"Population}\CharTok{\textbackslash{}n}\StringTok{(millions)"}\NormalTok{)}
 \NormalTok{map}
 \end{Highlighting}
 \end{Shaded}
+
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/World_Population_Map.png}
@@ -417,7 +418,11 @@ a continuum-based colour scheme:
 \end{Highlighting}
 \end{Shaded}
 
-Choosing an appropriate colour palette is difficult and there are a variety of considerations such as the intended destination of a graphic (computer screen, print etc), the likely audience and the visual impairments such as colour blindness. There is a large body of literature associated with colour perception and this forms the basis to the \emph{Color Brewer} palettes developed
+Choosing an appropriate colour palette is difficult and there are a variety of considerations,
+such as the intended destination of a graphic (computer screen, print etc),
+the likely audience and the visual impairments such as colour blindness.
+There is a large body of literature associated with colour perception and
+this forms the basis to the \emph{Color Brewer} palettes developed
 by Cynthia Brewer (see http://colorbrewer2.org). These are designed to
 be colour blind safe and perceptually uniform such that no one colour
 jumps out more than any others. This latter characteristic is important
@@ -520,10 +525,6 @@ package documentation (see \href{http://ggplot2.org/}{ggplot2.org}).
 
 \subsection{Map Adornments}
 
-% ***I think scale bar and north arrow sections can be consolidated. 
-% also not sure about the layering point in this context. Might be worht 
-% mentioning furhter up***
-
 Map adornments and annotations orientate the viewer and provide context.
 They include grids (also known as graticules), orientation arrows, scale
 bars and data attribution. Not all are required on a single map, indeed
@@ -532,8 +533,8 @@ clutter (Monkhouse and Wilkinson 1971). With ggplot2, scales and legends
 are provided by default, but they can be customised.
 
 The maps created so far have concerned a single dataset, however, it is possible to layer
-separate datasets together to create a single representation. This first requires an empty plot, meaning that each new layer must be defined with
-its own dataset, and as such, adjust the syntax a little from that presented previously. Although more code is needed, this does enable
+separate datasets together to create a single map. This is something required to create both the north arrow and scale bar since they are, in effect, data that are not stored in the same R object used to produce the plot (in this case only a couple of coordinate pairs). This process can therefore be replicated with additional R objects and not just for map adornments. It first requires an empty plot, meaning that each new layer must be defined with
+its own dataset, and as such, the syntax is a little different from that presented previously. Although more code is needed, it does enable
 much greater flexibility with regards to what can be included as new
 layer content. Another possibility is to use \texttt{geom\_segment()}
 to add a rudimentary arrow (see \texttt{?geom\_segment} for
@@ -556,7 +557,7 @@ refinements):
 % \subsubsection{Scale bar}
 
 ggplot2's scale bar capabilities are perhaps the least advanced element
-of the package. This approach will only work if the spatial data are in
+of the package. To create a scale bar the spatial data will need to be in
 a projected coordinate system to ensure there are no distortions as a
 result of the curvature of the earth. In the case of the world map the
 distances at the equator in terms of degrees east to west are very
@@ -581,7 +582,7 @@ Boroughs.
 % \caption{Scale Bar Example}
 % \end{figure}
 
-\subsubsection{Legends}
+% \subsubsection{Legends}
 
 Legends are added automatically, but can be customised in a number of
 ways. They are an important adornment of any map since they describe
@@ -699,7 +700,7 @@ within ggplot2, and illustrate those ways in which they can be applied to produc
 high-quality maps that are reproducible with only a few lines of code.
 
 The example uses the png package to load in a series of map
-annotations stored at png graphics files. These have been created in image editing software and will add a historic feel to the map. We are also loading in a World boundary
+annotations stored as png graphics files. These have been created in image editing software and will add a historic feel to the map. We are also loading in a World boundary
 shapefile and the shipping data itself.
 
 \begin{Shaded}
@@ -746,7 +747,7 @@ prevent it from executing by simply storing it as the plot's parameters.
 \end{Highlighting}
 \end{Shaded}
 
-To see the result of this simply type:
+% To see the result of this simply type:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -763,7 +764,7 @@ To see the result of this simply type:
 The code snippet below creates the plot layer containing the the
 shipping routes. The \texttt{geom\_path()} function is used to string
 together the coordinates to form the routes. You can see within the
-\texttt{aes()} that this specifies the long and lat, plus pasted
+\texttt{aes()} that this specifies the longitude and latitude, plus pasted
 together the \texttt{trp} and \texttt{group.regroup} variables to
 identify the unique paths.
 
@@ -833,7 +834,7 @@ the blue marble background.
 
 \section{Conclusions}
 
-There are an almost infinite number of different combinations colours,
+There are an infinite number of colour combinations,
 adornments and line widths that could be applied to a map (or any other
 data visualisation) so do not feel constrained by the examples presented
 in this chapter. Take inspiration from maps and graphics you have seen
@@ -864,9 +865,9 @@ applications and available packages. The supportive online communities
 surrounding large open source programs such as R are one of their
 greatest assets, so we recommend you become an active ``open source''
 citizen rather than merely a passive consumer of new software (Ramsey \&
-Dubovsky, 2013). As R continues its ascent a as a spatial analysis and
-data visualisation platform, the opportunities to benefit from it by
-creating compelling maps are only set to grow.
+Dubovsky, 2013). As R continues its ascent as a spatial analysis and
+data visualisation platform, the opportunities
+to create beautiful and useful maps are only set to grow.
 
 \section{Supporting Materials}
 

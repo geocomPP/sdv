@@ -1,20 +1,29 @@
 \documentclass[]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
-\ifxetex
-  \usepackage{fontspec,xltxtra,xunicode}
-  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
-\else
-  \ifluatex
-    \usepackage{fontspec}
-    \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+\usepackage{fixltx2e} % provides \textsubscript
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+    \usepackage{xltxtra,xunicode}
   \else
-    \usepackage[utf8]{inputenc}
+    \usepackage{fontspec}
   \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
 \fi
+% use microtype if available
+\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
 \usepackage{color}
 \usepackage{fancyvrb}
-\DefineShortVerb[commandchars=\\\{\}]{\|}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
 \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
 % Add ',fontsize=\small' for more characters per line
 \newenvironment{Shaded}{}{}
@@ -33,35 +42,26 @@
 \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
 \newcommand{\NormalTok}[1]{{#1}}
 \usepackage{graphicx}
-% We will generate all images so they have a width \maxwidth. This means
-% that they will get their normal width if they fit onto the page, but
+% Redefine \includegraphics so that, unless explicit options are
+% given, the image width will not exceed the width of the page.
+% Images get their normal width if they fit onto the page, but
 % are scaled down if they would overflow the margins.
 \makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
-\else\Gin@nat@width\fi}
+\def\ScaleIfNeeded{%
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
 \makeatother
 \let\Oldincludegraphics\includegraphics
-\renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=10cm]{#1}}
-\ifxetex
-  \usepackage[setpagesize=false, % page size defined by xetex
-              unicode=false, % unicode breaks when used with xetex
-              xetex,
-              colorlinks=true,
-              linkcolor=blue]{hyperref}
-\else
-  \usepackage[unicode=true,
-              colorlinks=true,
-              linkcolor=blue]{hyperref}
-\fi
-\hypersetup{breaklinks=true, pdfborder={0 0 0}}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{6pt plus 2pt minus 1pt}
-\setlength{\emergencystretch}{3em}  % prevent overfull lines
-\setcounter{secnumdepth}{0}
-
-
+{%
+ \catcode`\@=11\relax%
+ \gdef\includegraphics{\@ifnextchar[{\Oldincludegraphics}{\Oldincludegraphics[width=\ScaleIfNeeded]}}%
+}%
 \usepackage[margin=1.8cm]{geometry}
-\begin{document}
+\ifxetex
 \author{
 Cheshire, James\\
 \texttt{james.cheshire@ucl.ac.uk}
@@ -70,11 +70,36 @@ Lovelace, Robin\\
 \texttt{r.lovelace@leeds.ac.uk}
 }
 \title{Spatial data visualisation with R}
-
+  \usepackage[setpagesize=false, % page size defined by xetex
 \maketitle
-\section{Introduction}
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={},
+            pdftitle={},
+            colorlinks=true,
+            citecolor=blue,
+            urlcolor=blue,
+            linkcolor=magenta,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\setcounter{secnumdepth}{0}
 
-\subsection{What is R?}
+\author{}
+\date{}
+
+\begin{document}
+
+\section{Introduction}\label{introduction}
+
+\subsection{What is R?}\label{what-is-r}
 
 R is a free and open source computer program that runs on all major
 operating systems. It relies primarily on the \emph{command line} for
@@ -91,8 +116,8 @@ and click their way through life. That's good, but there is a tremendous
 amount of flexibility and power waiting for you with the command line.
 Many times you can do something on the command line in a fraction of the
 time you can do it with a GUI.
-
 \end{quote}
+
 The joy of this, when you get accustomed to it, is that any command is
 only ever a few keystrokes away, and the order of the commands sent to R
 can be stored and repeated in scripts, saving time in the long-term. In
@@ -115,7 +140,8 @@ recent years is the addition of a wide variety of spatial analysis and
 visualisation tools (Bivand et al. 2013). The latter will be the focus
 of this chapter.
 
-\subsection{Why R for spatial data visualisation?}
+\subsection{Why R for spatial data
+visualisation?}\label{why-r-for-spatial-data-visualisation}
 
 R was conceived - and is still primarily known - for its capabilities as
 a ``statistical programming language'' (Bivand and Gebhardt 2000).
@@ -163,7 +189,8 @@ that we will be using to great effect in this chapter: all of the
 results presented in the subsequent sections can be reproduced (and
 modified) at home, as described in the next section.
 
-\section{A practical primer on spatial data in R}
+\section{A practical primer on spatial data in
+R}\label{a-practical-primer-on-spatial-data-in-r}
 
 This section briefly introduces some of the key steps to get started
 with R. Like the rest of the chapter, it has a large \emph{practical}
@@ -192,7 +219,7 @@ have a strong understanding of the dataset before progressing. We will
 see how data can be loaded into R (ready for the next section) and
 exported to other formats.
 
-\subsection{Loading spatial data in R}
+\subsection{Loading spatial data in R}\label{loading-spatial-data-in-r}
 
 R is able to import a very wide range of spatial data formats thanks to
 its interface with the Geospatial Data Abstraction Library (GDAL). The
@@ -213,10 +240,11 @@ if this is an issue.
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(rgdal)  }\CommentTok{# load the package (needs to be installed)}
-\NormalTok{wrld <- }\KeywordTok{readOGR}\NormalTok{(}\StringTok{"data/"}\NormalTok{, }\StringTok{"world"}\NormalTok{)}
+\NormalTok{wrld <-}\StringTok{ }\KeywordTok{readOGR}\NormalTok{(}\StringTok{"data/"}\NormalTok{, }\StringTok{"world"}\NormalTok{)}
 \KeywordTok{plot}\NormalTok{(wrld)}
 \end{Highlighting}
 \end{Shaded}
+
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/A_Basic_Map_of_the_World.png}
@@ -234,7 +262,7 @@ simplify them when necessary. R makes this easy, as described in Section
 that accompanies this Chapter. For now, let us continue with an even
 more important topic: how R `sees' spatial data.
 
-\subsection{How R `sees' spatial data}
+\subsection{How R `sees' spatial data}\label{how-r-sees-spatial-data}
 
 Spatial datasets in R are saved in their own format, defined as
 \texttt{Spatial} classes within the \texttt{sp} package (Bivand et al.
@@ -255,9 +283,11 @@ are there? This query can be answered using \texttt{nrow}:
 \KeywordTok{nrow}\NormalTok{(wrld)}
 \end{Highlighting}
 \end{Shaded}
+
 \begin{verbatim}
 ## [1] 175
 \end{verbatim}
+
 What do the first 2 rows and 5 columns of attribute data contain? To
 answer this question, we need to refer to the \texttt{data} slot of the
 object using the \texttt{@} symbol and use square brackets to define the
@@ -271,18 +301,21 @@ removing the square brackets entirely:
 \NormalTok{wrld@data[}\DecValTok{1}\NormalTok{:}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{:}\DecValTok{5}\NormalTok{]}
 \end{Highlighting}
 \end{Shaded}
+
 \begin{verbatim}
 ##   scalerank      featurecla labelrank  sovereignt sov_a3
 ## 0         1 Admin-0 country         3 Afghanistan    AFG
 ## 1         1 Admin-0 country         3      Angola    AGO
 \end{verbatim}
+
 The output shows that the first country in the \texttt{wrld} object is
 Afghanistan. Now that we have a basic understanding of the attributes of
 the spatial dataset, and know where to look for more detailed
 information about spatial data in R via the online tutorial, it is time
 to move on to the topic of visualisation.
 
-\section{Fundamentals of Spatial Data Visualisation}
+\section{Fundamentals of Spatial Data
+Visualisation}\label{fundamentals-of-spatial-data-visualisation}
 
 Good maps depend on sound analysis and can have an enormous impact on
 the understanding and communication of results. Thanks to new data
@@ -329,6 +362,7 @@ this section.
 \KeywordTok{library}\NormalTok{(ggplot2)}
 \end{Highlighting}
 \end{Shaded}
+
 We are going to use the previously loaded map of the world to
 demonstrate some of the cartographic principles as they are introduced.
 To establish the starting point, find the first 35 column names of the
@@ -339,6 +373,7 @@ To establish the starting point, find the first 35 column names of the
 \KeywordTok{names}\NormalTok{(wrld@data)[}\DecValTok{1}\NormalTok{:}\DecValTok{35}\NormalTok{]}
 \end{Highlighting}
 \end{Shaded}
+
 \begin{verbatim}
 ##  [1] "scalerank"  "featurecla" "labelrank"  "sovereignt" "sov_a3"    
 ##  [6] "adm0_dif"   "level"      "type"       "admin"      "adm0_a3"   
@@ -348,6 +383,7 @@ To establish the starting point, find the first 35 column names of the
 ## [26] "formal_fr"  "note_adm0"  "note_brk"   "name_sort"  "name_alt"  
 ## [31] "mapcolor7"  "mapcolor8"  "mapcolor9"  "mapcolor13" "pop_est"
 \end{verbatim}
+
 This shows many attribute columns associated with the \texttt{wrld}
 object. Although we will keep all of them, we are only really interested
 in population \texttt{("pop\_est")}. Typing
@@ -365,10 +401,11 @@ and shape preservation:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{wrld.rob <- }\KeywordTok{spTransform}\NormalTok{(wrld, }\KeywordTok{CRS}\NormalTok{(}\StringTok{"+proj=robin"}\NormalTok{))  }\CommentTok{#`+proj=robin` refers to the Robinson projection}
+\NormalTok{wrld.rob <-}\StringTok{ }\KeywordTok{spTransform}\NormalTok{(wrld, }\KeywordTok{CRS}\NormalTok{(}\StringTok{"+proj=robin"}\NormalTok{))  }\CommentTok{#`+proj=robin` refers to the Robinson projection}
 \KeywordTok{plot}\NormalTok{(wrld.rob)}
 \end{Highlighting}
 \end{Shaded}
+
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/The_Robinson_Projection.png}
@@ -383,23 +420,26 @@ attribute data lost during the fortify operation.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{wrld.rob.f <- }\KeywordTok{fortify}\NormalTok{(wrld.rob, }\DataTypeTok{region =} \StringTok{"sov_a3"}\NormalTok{)}
+\NormalTok{wrld.rob.f <-}\StringTok{ }\KeywordTok{fortify}\NormalTok{(wrld.rob, }\DataTypeTok{region =} \StringTok{"sov_a3"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
+
 \begin{verbatim}
 ## Loading required package: rgeos
 ## rgeos version: 0.2-19, (SVN revision 394)
 ##  GEOS runtime version: 3.3.8-CAPI-1.7.8 
 ##  Polygon checking: TRUE
 \end{verbatim}
+
 \begin{Shaded}
 \begin{Highlighting}[]
 
 \CommentTok{# Use by.x and by.y arguments to specify the columns that match the two}
 \CommentTok{# dataframes together:}
-\NormalTok{wrld.pop.f <- }\KeywordTok{merge}\NormalTok{(wrld.rob.f, wrld.rob@data, }\DataTypeTok{by.x =} \StringTok{"id"}\NormalTok{, }\DataTypeTok{by.y =} \StringTok{"sov_a3"}\NormalTok{)}
+\NormalTok{wrld.pop.f <-}\StringTok{ }\KeywordTok{merge}\NormalTok{(wrld.rob.f, wrld.rob@data, }\DataTypeTok{by.x =} \StringTok{"id"}\NormalTok{, }\DataTypeTok{by.y =} \StringTok{"sov_a3"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
+
 The code below produces a map coloured by the population variable. It
 demonstrates the syntax of ggplot2 by first stringing together a series
 of plot commands and assigning them to a single R object called
@@ -414,20 +454,21 @@ a map's appearance.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{map <- }\KeywordTok{ggplot}\NormalTok{(wrld.pop.f, }\KeywordTok{aes}\NormalTok{(long, lat, }\DataTypeTok{group =} \NormalTok{group, }\DataTypeTok{fill =} \NormalTok{pop_est)) + }\KeywordTok{geom_polygon}\NormalTok{() + }
-    \KeywordTok{coord_equal}\NormalTok{() + }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Longitude"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"Latitude"}\NormalTok{, }\DataTypeTok{fill =} \StringTok{"World Population"}\NormalTok{) + }
-    \KeywordTok{ggtitle}\NormalTok{(}\StringTok{"World Population"}\NormalTok{)}
-
+\NormalTok{map <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(wrld.pop.f, }\KeywordTok{aes}\NormalTok{(long, lat, }\DataTypeTok{group =} \NormalTok{group, }\DataTypeTok{fill =} \NormalTok{pop_est/}\FloatTok{1e+06}\NormalTok{)) +}\StringTok{ }
+\StringTok{    }\KeywordTok{geom_polygon}\NormalTok{() +}\StringTok{ }\KeywordTok{coord_equal}\NormalTok{() +}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Longitude"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"Latitude"}\NormalTok{, }\DataTypeTok{fill =} \StringTok{"World Population"}\NormalTok{) +}\StringTok{ }
+\StringTok{    }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"World Population"}\NormalTok{) +}\StringTok{ }\KeywordTok{scale_fill_continuous}\NormalTok{(}\DataTypeTok{name =} \StringTok{"Population}\CharTok{\textbackslash{}n}\StringTok{(millions)"}\NormalTok{)}
 \NormalTok{map}
 \end{Highlighting}
 \end{Shaded}
+
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/World_Population_Map.png}
 \caption{World Population Map}
 \end{figure}
 
-\subsection{Colour and other aesthetics}
+\subsection{Colour and other
+aesthetics}\label{colour-and-other-aesthetics}
 
 Colour has an enormous impact on how people will perceive a graphic.
 Adjusting a colour palette from yellow to red or from green to blue, for
@@ -438,7 +479,7 @@ few examples of how to create high quality maps with R. For more
 information about the importance of different features of a map for its
 interpretation, see Monmonier (1996).
 
-\subsubsection{Choropleth Maps}
+\subsubsection{Choropleth Maps}\label{choropleth-maps}
 
 ggplot2 knows the difference between continuous and categorical
 (nominal) variables and will automatically assign the appropriate colour
@@ -451,14 +492,15 @@ categorical data, \texttt{scale\_fill\_manual()} can be used:
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# Produce a map of continents}
-\NormalTok{map.cont <- }\KeywordTok{ggplot}\NormalTok{(wrld.pop.f, }\KeywordTok{aes}\NormalTok{(long, lat, }\DataTypeTok{group =} \NormalTok{group, }\DataTypeTok{fill =} \NormalTok{continent)) + }
-    \KeywordTok{geom_polygon}\NormalTok{() + }\KeywordTok{coord_equal}\NormalTok{() + }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Longitude"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"Latitude"}\NormalTok{, }\DataTypeTok{fill =} \StringTok{"World Continents"}\NormalTok{) + }
-    \KeywordTok{ggtitle}\NormalTok{(}\StringTok{"World Continents"}\NormalTok{)}
+\NormalTok{map.cont <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(wrld.pop.f, }\KeywordTok{aes}\NormalTok{(long, lat, }\DataTypeTok{group =} \NormalTok{group, }\DataTypeTok{fill =} \NormalTok{continent)) +}\StringTok{ }
+\StringTok{    }\KeywordTok{geom_polygon}\NormalTok{() +}\StringTok{ }\KeywordTok{coord_equal}\NormalTok{() +}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Longitude"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"Latitude"}\NormalTok{, }\DataTypeTok{fill =} \StringTok{"World Continents"}\NormalTok{) +}\StringTok{ }
+\StringTok{    }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"World Continents"}\NormalTok{)}
 
 \CommentTok{# To see the default colours}
 \NormalTok{map.cont}
 \end{Highlighting}
 \end{Shaded}
+
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/A_Map_of_the_Continents_Using_Default_Colours.png}
@@ -469,19 +511,21 @@ To change the colour scheme, we can set our own colours:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{map.cont + }\KeywordTok{scale_fill_manual}\NormalTok{(}\DataTypeTok{values =} \KeywordTok{c}\NormalTok{(}\StringTok{"yellow"}\NormalTok{, }\StringTok{"red"}\NormalTok{, }\StringTok{"purple"}\NormalTok{, }\StringTok{"white"}\NormalTok{, }
+\NormalTok{map.cont +}\StringTok{ }\KeywordTok{scale_fill_manual}\NormalTok{(}\DataTypeTok{values =} \KeywordTok{c}\NormalTok{(}\StringTok{"yellow"}\NormalTok{, }\StringTok{"red"}\NormalTok{, }\StringTok{"purple"}\NormalTok{, }\StringTok{"white"}\NormalTok{, }
     \StringTok{"orange"}\NormalTok{, }\StringTok{"blue"}\NormalTok{, }\StringTok{"green"}\NormalTok{, }\StringTok{"black"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
+
 Whilst \texttt{scale\_fill\_continuous()} works with continuous
 datasets:
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# Note the use of the 'map' object created earler}
-\NormalTok{map + }\KeywordTok{scale_fill_continuous}\NormalTok{(}\DataTypeTok{low =} \StringTok{"white"}\NormalTok{, }\DataTypeTok{high =} \StringTok{"black"}\NormalTok{)}
+\NormalTok{map +}\StringTok{ }\KeywordTok{scale_fill_continuous}\NormalTok{(}\DataTypeTok{low =} \StringTok{"white"}\NormalTok{, }\DataTypeTok{high =} \StringTok{"black"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
+
 It is well worth looking at the \emph{Color Brewer} palettes developed
 by Cynthia Brewer (see http://colorbrewer2.org). These are designed to
 be colour blind safe and perceptually uniform such that no one colour
@@ -496,9 +540,14 @@ colour palettes and these can be easily utilised by ggplot2.
 \StringTok{`}\DataTypeTok{?}\StringTok{`}\NormalTok{(RColorBrewer)}
 \CommentTok{# note the use of the scale_fill_gradientn() function rather than}
 \CommentTok{# scale_fill_continuous() used above}
-\NormalTok{map + }\KeywordTok{scale_fill_gradientn}\NormalTok{(}\DataTypeTok{colours =} \KeywordTok{brewer.pal}\NormalTok{(}\DecValTok{7}\NormalTok{, }\StringTok{"YlGn"}\NormalTok{))}
+\NormalTok{map +}\StringTok{ }\KeywordTok{scale_fill_gradientn}\NormalTok{(}\DataTypeTok{colours =} \KeywordTok{brewer.pal}\NormalTok{(}\DecValTok{7}\NormalTok{, }\StringTok{"YlGn"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
+
+\begin{verbatim}
+## Scale for 'fill' is already present. Adding another scale for 'fill', which will replace the existing scale.
+\end{verbatim}
+
 In addition to altering the colour scale used to represent continuous
 data it may also be desirable to adjust the breaks at which the colour
 transitions occur. There are many ways to select both the optimum number
@@ -514,50 +563,103 @@ gridExtra package to display the maps side by side.
 \KeywordTok{library}\NormalTok{(classInt)}
 \end{Highlighting}
 \end{Shaded}
+
 \begin{verbatim}
 ## Loading required package: class
-## Loading required package: e1071
+
+## Warning: there is no package called 'class'
+
+## Error: package 'class' could not be loaded
 \end{verbatim}
+
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(gridExtra)}
 \end{Highlighting}
 \end{Shaded}
+
 \begin{verbatim}
-## Loading required package: grid
+## Error: there is no package called 'gridExtra'
 \end{verbatim}
+
 \begin{Shaded}
 \begin{Highlighting}[]
 
 \CommentTok{# Specify how number of breaks - generally this should be fewer than 7}
-\NormalTok{nbrks <- }\DecValTok{6}
+\NormalTok{nbrks <-}\StringTok{ }\DecValTok{6}
 
 \CommentTok{# Here quantiles are used to identify the breaks Note that we are using the}
 \CommentTok{# original 'wrld.rob' object and not the 'wrld.rob@data$pop_est.f' Use the}
 \CommentTok{# help files (by typing ?classIntervals) to see the full range of options}
-\NormalTok{brks <- }\KeywordTok{classIntervals}\NormalTok{(wrld.rob@data$pop_est, }\DataTypeTok{n =} \NormalTok{nbrks, }\DataTypeTok{style =} \StringTok{"quantile"}\NormalTok{)}
+\NormalTok{brks <-}\StringTok{ }\KeywordTok{classIntervals}\NormalTok{(wrld.rob@data$pop_est, }\DataTypeTok{n =} \NormalTok{nbrks, }\DataTypeTok{style =} \StringTok{"quantile"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Error: could not find function "classIntervals"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 
 \KeywordTok{print}\NormalTok{(brks)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Error: object 'brks' not found
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 
 \CommentTok{# Now the breaks can be easily inserted into the code above for a range of}
 \CommentTok{# colour palettes}
-\NormalTok{YlGn <- map + }\KeywordTok{scale_fill_gradientn}\NormalTok{(}\DataTypeTok{colours =} \KeywordTok{brewer.pal}\NormalTok{(nbrks, }\StringTok{"YlGn"}\NormalTok{), }\DataTypeTok{breaks =} \KeywordTok{c}\NormalTok{(brks$brks))}
+\NormalTok{YlGn <-}\StringTok{ }\NormalTok{map +}\StringTok{ }\KeywordTok{scale_fill_gradientn}\NormalTok{(}\DataTypeTok{colours =} \KeywordTok{brewer.pal}\NormalTok{(nbrks, }\StringTok{"YlGn"}\NormalTok{), }\DataTypeTok{breaks =} \KeywordTok{c}\NormalTok{(brks$brks))}
+\end{Highlighting}
+\end{Shaded}
 
-\NormalTok{PuBu <- map + }\KeywordTok{scale_fill_gradientn}\NormalTok{(}\DataTypeTok{colours =} \KeywordTok{brewer.pal}\NormalTok{(nbrks, }\StringTok{"PuBu"}\NormalTok{), }\DataTypeTok{breaks =} \KeywordTok{c}\NormalTok{(brks$brks))}
+\begin{verbatim}
+## Error: object 'brks' not found
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+
+\NormalTok{PuBu <-}\StringTok{ }\NormalTok{map +}\StringTok{ }\KeywordTok{scale_fill_gradientn}\NormalTok{(}\DataTypeTok{colours =} \KeywordTok{brewer.pal}\NormalTok{(nbrks, }\StringTok{"PuBu"}\NormalTok{), }\DataTypeTok{breaks =} \KeywordTok{c}\NormalTok{(brks$brks))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Error: object 'brks' not found
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 
 \KeywordTok{grid.arrange}\NormalTok{(YlGn, PuBu, }\DataTypeTok{ncol =} \DecValTok{2}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
+
+\begin{verbatim}
+## Error: could not find function "grid.arrange"
+\end{verbatim}
+
 If you are not happy with the automatic methods for specifying breaks it
 can also be done manually:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{nbrks <- }\DecValTok{4}
-\NormalTok{brks <- }\KeywordTok{c}\NormalTok{(}\FloatTok{1e+08}\NormalTok{, }\FloatTok{2.5e+08}\NormalTok{, }\FloatTok{5e+07}\NormalTok{, }\FloatTok{1e+09}\NormalTok{)}
-\NormalTok{map + }\KeywordTok{scale_fill_gradientn}\NormalTok{(}\DataTypeTok{colours =} \KeywordTok{brewer.pal}\NormalTok{(nbrks, }\StringTok{"PuBu"}\NormalTok{), }\DataTypeTok{breaks =} \KeywordTok{c}\NormalTok{(brks))}
+\NormalTok{nbrks <-}\StringTok{ }\DecValTok{4}
+\NormalTok{brks <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\FloatTok{1e+08}\NormalTok{, }\FloatTok{2.5e+08}\NormalTok{, }\FloatTok{5e+07}\NormalTok{, }\FloatTok{1e+09}\NormalTok{)}
+\NormalTok{map +}\StringTok{ }\KeywordTok{scale_fill_gradientn}\NormalTok{(}\DataTypeTok{colours =} \KeywordTok{brewer.pal}\NormalTok{(nbrks, }\StringTok{"PuBu"}\NormalTok{), }\DataTypeTok{breaks =} \KeywordTok{c}\NormalTok{(brks))}
 \end{Highlighting}
 \end{Shaded}
+
+\begin{verbatim}
+## Scale for 'fill' is already present. Adding another scale for 'fill', which will replace the existing scale.
+\end{verbatim}
+
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/unnamed-chunk-6.png}
@@ -576,22 +678,22 @@ map) green. The second plot is more conventional.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{map2 <- }\KeywordTok{ggplot}\NormalTok{(wrld.pop.f, }\KeywordTok{aes}\NormalTok{(long, lat, }\DataTypeTok{group =} \NormalTok{group)) + }\KeywordTok{coord_equal}\NormalTok{()}
+\NormalTok{map2 <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(wrld.pop.f, }\KeywordTok{aes}\NormalTok{(long, lat, }\DataTypeTok{group =} \NormalTok{group)) +}\StringTok{ }\KeywordTok{coord_equal}\NormalTok{()}
 
-\NormalTok{blue <- map2 + }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"light blue"}\NormalTok{) + }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"dark green"}\NormalTok{))}
+\NormalTok{blue <-}\StringTok{ }\NormalTok{map2 +}\StringTok{ }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"light blue"}\NormalTok{) +}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"dark green"}\NormalTok{))}
 
-\NormalTok{green <- map2 + }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"dark green"}\NormalTok{) + }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"light blue"}\NormalTok{))}
+\NormalTok{green <-}\StringTok{ }\NormalTok{map2 +}\StringTok{ }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"dark green"}\NormalTok{) +}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"light blue"}\NormalTok{))}
 
 \KeywordTok{grid.arrange}\NormalTok{(blue, green, }\DataTypeTok{ncol =} \DecValTok{2}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-\begin{figure}[htbp]
-\centering
-\includegraphics{figure/Conforming_to_Colour_Convention.png}
-\caption{Conforming to Colour Convention}
-\end{figure}
 
-\subsubsection{Experimenting with line colour and widths}
+\begin{verbatim}
+## Error: could not find function "grid.arrange"
+\end{verbatim}
+
+\subsubsection{Experimenting with line colour and
+widths}\label{experimenting-with-line-colour-and-widths}
 
 Line colour and width are important parameters too often overlooked for
 increasing the legibility of a graphic. The code below demonstrates it
@@ -603,24 +705,23 @@ widths.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{map3 <- map2 + }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"light blue"}\NormalTok{))}
+\NormalTok{map3 <-}\StringTok{ }\NormalTok{map2 +}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"light blue"}\NormalTok{))}
 
-\NormalTok{yellow <- map3 + }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"dark green"}\NormalTok{, }\DataTypeTok{colour =} \StringTok{"yellow"}\NormalTok{)}
+\NormalTok{yellow <-}\StringTok{ }\NormalTok{map3 +}\StringTok{ }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"dark green"}\NormalTok{, }\DataTypeTok{colour =} \StringTok{"yellow"}\NormalTok{)}
 
-\NormalTok{black <- map3 + }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"dark green"}\NormalTok{, }\DataTypeTok{colour =} \StringTok{"black"}\NormalTok{)}
+\NormalTok{black <-}\StringTok{ }\NormalTok{map3 +}\StringTok{ }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"dark green"}\NormalTok{, }\DataTypeTok{colour =} \StringTok{"black"}\NormalTok{)}
 
-\NormalTok{thin <- map3 + }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"dark green"}\NormalTok{, }\DataTypeTok{colour =} \StringTok{"black"}\NormalTok{, }\DataTypeTok{lwd =} \FloatTok{0.1}\NormalTok{)}
+\NormalTok{thin <-}\StringTok{ }\NormalTok{map3 +}\StringTok{ }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"dark green"}\NormalTok{, }\DataTypeTok{colour =} \StringTok{"black"}\NormalTok{, }\DataTypeTok{lwd =} \FloatTok{0.1}\NormalTok{)}
 
-\NormalTok{thick <- map3 + }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"dark green"}\NormalTok{, }\DataTypeTok{colour =} \StringTok{"black"}\NormalTok{, }\DataTypeTok{lwd =} \FloatTok{1.5}\NormalTok{)}
+\NormalTok{thick <-}\StringTok{ }\NormalTok{map3 +}\StringTok{ }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"dark green"}\NormalTok{, }\DataTypeTok{colour =} \StringTok{"black"}\NormalTok{, }\DataTypeTok{lwd =} \FloatTok{1.5}\NormalTok{)}
 
 \KeywordTok{grid.arrange}\NormalTok{(yellow, black, thick, thin, }\DataTypeTok{ncol =} \DecValTok{2}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-\begin{figure}[htbp]
-\centering
-\includegraphics{figure/The_Impact_of_Line_Width.png}
-\caption{The Impact of Line Width}
-\end{figure}
+
+\begin{verbatim}
+## Error: could not find function "grid.arrange"
+\end{verbatim}
 
 There are other parameters such as layer transparency (use the
 \texttt{alpha} parameter for this) that can be applied to all aspects of
@@ -628,7 +729,8 @@ the plot - both points, lines and polygons. Space does not permit full
 exploration here but more information is available from the ggplot2
 package documentation (see \href{http://ggplot2.org/}{ggplot2.org}).
 
-\subsection{Map Adornments and Annotations}
+\subsection{Map Adornments and
+Annotations}\label{map-adornments-and-annotations}
 
 Map adornments and annotations orientate the viewer and provide context.
 They include grids (also known as graticules), orientation arrows, scale
@@ -637,7 +739,7 @@ it is often best that they are used sparingly to avoid unnecessary
 clutter (Monkhouse and Wilkinson 1971). With ggplot2 scales and legends
 are provided by default, but they can be customised.
 
-\subsubsection{North arrow}
+\subsubsection{North arrow}\label{north-arrow}
 
 In the maps created so far, we have defined the \emph{aesthetics}
 (\texttt{aes}) of the map in the foundation function \texttt{ggplot()}.
@@ -657,18 +759,19 @@ refinements):
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(grid)  }\CommentTok{# needed for arrow}
-\KeywordTok{ggplot}\NormalTok{() + }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{data =} \NormalTok{wrld.pop.f, }\KeywordTok{aes}\NormalTok{(long, lat, }\DataTypeTok{group =} \NormalTok{group, }\DataTypeTok{fill =} \NormalTok{pop_est)) + }
-    \KeywordTok{geom_line}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{c}\NormalTok{(-}\FloatTok{1.3e+07}\NormalTok{, -}\FloatTok{1.3e+07}\NormalTok{), }\DataTypeTok{y =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{5e+06}\NormalTok{)), }\DataTypeTok{arrow =} \KeywordTok{arrow}\NormalTok{()) + }
-    \KeywordTok{coord_fixed}\NormalTok{()  }\CommentTok{# correct aspect ratio}
+\KeywordTok{ggplot}\NormalTok{() +}\StringTok{ }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{data =} \NormalTok{wrld.pop.f, }\KeywordTok{aes}\NormalTok{(long, lat, }\DataTypeTok{group =} \NormalTok{group, }\DataTypeTok{fill =} \NormalTok{pop_est)) +}\StringTok{ }
+\StringTok{    }\KeywordTok{geom_line}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{c}\NormalTok{(-}\FloatTok{1.3e+07}\NormalTok{, -}\FloatTok{1.3e+07}\NormalTok{), }\DataTypeTok{y =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{5e+06}\NormalTok{)), }\DataTypeTok{arrow =} \KeywordTok{arrow}\NormalTok{()) +}\StringTok{ }
+\StringTok{    }\KeywordTok{coord_fixed}\NormalTok{()  }\CommentTok{# correct aspect ratio}
 \end{Highlighting}
 \end{Shaded}
+
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/North_Arrow_Example.png}
 \caption{North Arrow Example}
 \end{figure}
 
-\subsubsection{Scale bar}
+\subsubsection{Scale bar}\label{scale-bar}
 
 ggplot2's scale bar capabilities are perhaps the least advanced element
 of the package. This approach will only work if the spatial data are in
@@ -685,18 +788,19 @@ Boroughs.
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{load}\NormalTok{(}\StringTok{"data/lnd.f.RData"}\NormalTok{)}
-\KeywordTok{ggplot}\NormalTok{() + }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{data =} \NormalTok{lnd.f, }\KeywordTok{aes}\NormalTok{(long, lat, }\DataTypeTok{group =} \NormalTok{group)) + }\KeywordTok{geom_line}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{c}\NormalTok{(}\DecValTok{505000}\NormalTok{, }
-    \DecValTok{515000}\NormalTok{), }\DataTypeTok{y =} \KeywordTok{c}\NormalTok{(}\DecValTok{158000}\NormalTok{, }\DecValTok{158000}\NormalTok{)), }\DataTypeTok{lwd =} \DecValTok{2}\NormalTok{) + }\KeywordTok{annotate}\NormalTok{(}\StringTok{"text"}\NormalTok{, }\DataTypeTok{label =} \StringTok{"10km"}\NormalTok{, }
-    \DataTypeTok{x =} \DecValTok{510000}\NormalTok{, }\DataTypeTok{y =} \DecValTok{160000}\NormalTok{) + }\KeywordTok{coord_fixed}\NormalTok{()}
+\KeywordTok{ggplot}\NormalTok{() +}\StringTok{ }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{data =} \NormalTok{lnd.f, }\KeywordTok{aes}\NormalTok{(long, lat, }\DataTypeTok{group =} \NormalTok{group)) +}\StringTok{ }\KeywordTok{geom_line}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{c}\NormalTok{(}\DecValTok{505000}\NormalTok{, }
+    \DecValTok{515000}\NormalTok{), }\DataTypeTok{y =} \KeywordTok{c}\NormalTok{(}\DecValTok{158000}\NormalTok{, }\DecValTok{158000}\NormalTok{)), }\DataTypeTok{lwd =} \DecValTok{2}\NormalTok{) +}\StringTok{ }\KeywordTok{annotate}\NormalTok{(}\StringTok{"text"}\NormalTok{, }\DataTypeTok{label =} \StringTok{"10km"}\NormalTok{, }
+    \DataTypeTok{x =} \DecValTok{510000}\NormalTok{, }\DataTypeTok{y =} \DecValTok{160000}\NormalTok{) +}\StringTok{ }\KeywordTok{coord_fixed}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
+
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/Scale_Bar_Example.png}
 \caption{Scale Bar Example}
 \end{figure}
 
-\subsubsection{Legends}
+\subsubsection{Legends}\label{legends}
 
 Legends are added automatically but can be customised in a number of
 ways. They are an important adornment of any map since they describe
@@ -709,9 +813,10 @@ examples available in the ggplot2 documentation.
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# Position}
-\NormalTok{map + }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"top"}\NormalTok{)}
+\NormalTok{map +}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"top"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
+
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/Formatting_the_Legend.png}
@@ -724,16 +829,18 @@ for customization are available, as highlighted in the examples below.
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# Title}
-\NormalTok{map + }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{colour =} \StringTok{"Red"}\NormalTok{, }\DataTypeTok{size =} \DecValTok{16}\NormalTok{, }\DataTypeTok{face =} \StringTok{"bold"}\NormalTok{))}
+\NormalTok{map +}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{colour =} \StringTok{"Red"}\NormalTok{, }\DataTypeTok{size =} \DecValTok{16}\NormalTok{, }\DataTypeTok{face =} \StringTok{"bold"}\NormalTok{))}
 
 \CommentTok{# Label Font Size and Colour}
-\NormalTok{map + }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.text =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{colour =} \StringTok{"blue"}\NormalTok{, }\DataTypeTok{size =} \DecValTok{16}\NormalTok{, }\DataTypeTok{face =} \StringTok{"italic"}\NormalTok{))}
+\NormalTok{map +}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.text =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{colour =} \StringTok{"blue"}\NormalTok{, }\DataTypeTok{size =} \DecValTok{16}\NormalTok{, }\DataTypeTok{face =} \StringTok{"italic"}\NormalTok{))}
 
 \CommentTok{# Border and background box}
-\NormalTok{map + }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"gray90"}\NormalTok{, }\DataTypeTok{size =} \FloatTok{0.5}\NormalTok{, }\DataTypeTok{linetype =} \StringTok{"dotted"}\NormalTok{))}
+\NormalTok{map +}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"gray90"}\NormalTok{, }\DataTypeTok{size =} \FloatTok{0.5}\NormalTok{, }\DataTypeTok{linetype =} \StringTok{"dotted"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
-\subsection{Adding Basemaps To Your Plots}
+
+\subsection{Adding Basemaps To Your
+Plots}\label{adding-basemaps-to-your-plots}
 
 The development of the ggmap package has enabled the simple use of
 online mapping services such as Google Maps and OpenStreetMap for base
@@ -752,6 +859,7 @@ reprojected file can be loaded as follows:
 \KeywordTok{load}\NormalTok{(}\StringTok{"data/lnd.wgs84.RData"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
+
 The first job is to calculate the bounding box (bb for short) of the
 \texttt{lnd.wgs84} object to identify the geographic extent of the map.
 This information is used to request the appropriate map tiles from the
@@ -763,13 +871,14 @@ around the edges of the data to be plotted.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{b <- }\KeywordTok{bbox}\NormalTok{(lnd.wgs84)}
-\NormalTok{b[}\DecValTok{1}\NormalTok{, ] <- (b[}\DecValTok{1}\NormalTok{, ] - }\KeywordTok{mean}\NormalTok{(b[}\DecValTok{1}\NormalTok{, ])) * }\FloatTok{1.05} \NormalTok{+ }\KeywordTok{mean}\NormalTok{(b[}\DecValTok{1}\NormalTok{, ])}
-\NormalTok{b[}\DecValTok{2}\NormalTok{, ] <- (b[}\DecValTok{2}\NormalTok{, ] - }\KeywordTok{mean}\NormalTok{(b[}\DecValTok{2}\NormalTok{, ])) * }\FloatTok{1.05} \NormalTok{+ }\KeywordTok{mean}\NormalTok{(b[}\DecValTok{2}\NormalTok{, ])}
+\NormalTok{b <-}\StringTok{ }\KeywordTok{bbox}\NormalTok{(lnd.wgs84)}
+\NormalTok{b[}\DecValTok{1}\NormalTok{, ] <-}\StringTok{ }\NormalTok{(b[}\DecValTok{1}\NormalTok{, ] -}\StringTok{ }\KeywordTok{mean}\NormalTok{(b[}\DecValTok{1}\NormalTok{, ])) *}\StringTok{ }\FloatTok{1.05} \NormalTok{+}\StringTok{ }\KeywordTok{mean}\NormalTok{(b[}\DecValTok{1}\NormalTok{, ])}
+\NormalTok{b[}\DecValTok{2}\NormalTok{, ] <-}\StringTok{ }\NormalTok{(b[}\DecValTok{2}\NormalTok{, ] -}\StringTok{ }\KeywordTok{mean}\NormalTok{(b[}\DecValTok{2}\NormalTok{, ])) *}\StringTok{ }\FloatTok{1.05} \NormalTok{+}\StringTok{ }\KeywordTok{mean}\NormalTok{(b[}\DecValTok{2}\NormalTok{, ])}
 \CommentTok{# scale longitude and latitude (increase bb by 5% for plot) replace 1.05}
 \CommentTok{# with 1.xx for an xx% increase in the plot size}
 \end{Highlighting}
 \end{Shaded}
+
 This is then fed into the \texttt{get\_map} function as the location
 parameter. The syntax below contains 2 functions. \texttt{ggmap} is
 required to produce the plot and provides the base map data.
@@ -777,13 +886,24 @@ required to produce the plot and provides the base map data.
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(ggmap)}
-
-\NormalTok{lnd.b1 <- }\KeywordTok{ggmap}\NormalTok{(}\KeywordTok{get_map}\NormalTok{(}\DataTypeTok{location =} \NormalTok{b))}
 \end{Highlighting}
 \end{Shaded}
+
 \begin{verbatim}
-## Warning: bounding box given to google - spatial extent only approximate.
+## Error: there is no package called 'ggmap'
 \end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+
+\NormalTok{lnd.b1 <-}\StringTok{ }\KeywordTok{ggmap}\NormalTok{(}\KeywordTok{get_map}\NormalTok{(}\DataTypeTok{location =} \NormalTok{b))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Error: could not find function "ggmap"
+\end{verbatim}
+
 \texttt{ggmap} follows the same syntax structures as ggplot2 and so can
 easily be integrated with the other examples included here. First
 \texttt{fortify} the \texttt{lnd.wgs84} object and then merge with the
@@ -791,19 +911,21 @@ required attribute data.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{lnd.wgs84.f <- }\KeywordTok{fortify}\NormalTok{(lnd.wgs84, }\DataTypeTok{region =} \StringTok{"ons_label"}\NormalTok{)}
-\NormalTok{lnd.wgs84.f <- }\KeywordTok{merge}\NormalTok{(lnd.wgs84.f, lnd.wgs84@data, }\DataTypeTok{by.x =} \StringTok{"id"}\NormalTok{, }\DataTypeTok{by.y =} \StringTok{"ons_label"}\NormalTok{)}
+\NormalTok{lnd.wgs84.f <-}\StringTok{ }\KeywordTok{fortify}\NormalTok{(lnd.wgs84, }\DataTypeTok{region =} \StringTok{"ons_label"}\NormalTok{)}
+\NormalTok{lnd.wgs84.f <-}\StringTok{ }\KeywordTok{merge}\NormalTok{(lnd.wgs84.f, lnd.wgs84@data, }\DataTypeTok{by.x =} \StringTok{"id"}\NormalTok{, }\DataTypeTok{by.y =} \StringTok{"ons_label"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
+
 We can now overlay this on our base map using the
 \texttt{geom\_polygon()} function.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{lnd.b1 + }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{data =} \NormalTok{lnd.wgs84.f, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{long, }\DataTypeTok{y =} \NormalTok{lat, }\DataTypeTok{group =} \NormalTok{group, }
+\NormalTok{lnd.b1 +}\StringTok{ }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{data =} \NormalTok{lnd.wgs84.f, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{long, }\DataTypeTok{y =} \NormalTok{lat, }\DataTypeTok{group =} \NormalTok{group, }
     \DataTypeTok{fill =} \NormalTok{Partic_Per), }\DataTypeTok{alpha =} \FloatTok{0.5}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
+
 The resulting map looks reasonable, but it would be improved with a
 simpler base map in black and white. A design firm called \emph{stamen}
 provide the tiles we need and they can be brought into the plot with the
@@ -811,25 +933,31 @@ provide the tiles we need and they can be brought into the plot with the
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{lnd.b2 <- }\KeywordTok{ggmap}\NormalTok{(}\KeywordTok{get_map}\NormalTok{(}\DataTypeTok{location =} \NormalTok{b, }\DataTypeTok{source =} \StringTok{"stamen"}\NormalTok{, }\DataTypeTok{maptype =} \StringTok{"toner"}\NormalTok{, }
+\NormalTok{lnd.b2 <-}\StringTok{ }\KeywordTok{ggmap}\NormalTok{(}\KeywordTok{get_map}\NormalTok{(}\DataTypeTok{location =} \NormalTok{b, }\DataTypeTok{source =} \StringTok{"stamen"}\NormalTok{, }\DataTypeTok{maptype =} \StringTok{"toner"}\NormalTok{, }
     \DataTypeTok{crop =} \NormalTok{T))  }\CommentTok{# note the addition of the maptype parameter.}
 \end{Highlighting}
 \end{Shaded}
+
+\begin{verbatim}
+## Error: could not find function "ggmap"
+\end{verbatim}
+
 We can then produce the plot as before.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{lnd.b2 + }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{data =} \NormalTok{lnd.wgs84.f, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{long, }\DataTypeTok{y =} \NormalTok{lat, }\DataTypeTok{group =} \NormalTok{group, }
+\NormalTok{lnd.b2 +}\StringTok{ }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{data =} \NormalTok{lnd.wgs84.f, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{long, }\DataTypeTok{y =} \NormalTok{lat, }\DataTypeTok{group =} \NormalTok{group, }
     \DataTypeTok{fill =} \NormalTok{Partic_Per), }\DataTypeTok{alpha =} \FloatTok{0.5}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
+
 This produces a much clearer map and enables readers to focus on the
 data rather than the basemap. Spatial polygons are not the only data
 types compatible with \texttt{ggmap} - you can use any plot type and set
 of parameters available in \texttt{ggplot2}, making it an ideal
 companion package for spatial data visualisation.
 
-\section{A Final Example}
+\section{A Final Example}\label{a-final-example}
 
 Here we present a final example that draws upon the many advanced
 concepts discussed in this chapter to produce a map of 18th Century
@@ -853,22 +981,25 @@ shapefile and the shipping data itself.
 \KeywordTok{library}\NormalTok{(rgdal)}
 \KeywordTok{library}\NormalTok{(ggplot2)}
 \KeywordTok{library}\NormalTok{(png)}
-\NormalTok{wrld <- }\KeywordTok{readOGR}\NormalTok{(}\StringTok{"data/"}\NormalTok{, }\StringTok{"ne_110m_admin_0_countries"}\NormalTok{)}
+\NormalTok{wrld <-}\StringTok{ }\KeywordTok{readOGR}\NormalTok{(}\StringTok{"data/"}\NormalTok{, }\StringTok{"ne_110m_admin_0_countries"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
+
 \begin{verbatim}
 ## OGR data source with driver: ESRI Shapefile 
 ## Source: "data/", layer: "ne_110m_admin_0_countries"
 ## with 177 features and 63 fields
 ## Feature type: wkbPolygon with 2 dimensions
 \end{verbatim}
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{btitle <- }\KeywordTok{readPNG}\NormalTok{(}\StringTok{"figure/brit_titles.png"}\NormalTok{)}
-\NormalTok{compass <- }\KeywordTok{readPNG}\NormalTok{(}\StringTok{"figure/windrose.png"}\NormalTok{)}
-\NormalTok{bdata <- }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"data/british_shipping_example.csv"}\NormalTok{)}
+\NormalTok{btitle <-}\StringTok{ }\KeywordTok{readPNG}\NormalTok{(}\StringTok{"figure/brit_titles.png"}\NormalTok{)}
+\NormalTok{compass <-}\StringTok{ }\KeywordTok{readPNG}\NormalTok{(}\StringTok{"figure/windrose.png"}\NormalTok{)}
+\NormalTok{bdata <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"data/british_shipping_example.csv"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
+
 If you look at the first few lines in the \texttt{bdata} object you will
 see there are 7 columns with each row representing a single point on the
 ship's course. The year of the journey and the nationality of the ship
@@ -880,11 +1011,12 @@ We first specify some plot parameters that remove the axis labels.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{xquiet <- }\KeywordTok{scale_x_continuous}\NormalTok{(}\StringTok{""}\NormalTok{, }\DataTypeTok{breaks =} \OtherTok{NULL}\NormalTok{)}
-\NormalTok{yquiet <- }\KeywordTok{scale_y_continuous}\NormalTok{(}\StringTok{""}\NormalTok{, }\DataTypeTok{breaks =} \OtherTok{NULL}\NormalTok{)}
-\NormalTok{quiet <- }\KeywordTok{list}\NormalTok{(xquiet, yquiet)}
+\NormalTok{xquiet <-}\StringTok{ }\KeywordTok{scale_x_continuous}\NormalTok{(}\StringTok{""}\NormalTok{, }\DataTypeTok{breaks =} \OtherTok{NULL}\NormalTok{)}
+\NormalTok{yquiet <-}\StringTok{ }\KeywordTok{scale_y_continuous}\NormalTok{(}\StringTok{""}\NormalTok{, }\DataTypeTok{breaks =} \OtherTok{NULL}\NormalTok{)}
+\NormalTok{quiet <-}\StringTok{ }\KeywordTok{list}\NormalTok{(xquiet, yquiet)}
 \end{Highlighting}
 \end{Shaded}
+
 The next step is to \texttt{fortify} the World coastlines and create the
 base plot. This sets the extents of the plot window and provides the
 blank canvas on which we will build up the layers. The first layer
@@ -893,19 +1025,21 @@ prevent it from executing by simply storing it as the plot's parameters.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{wrld.f <- }\KeywordTok{fortify}\NormalTok{(wrld, }\DataTypeTok{region =} \StringTok{"sov_a3"}\NormalTok{)}
-\NormalTok{base <- }\KeywordTok{ggplot}\NormalTok{(wrld.f, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{long, }\DataTypeTok{y =} \NormalTok{lat))}
-\NormalTok{wrld <- }\KeywordTok{c}\NormalTok{(}\KeywordTok{geom_polygon}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{group =} \NormalTok{group), }\DataTypeTok{size =} \FloatTok{0.1}\NormalTok{, }\DataTypeTok{colour =} \StringTok{"black"}\NormalTok{, }\DataTypeTok{fill =} \StringTok{"#D6BF86"}\NormalTok{, }
+\NormalTok{wrld.f <-}\StringTok{ }\KeywordTok{fortify}\NormalTok{(wrld, }\DataTypeTok{region =} \StringTok{"sov_a3"}\NormalTok{)}
+\NormalTok{base <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(wrld.f, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{long, }\DataTypeTok{y =} \NormalTok{lat))}
+\NormalTok{wrld <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\KeywordTok{geom_polygon}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{group =} \NormalTok{group), }\DataTypeTok{size =} \FloatTok{0.1}\NormalTok{, }\DataTypeTok{colour =} \StringTok{"black"}\NormalTok{, }\DataTypeTok{fill =} \StringTok{"#D6BF86"}\NormalTok{, }
     \DataTypeTok{data =} \NormalTok{wrld.f, }\DataTypeTok{alpha =} \DecValTok{1}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
+
 To see the result of this simply type:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{base + wrld + }\KeywordTok{coord_fixed}\NormalTok{()}
+\NormalTok{base +}\StringTok{ }\NormalTok{wrld +}\StringTok{ }\KeywordTok{coord_fixed}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
+
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/World_Map.png}
@@ -921,11 +1055,12 @@ identify the unique paths.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{route <- }\KeywordTok{c}\NormalTok{(}\KeywordTok{geom_path}\NormalTok{(}\KeywordTok{aes}\NormalTok{(long, lat, }\DataTypeTok{group =} \KeywordTok{paste}\NormalTok{(bdata$trp, bdata$group.regroup, }
+\NormalTok{route <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\KeywordTok{geom_path}\NormalTok{(}\KeywordTok{aes}\NormalTok{(long, lat, }\DataTypeTok{group =} \KeywordTok{paste}\NormalTok{(bdata$trp, bdata$group.regroup, }
     \DataTypeTok{sep =} \StringTok{"."}\NormalTok{)), }\DataTypeTok{colour =} \StringTok{"#0F3B5F"}\NormalTok{, }\DataTypeTok{size =} \FloatTok{0.2}\NormalTok{, }\DataTypeTok{data =} \NormalTok{bdata, }\DataTypeTok{alpha =} \FloatTok{0.5}\NormalTok{, }
     \DataTypeTok{lineend =} \StringTok{"round"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
+
 We now have all we need to generate the final plot by building the
 layers together with the \texttt{+} sign as shown in the code below. The
 first 3 arguments are the plot layers, and the parameters within
@@ -939,12 +1074,13 @@ labels.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{base + route + wrld + }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"#BAC4B9"}\NormalTok{, }
-    \DataTypeTok{colour =} \StringTok{"black"}\NormalTok{)) + }\KeywordTok{annotation_raster}\NormalTok{(btitle, }\DataTypeTok{xmin =} \DecValTok{30}\NormalTok{, }\DataTypeTok{xmax =} \DecValTok{140}\NormalTok{, }\DataTypeTok{ymin =} \DecValTok{51}\NormalTok{, }
-    \DataTypeTok{ymax =} \DecValTok{87}\NormalTok{) + }\KeywordTok{annotation_raster}\NormalTok{(compass, }\DataTypeTok{xmin =} \DecValTok{65}\NormalTok{, }\DataTypeTok{xmax =} \DecValTok{105}\NormalTok{, }\DataTypeTok{ymin =} \DecValTok{25}\NormalTok{, }
-    \DataTypeTok{ymax =} \DecValTok{65}\NormalTok{) + }\KeywordTok{coord_equal}\NormalTok{() + quiet}
+\NormalTok{base +}\StringTok{ }\NormalTok{route +}\StringTok{ }\NormalTok{wrld +}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"#BAC4B9"}\NormalTok{, }
+    \DataTypeTok{colour =} \StringTok{"black"}\NormalTok{)) +}\StringTok{ }\KeywordTok{annotation_raster}\NormalTok{(btitle, }\DataTypeTok{xmin =} \DecValTok{30}\NormalTok{, }\DataTypeTok{xmax =} \DecValTok{140}\NormalTok{, }\DataTypeTok{ymin =} \DecValTok{51}\NormalTok{, }
+    \DataTypeTok{ymax =} \DecValTok{87}\NormalTok{) +}\StringTok{ }\KeywordTok{annotation_raster}\NormalTok{(compass, }\DataTypeTok{xmin =} \DecValTok{65}\NormalTok{, }\DataTypeTok{xmax =} \DecValTok{105}\NormalTok{, }\DataTypeTok{ymin =} \DecValTok{25}\NormalTok{, }
+    \DataTypeTok{ymax =} \DecValTok{65}\NormalTok{) +}\StringTok{ }\KeywordTok{coord_equal}\NormalTok{() +}\StringTok{ }\NormalTok{quiet}
 \end{Highlighting}
 \end{Shaded}
+
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/World_Shipping.png}
@@ -967,22 +1103,23 @@ the blue marble background.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{earth <- }\KeywordTok{readPNG}\NormalTok{(}\StringTok{"figure/earth_raster.png"}\NormalTok{)}
+\NormalTok{earth <-}\StringTok{ }\KeywordTok{readPNG}\NormalTok{(}\StringTok{"figure/earth_raster.png"}\NormalTok{)}
 
-\NormalTok{base + }\KeywordTok{annotation_raster}\NormalTok{(earth, }\DataTypeTok{xmin =} \NormalTok{-}\DecValTok{180}\NormalTok{, }\DataTypeTok{xmax =} \DecValTok{180}\NormalTok{, }\DataTypeTok{ymin =} \NormalTok{-}\DecValTok{90}\NormalTok{, }\DataTypeTok{ymax =} \DecValTok{90}\NormalTok{) + }
-    \NormalTok{route + }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"#BAC4B9"}\NormalTok{, }\DataTypeTok{colour =} \StringTok{"black"}\NormalTok{)) + }
-    \KeywordTok{annotation_raster}\NormalTok{(btitle, }\DataTypeTok{xmin =} \DecValTok{30}\NormalTok{, }\DataTypeTok{xmax =} \DecValTok{140}\NormalTok{, }\DataTypeTok{ymin =} \DecValTok{51}\NormalTok{, }\DataTypeTok{ymax =} \DecValTok{87}\NormalTok{) + }
-    \KeywordTok{annotation_raster}\NormalTok{(compass, }\DataTypeTok{xmin =} \DecValTok{65}\NormalTok{, }\DataTypeTok{xmax =} \DecValTok{105}\NormalTok{, }\DataTypeTok{ymin =} \DecValTok{25}\NormalTok{, }\DataTypeTok{ymax =} \DecValTok{65}\NormalTok{) + }
-    \KeywordTok{coord_equal}\NormalTok{() + quiet}
+\NormalTok{base +}\StringTok{ }\KeywordTok{annotation_raster}\NormalTok{(earth, }\DataTypeTok{xmin =} \NormalTok{-}\DecValTok{180}\NormalTok{, }\DataTypeTok{xmax =} \DecValTok{180}\NormalTok{, }\DataTypeTok{ymin =} \NormalTok{-}\DecValTok{90}\NormalTok{, }\DataTypeTok{ymax =} \DecValTok{90}\NormalTok{) +}\StringTok{ }
+\StringTok{    }\NormalTok{route +}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"#BAC4B9"}\NormalTok{, }\DataTypeTok{colour =} \StringTok{"black"}\NormalTok{)) +}\StringTok{ }
+\StringTok{    }\KeywordTok{annotation_raster}\NormalTok{(btitle, }\DataTypeTok{xmin =} \DecValTok{30}\NormalTok{, }\DataTypeTok{xmax =} \DecValTok{140}\NormalTok{, }\DataTypeTok{ymin =} \DecValTok{51}\NormalTok{, }\DataTypeTok{ymax =} \DecValTok{87}\NormalTok{) +}\StringTok{ }
+\StringTok{    }\KeywordTok{annotation_raster}\NormalTok{(compass, }\DataTypeTok{xmin =} \DecValTok{65}\NormalTok{, }\DataTypeTok{xmax =} \DecValTok{105}\NormalTok{, }\DataTypeTok{ymin =} \DecValTok{25}\NormalTok{, }\DataTypeTok{ymax =} \DecValTok{65}\NormalTok{) +}\StringTok{ }
+\StringTok{    }\KeywordTok{coord_equal}\NormalTok{() +}\StringTok{ }\NormalTok{quiet}
 \end{Highlighting}
 \end{Shaded}
+
 \begin{figure}[htbp]
 \centering
 \includegraphics{figure/World_Shipping_with_raster_background.png}
 \caption{World Shipping with raster background}
 \end{figure}
 
-\section{Conclusions}
+\section{Conclusions}\label{conclusions}
 
 There are an almost infinite number of different combinations colours,
 adornments and line widths that could be applied to a map (or any other
@@ -1022,7 +1159,7 @@ Dubovsky, 2013). As R continues its ascent a as a spatial analysis and
 data visualisation platform, the opportunities to benefit from it by
 creating compelling maps are only set to grow.
 
-\section{References}
+\section{References}\label{references}
 
 Bivand, R., \& Gebhardt, A. (2000). Implementing functions for spatial
 statistical analysis using the R language. Journal of Geographical
