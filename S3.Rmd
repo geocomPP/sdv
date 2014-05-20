@@ -211,7 +211,8 @@ grid.arrange(blue, green, ncol = 2)
 Line colour and width are important parameters too often overlooked for increasing the legibility of a graphic. The code below demonstrates it is possible to adjust these using the `colour` and `lwd` arguments. The impact of different line widths will vary depending on your screen size and resolution. If you save the plot to pdf (e.g. using the `ggsave` command), this will also affect the relative line widths.
 
 ```{r The Impact of Line Width}
-map3 <- map2 + theme(panel.background = element_rect(fill = "light blue"))
+map3 <- ggplot(wrld.pop.f, aes(long, lat, group = group)) + coord_equal() +
+ theme(panel.background = element_rect(fill = "light blue"))
 
 yellow <- map3 + geom_polygon(fill = "dark green", colour = "yellow") 
   
