@@ -135,11 +135,11 @@ refer to the online
 [tutorial](https://github.com/geocomPP/sdvwR/blob/master/sdv-tutorial.pdf?raw=true)
 if this is an issue.
 
-``` {.r}
+~~~~ {.r}
 library(rgdal)  # load the package (needs to be installed)
 wrld <- readOGR("data/", "world")
 plot(wrld)
-```
+~~~~
 
 ![plot of chunk A Basic Map of the
 World](figure/A_Basic_Map_of_the_World.png)
@@ -171,9 +171,9 @@ functions that would apply to any spatial dataset in R, to gain an
 understanding of what we have loaded. How many rows of attribute data
 are there? This query can be answered using `nrow`:
 
-``` {.r}
+~~~~ {.r}
 nrow(wrld)
-```
+~~~~
 
     ## [1] 175
 
@@ -185,9 +185,9 @@ comma within the square brackets and the column numbers after. Try
 playing with the following line of code, for example by removing the
 square brackets entirely:
 
-``` {.r}
+~~~~ {.r}
 wrld@data[1:2, 1:5]
-```
+~~~~
 
     ##   scalerank      featurecla labelrank  sovereignt sov_a3
     ## 0         1 Admin-0 country         3 Afghanistan    AFG
@@ -242,18 +242,18 @@ First ensure that the necessary packages are installed and that R is in
 the correct working directory. Then load the ggplot2 package used in
 this section.
 
-``` {.r}
+~~~~ {.r}
 library(ggplot2)
-```
+~~~~
 
 We are going to use the previously loaded map of the world to
 demonstrate some of the cartographic principles as they are introduced.
 To establish the starting point, find the first 35 column names of the
 `wrld` object:
 
-``` {.r}
+~~~~ {.r}
 names(wrld@data)[1:35]
-```
+~~~~
 
     ##  [1] "scalerank"  "featurecla" "labelrank"  "sovereignt" "sov_a3"    
     ##  [6] "adm0_dif"   "level"      "type"       "admin"      "adm0_a3"   
@@ -277,10 +277,10 @@ cartographic perspective this projection this is not ideal. Instead, the
 Robinson projection provides a good compromise between areal distortion
 and shape preservation:
 
-``` {.r}
+~~~~ {.r}
 wrld.rob <- spTransform(wrld, CRS("+proj=robin"))  #`+proj=robin` refers to the Robinson projection
 plot(wrld.rob)
-```
+~~~~
 
 ![plot of chunk The Robinson
 Projection](figure/The_Robinson_Projection.png)
@@ -291,21 +291,21 @@ to convert the spatial data it into a format that ggplot2 understands.
 Then the `merge` function is used to re-attach the attribute data lost
 during the fortify operation.
 
-``` {.r}
+~~~~ {.r}
 wrld.rob.f <- fortify(wrld.rob, region = "sov_a3")
-```
+~~~~
 
     ## Loading required package: rgeos
-    ## rgeos version: 0.2-19, (SVN revision 394)
-    ##  GEOS runtime version: 3.3.8-CAPI-1.7.8 
+    ## rgeos version: 0.3-2, (SVN revision 413M)
+    ##  GEOS runtime version: 3.3.9-CAPI-1.7.9 
     ##  Polygon checking: TRUE
 
-``` {.r}
+~~~~ {.r}
 
 # Use by.x and by.y arguments to specify the columns that match the two
 # dataframes together:
 wrld.pop.f <- merge(wrld.rob.f, wrld.rob@data, by.x = "id", by.y = "sov_a3")
-```
+~~~~
 
 The code below produces a map coloured by the population variable. It
 demonstrates the syntax of ggplot2 by first stringing together a series
@@ -318,12 +318,12 @@ colour palette and automatically generates a legend. `geom_polygon()`
 tells ggplot2 to plot polygons. As will be shown in the next section
 these defaults can be easily altered to change a map's appearance.
 
-``` {.r}
+~~~~ {.r}
 map <- ggplot(wrld.pop.f, aes(long, lat, group = group, fill = pop_est/1e+06)) + 
     geom_polygon() + coord_equal() + labs(x = "Longitude", y = "Latitude", fill = "World Population") + 
     ggtitle("World Population") + scale_fill_continuous(name = "Population\n(millions)")
 map
-```
+~~~~
 
 ![plot of chunk World Population Map](figure/World_Population_Map.png)
 
@@ -349,7 +349,7 @@ of reasons, such as the need to print in black and white. The
 `scale_fill_` family of commands enable such customisation. For
 categorical data, `scale_fill_manual()` can be used:
 
-``` {.r}
+~~~~ {.r}
 # Produce a map of continents
 map.cont <- ggplot(wrld.pop.f, aes(long, lat, group = group, fill = continent)) + 
     geom_polygon() + coord_equal() + labs(x = "Longitude", y = "Latitude", fill = "World Continents") + 
@@ -357,24 +357,24 @@ map.cont <- ggplot(wrld.pop.f, aes(long, lat, group = group, fill = continent)) 
 
 # To see the default colours
 map.cont
-```
+~~~~
 
 ![plot of chunk A Map of the Continents Using Default
 Colours](figure/A_Map_of_the_Continents_Using_Default_Colours.png)
 
 To change the colour scheme, we can set our own colours:
 
-``` {.r}
+~~~~ {.r}
 map.cont + scale_fill_manual(values = c("yellow", "red", "purple", "white", 
     "orange", "blue", "green", "black"))
-```
+~~~~
 
 Whilst `scale_fill_continuous()` works with continuous datasets:
 
-``` {.r}
+~~~~ {.r}
 # Note the use of the 'map' object created earler
 map + scale_fill_continuous(low = "white", high = "black")
-```
+~~~~
 
 It is well worth looking at the *Color Brewer* palettes developed by
 Cynthia Brewer (see http://colorbrewer2.org). These are designed to be
@@ -383,14 +383,14 @@ out more than any others. This latter characteristic is important when
 trying to produce impartial maps. R has a package that contains the
 colour palettes and these can be easily utilised by ggplot2.
 
-``` {.r}
+~~~~ {.r}
 library(RColorBrewer)
 # look at the help documents to see the palettes available.
 `?`(RColorBrewer)
 # note the use of the scale_fill_gradientn() function rather than
 # scale_fill_continuous() used above
 map + scale_fill_gradientn(colours = brewer.pal(7, "YlGn"))
-```
+~~~~
 
     ## Scale for 'fill' is already present. Adding another scale for 'fill', which will replace the existing scale.
 
@@ -404,23 +404,14 @@ package contains many ways to automatically create these breaks. We use
 the `grid.arrange` function from the gridExtra package to display the
 maps side by side.
 
-``` {.r}
+~~~~ {.r}
 library(classInt)
-```
-
-    ## Loading required package: class
-
-    ## Warning: there is no package called 'class'
-
-    ## Error: package 'class' could not be loaded
-
-``` {.r}
 library(gridExtra)
-```
+~~~~
 
-    ## Error: there is no package called 'gridExtra'
+    ## Loading required package: grid
 
-``` {.r}
+~~~~ {.r}
 
 # Specify how number of breaks - generally this should be fewer than 7
 nbrks <- 6
@@ -429,48 +420,36 @@ nbrks <- 6
 # original 'wrld.rob' object and not the 'wrld.rob@data$pop_est.f' Use the
 # help files (by typing ?classIntervals) to see the full range of options
 brks <- classIntervals(wrld.rob@data$pop_est, n = nbrks, style = "quantile")
-```
-
-    ## Error: could not find function "classIntervals"
-
-``` {.r}
 
 print(brks)
-```
-
-    ## Error: object 'brks' not found
-
-``` {.r}
 
 # Now the breaks can be easily inserted into the code above for a range of
 # colour palettes
 YlGn <- map + scale_fill_gradientn(colours = brewer.pal(nbrks, "YlGn"), breaks = c(brks$brks))
-```
+~~~~
 
-    ## Error: object 'brks' not found
+    ## Scale for 'fill' is already present. Adding another scale for 'fill', which will replace the existing scale.
 
-``` {.r}
+~~~~ {.r}
 
 PuBu <- map + scale_fill_gradientn(colours = brewer.pal(nbrks, "PuBu"), breaks = c(brks$brks))
-```
+~~~~
 
-    ## Error: object 'brks' not found
+    ## Scale for 'fill' is already present. Adding another scale for 'fill', which will replace the existing scale.
 
-``` {.r}
+~~~~ {.r}
 
 grid.arrange(YlGn, PuBu, ncol = 2)
-```
-
-    ## Error: could not find function "grid.arrange"
+~~~~
 
 If you are not happy with the automatic methods for specifying breaks it
 can also be done manually:
 
-``` {.r}
+~~~~ {.r}
 nbrks <- 4
 brks <- c(1e+08, 2.5e+08, 5e+07, 1e+09)
 map + scale_fill_gradientn(colours = brewer.pal(nbrks, "PuBu"), breaks = c(brks))
-```
+~~~~
 
     ## Scale for 'fill' is already present. Adding another scale for 'fill', which will replace the existing scale.
 
@@ -486,7 +465,7 @@ generates two plots with the `wrld.pop.f` object. The first colours the
 land blue and the sea (in this case the background to the map) green.
 The second plot is more conventional.
 
-``` {.r}
+~~~~ {.r}
 map2 <- ggplot(wrld.pop.f, aes(long, lat, group = group)) + coord_equal()
 
 blue <- map2 + geom_polygon(fill = "light blue") + theme(panel.background = element_rect(fill = "dark green"))
@@ -494,9 +473,10 @@ blue <- map2 + geom_polygon(fill = "light blue") + theme(panel.background = elem
 green <- map2 + geom_polygon(fill = "dark green") + theme(panel.background = element_rect(fill = "light blue"))
 
 grid.arrange(blue, green, ncol = 2)
-```
+~~~~
 
-    ## Error: could not find function "grid.arrange"
+![plot of chunk Conforming to Colour
+Convention](figure/Conforming_to_Colour_Convention.png)
 
 ### Experimenting with line colour and widths
 
@@ -507,8 +487,9 @@ impact of different line widths will vary depending on your screen size
 and resolution. If you save the plot to pdf (e.g. using the `ggsave`
 command), this will also affect the relative line widths.
 
-``` {.r}
-map3 <- map2 + theme(panel.background = element_rect(fill = "light blue"))
+~~~~ {.r}
+map3 <- ggplot(wrld.pop.f, aes(long, lat, group = group)) + coord_equal() + 
+    theme(panel.background = element_rect(fill = "light blue"))
 
 yellow <- map3 + geom_polygon(fill = "dark green", colour = "yellow")
 
@@ -519,9 +500,10 @@ thin <- map3 + geom_polygon(fill = "dark green", colour = "black", lwd = 0.1)
 thick <- map3 + geom_polygon(fill = "dark green", colour = "black", lwd = 1.5)
 
 grid.arrange(yellow, black, thick, thin, ncol = 2)
-```
+~~~~
 
-    ## Error: could not find function "grid.arrange"
+![plot of chunk The Impact of Line
+Width](figure/The_Impact_of_Line_Width.png)
 
 There are other parameters such as layer transparency (use the `alpha`
 parameter for this) that can be applied to all aspects of the plot -
@@ -555,12 +537,12 @@ much greater flexibility with regards to what can be included in new
 layer contents. Another possibility is to use `geom_segment()` to add a
 rudimentary arrow (see `?geom_segment` for refinements):
 
-``` {.r}
+~~~~ {.r}
 library(grid)  # needed for arrow
 ggplot() + geom_polygon(data = wrld.pop.f, aes(long, lat, group = group, fill = pop_est)) + 
     geom_line(aes(x = c(-1.3e+07, -1.3e+07), y = c(0, 5e+06)), arrow = arrow()) + 
     coord_fixed()  # correct aspect ratio
-```
+~~~~
 
 ![plot of chunk North Arrow Example](figure/North_Arrow_Example.png)
 
@@ -578,12 +560,12 @@ labels on will enable them to act as a graticule to indicate distance.
 We therefore load in a file containing the geometry of London's
 Boroughs.
 
-``` {.r}
+~~~~ {.r}
 load("data/lnd.f.RData")
 ggplot() + geom_polygon(data = lnd.f, aes(long, lat, group = group)) + geom_line(aes(x = c(505000, 
     515000), y = c(158000, 158000)), lwd = 2) + annotate("text", label = "10km", 
     x = 510000, y = 160000) + coord_fixed()
-```
+~~~~
 
 ![plot of chunk Scale Bar Example](figure/Scale_Bar_Example.png)
 
@@ -597,17 +579,17 @@ number of significant figures. A few examples of legend customisation
 are included below by way of introduction, but there are many more
 examples available in the ggplot2 documentation.
 
-``` {.r}
+~~~~ {.r}
 # Position
 map + theme(legend.position = "top")
-```
+~~~~
 
 ![plot of chunk Formatting the Legend](figure/Formatting_the_Legend.png)
 
 As you can see, this added the legend in a new place. Many more options
 for customization are available, as highlighted in the examples below.
 
-``` {.r}
+~~~~ {.r}
 # Title
 map + theme(legend.title = element_text(colour = "Red", size = 16, face = "bold"))
 
@@ -616,7 +598,7 @@ map + theme(legend.text = element_text(colour = "blue", size = 16, face = "itali
 
 # Border and background box
 map + theme(legend.background = element_rect(fill = "gray90", size = 0.5, linetype = "dotted"))
-```
+~~~~
 
 Adding Basemaps To Your Plots
 -----------------------------
@@ -633,9 +615,9 @@ compatible with the online map services used in the following examples.
 It therefore needs reprojecting - a step we completed earlier. The
 reprojected file can be loaded as follows:
 
-``` {.r}
+~~~~ {.r}
 load("data/lnd.wgs84.RData")
-```
+~~~~
 
 The first job is to calculate the bounding box (bb for short) of the
 `lnd.wgs84` object to identify the geographic extent of the map. This
@@ -646,66 +628,59 @@ navigation. The first line of code in the snippet below retrieves the
 bounding box and the two that follow add 5% so there is a little space
 around the edges of the data to be plotted.
 
-``` {.r}
+~~~~ {.r}
 b <- bbox(lnd.wgs84)
 b[1, ] <- (b[1, ] - mean(b[1, ])) * 1.05 + mean(b[1, ])
 b[2, ] <- (b[2, ] - mean(b[2, ])) * 1.05 + mean(b[2, ])
 # scale longitude and latitude (increase bb by 5% for plot) replace 1.05
 # with 1.xx for an xx% increase in the plot size
-```
+~~~~
 
 This is then fed into the `get_map` function as the location parameter.
 The syntax below contains 2 functions. `ggmap` is required to produce
 the plot and provides the base map data.
 
-``` {.r}
+~~~~ {.r}
 library(ggmap)
-```
-
-    ## Error: there is no package called 'ggmap'
-
-``` {.r}
 
 lnd.b1 <- ggmap(get_map(location = b))
-```
+~~~~
 
-    ## Error: could not find function "ggmap"
+    ## Warning: bounding box given to google - spatial extent only approximate.
 
 `ggmap` follows the same syntax structures as ggplot2 and so can easily
 be integrated with the other examples included here. First `fortify` the
 `lnd.wgs84` object and then merge with the required attribute data.
 
-``` {.r}
+~~~~ {.r}
 lnd.wgs84.f <- fortify(lnd.wgs84, region = "ons_label")
 lnd.wgs84.f <- merge(lnd.wgs84.f, lnd.wgs84@data, by.x = "id", by.y = "ons_label")
-```
+~~~~
 
 We can now overlay this on our base map using the `geom_polygon()`
 function.
 
-``` {.r}
+~~~~ {.r}
 lnd.b1 + geom_polygon(data = lnd.wgs84.f, aes(x = long, y = lat, group = group, 
     fill = Partic_Per), alpha = 0.5)
-```
+~~~~
 
 The resulting map looks reasonable, but it would be improved with a
 simpler base map in black and white. A design firm called *stamen*
 provide the tiles we need and they can be brought into the plot with the
 `get_map` function:
 
-``` {.r}
+~~~~ {.r}
 lnd.b2 <- ggmap(get_map(location = b, source = "stamen", maptype = "toner", 
     crop = T))  # note the addition of the maptype parameter.
-```
-
-    ## Error: could not find function "ggmap"
+~~~~
 
 We can then produce the plot as before.
 
-``` {.r}
+~~~~ {.r}
 lnd.b2 + geom_polygon(data = lnd.wgs84.f, aes(x = long, y = lat, group = group, 
     fill = Partic_Per), alpha = 0.5)
-```
+~~~~
 
 This produces a much clearer map and enables readers to focus on the
 data rather than the basemap. Spatial polygons are not the only data
@@ -733,23 +708,23 @@ annotations. These have been created in image editing software and will
 add a historic feel to the map. We are also loading in a World boundary
 shapefile and the shipping data itself.
 
-``` {.r}
+~~~~ {.r}
 library(rgdal)
 library(ggplot2)
 library(png)
 wrld <- readOGR("data/", "ne_110m_admin_0_countries")
-```
+~~~~
 
     ## OGR data source with driver: ESRI Shapefile 
     ## Source: "data/", layer: "ne_110m_admin_0_countries"
     ## with 177 features and 63 fields
     ## Feature type: wkbPolygon with 2 dimensions
 
-``` {.r}
+~~~~ {.r}
 btitle <- readPNG("figure/brit_titles.png")
 compass <- readPNG("figure/windrose.png")
 bdata <- read.csv("data/british_shipping_example.csv")
-```
+~~~~
 
 If you look at the first few lines in the `bdata` object you will see
 there are 7 columns with each row representing a single point on the
@@ -760,11 +735,11 @@ ggplot2 plots.
 
 We first specify some plot parameters that remove the axis labels.
 
-``` {.r}
+~~~~ {.r}
 xquiet <- scale_x_continuous("", breaks = NULL)
 yquiet <- scale_y_continuous("", breaks = NULL)
 quiet <- list(xquiet, yquiet)
-```
+~~~~
 
 The next step is to `fortify` the World coastlines and create the base
 plot. This sets the extents of the plot window and provides the blank
@@ -772,18 +747,18 @@ canvas on which we will build up the layers. The first layer created is
 the wrld object; the code is wrapped in `c()` to prevent it from
 executing by simply storing it as the plot's parameters.
 
-``` {.r}
+~~~~ {.r}
 wrld.f <- fortify(wrld, region = "sov_a3")
 base <- ggplot(wrld.f, aes(x = long, y = lat))
 wrld <- c(geom_polygon(aes(group = group), size = 0.1, colour = "black", fill = "#D6BF86", 
     data = wrld.f, alpha = 1))
-```
+~~~~
 
 To see the result of this simply type:
 
-``` {.r}
+~~~~ {.r}
 base + wrld + coord_fixed()
-```
+~~~~
 
 ![plot of chunk World Map](figure/World_Map.png)
 
@@ -793,11 +768,11 @@ the coordinates into the routes. You can see within the `aes()`
 component we have specified long and lat plus pasted together the `trp`
 and `group.regroup` variables to identify the unique paths.
 
-``` {.r}
+~~~~ {.r}
 route <- c(geom_path(aes(long, lat, group = paste(bdata$trp, bdata$group.regroup, 
     sep = ".")), colour = "#0F3B5F", size = 0.2, data = bdata, alpha = 0.5, 
     lineend = "round"))
-```
+~~~~
 
 We now have all we need to generate the final plot by building the
 layers together with the `+` sign as shown in the code below. The first
@@ -809,12 +784,12 @@ longitude (in WGS84) and we can use these parameters to change the png's
 position and also its size. The final two arguments fix the aspect ratio
 of the plot and remove the axis labels.
 
-``` {.r}
+~~~~ {.r}
 base + route + wrld + theme(panel.background = element_rect(fill = "#BAC4B9", 
     colour = "black")) + annotation_raster(btitle, xmin = 30, xmax = 140, ymin = 51, 
     ymax = 87) + annotation_raster(compass, xmin = 65, xmax = 105, ymin = 25, 
     ymax = 65) + coord_equal() + quiet
-```
+~~~~
 
 ![plot of chunk World Shipping](figure/World_Shipping.png)
 
@@ -832,7 +807,7 @@ Once you have produced the plot, alter the code to recolour the shipping
 routes to make them appear more clearly against the blue marble
 background.
 
-``` {.r}
+~~~~ {.r}
 earth <- readPNG("figure/earth_raster.png")
 
 base + annotation_raster(earth, xmin = -180, xmax = 180, ymin = -90, ymax = 90) + 
@@ -840,7 +815,7 @@ base + annotation_raster(earth, xmin = -180, xmax = 180, ymin = -90, ymax = 90) 
     annotation_raster(btitle, xmin = 30, xmax = 140, ymin = 51, ymax = 87) + 
     annotation_raster(compass, xmin = 65, xmax = 105, ymin = 25, ymax = 65) + 
     coord_equal() + quiet
-```
+~~~~
 
 ![plot of chunk World Shipping with raster
 background](figure/World_Shipping_with_raster_background.png)
@@ -937,6 +912,6 @@ Association, Institute of Mathematics Statistics and Interface
 Foundation of North America Journal of Computational and Graphical
 Statistics. 19, 1: 3-28
 
-``` {.r}
+~~~~ {.r}
 source("md2pdf.R")  # convert chapter to tex
-```
+~~~~
